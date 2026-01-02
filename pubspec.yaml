@@ -1,0 +1,29 @@
+name: nascentia
+description: Site web officiel de l'application NASCENTIA - Landing page moderne
+
+publish_to: 'none'
+
+version: 1.0.0+1
+
+environment:
+  sdk: '>=3.0.0 <4.0.0'
+
+dependencies:
+  flutter:
+    sdk: flutter
+  
+  # Google Fonts pour les polices personnalisées
+  google_fonts: ^6.1.0
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  
+  flutter_lints: ^3.0.0
+
+flutter:
+  uses-material-design: true
+  
+  # Assets - Images des mockups
+  assets:
+    - assets/images/
