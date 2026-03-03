@@ -4,15 +4,8 @@ import '../theme/app_constants.dart';
 import '../theme/app_text_styles.dart';
 
 /// Section "Problème & Solution" — angle simplicité et accessibilité
-class FastOrderSection extends StatefulWidget {
+class FastOrderSection extends StatelessWidget {
   const FastOrderSection({Key? key}) : super(key: key);
-
-  @override
-  State<FastOrderSection> createState() => _FastOrderSectionState();
-}
-
-class _FastOrderSectionState extends State<FastOrderSection> {
-  bool _isHovered = false;
 
   @override
   Widget build(BuildContext context) {
@@ -72,7 +65,7 @@ class _FastOrderSectionState extends State<FastOrderSection> {
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
-        Flexible(flex: 5, child: _buildPhoneMockups(isTablet)),
+        Flexible(flex: 5, child: _buildImage(isTablet)),
         SizedBox(width: isTablet ? 40 : 60),
         Flexible(flex: 5, child: _buildTextContent(context)),
       ],
@@ -85,126 +78,49 @@ class _FastOrderSectionState extends State<FastOrderSection> {
       children: [
         _buildTextContent(context),
         const SizedBox(height: 40),
-        Center(child: _buildPhoneMockups(false)),
+        Center(child: _buildImage(false)),
       ],
     );
   }
 
-  /// R6 — Mockups avec vraies images de l'app (au lieu de shopping_cart)
-  Widget _buildPhoneMockups(bool isTablet) {
-    final phoneHeight = isTablet ? 380.0 : 420.0;
-    final phoneWidth = phoneHeight * 0.47;
+  Widget _buildImage(bool isTablet) {
+    final imageHeight = isTablet ? 380.0 : 420.0;
 
-    return MouseRegion(
-      onEnter: (_) => setState(() => _isHovered = true),
-      onExit: (_) => setState(() => _isHovered = false),
-      child: AnimatedContainer(
-        duration: const Duration(milliseconds: 400),
-        curve: Curves.easeOut,
-        transform: Matrix4.identity()..rotateY(_isHovered ? -0.05 : 0.0),
-        height: phoneHeight,
-        width: phoneWidth * 1.65,
-        child: Stack(
-          children: [
-            // Téléphone arrière
-            AnimatedPositioned(
-              duration: const Duration(milliseconds: 400),
-              curve: Curves.easeOut,
-              left: _isHovered ? -10 : 0,
-              top: _isHovered ? 30 : 25,
-              child: _buildPhoneMockup(
-                phoneWidth,
-                phoneHeight,
-                'lib/assets/images/image_section2-2.png',
-                isBack: true,
-              ),
-            ),
-            // Téléphone avant
-            AnimatedPositioned(
-              duration: const Duration(milliseconds: 400),
-              curve: Curves.easeOut,
-              left: _isHovered ? phoneWidth * 0.75 : phoneWidth * 0.65,
-              top: _isHovered ? -5 : 0,
-              child: _buildPhoneMockup(
-                phoneWidth,
-                phoneHeight,
-                'lib/assets/images/image_section2-1.png',
-                isBack: false,
-              ),
+    return Center(
+      child: Container(
+        height: imageHeight,
+        constraints: BoxConstraints(maxWidth: isTablet ? 320.0 : 360.0),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(28),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withValues(alpha: 0.3),
+              blurRadius: 40,
+              offset: const Offset(0, 20),
             ),
           ],
         ),
-      ),
-    );
-  }
-
-  Widget _buildPhoneMockup(
-    double width,
-    double height,
-    String imagePath, {
-    required bool isBack,
-  }) {
-    return Container(
-      width: width,
-      height: height,
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(28),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withValues(alpha: 0.25),
-            blurRadius: 30,
-            offset: const Offset(0, 18),
-          ),
-        ],
-      ),
-      child: ClipRRect(
-        borderRadius: BorderRadius.circular(28),
-        child: Image.asset(
-          imagePath,
-          fit: BoxFit.cover,
-          errorBuilder: (context, error, stackTrace) {
-            // R6 — Placeholder avec icône calendrier (cohérent avec le produit)
-            return Container(
-              decoration: BoxDecoration(
-                gradient: LinearGradient(
-                  begin: Alignment.topLeft,
-                  end: Alignment.bottomRight,
-                  colors: [
-                    isBack
-                        ? AppColors.purple.withValues(alpha: 0.6)
-                        : Colors.white.withValues(alpha: 0.15),
-                    isBack
-                        ? AppColors.primary.withValues(alpha: 0.4)
-                        : Colors.white.withValues(alpha: 0.08),
-                  ],
+        child: ClipRRect(
+          borderRadius: BorderRadius.circular(28),
+          child: Image.asset(
+            'lib/assets/images/image_section2.png',
+            fit: BoxFit.cover,
+            errorBuilder: (context, error, stackTrace) {
+              return Container(
+                decoration: BoxDecoration(
+                  color: AppColors.white.withValues(alpha: 0.15),
+                  borderRadius: BorderRadius.circular(28),
                 ),
-              ),
-              child: Column(
-                children: [
-                  Container(
-                    margin: const EdgeInsets.only(top: 12),
-                    width: width * 0.35,
-                    height: 4,
-                    decoration: BoxDecoration(
-                      color: Colors.white.withValues(alpha: 0.3),
-                      borderRadius: BorderRadius.circular(2),
-                    ),
+                child: const Center(
+                  child: Icon(
+                    Icons.phone_iphone,
+                    size: 80,
+                    color: AppColors.white,
                   ),
-                  Expanded(
-                    child: Center(
-                      child: Icon(
-                        isBack
-                            ? Icons.calendar_month_outlined
-                            : Icons.child_care_outlined,
-                        size: width * 0.35,
-                        color: AppColors.white.withValues(alpha: 0.8),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            );
-          },
+                ),
+              );
+            },
+          ),
         ),
       ),
     );
