@@ -665,13 +665,13 @@ class _DownloadPageState extends State<DownloadPage> {
           child: Column(
             children: [
               _buildInfoRow('Version', '2.1.0'),
-              const Divider(height: 32),
+              Divider(height: 32, color: AppColors.greyLight.withValues(alpha: 0.08)),
               _buildInfoRow('Taille', '45 MB'),
-              const Divider(height: 32),
+              Divider(height: 32, color: AppColors.greyLight.withValues(alpha: 0.08)),
               _buildInfoRow('Mis à jour le', '15 décembre 2025'),
-              const Divider(height: 32),
+              Divider(height: 32, color: AppColors.greyLight.withValues(alpha: 0.08)),
               _buildInfoRow('Développeur', 'NASCENTIA Health Tech'),
-              const Divider(height: 32),
+              Divider(height: 32, color: AppColors.greyLight.withValues(alpha: 0.08)),
               _buildInfoRow('Compatibilité', 'Android 6.0+, iOS 13.0+'),
             ],
           ),
@@ -960,7 +960,7 @@ class _DownloadPageState extends State<DownloadPage> {
               : AppColors.white,
           borderRadius: BorderRadius.circular(20),
           border: Border.all(
-            color: isSelected ? AppColors.primary : AppColors.greyLight,
+            color: isSelected ? AppColors.primary : AppColors.greyLight.withValues(alpha: 0.25),
             width: isSelected ? 2 : 1,
           ),
         ),
@@ -1142,7 +1142,7 @@ class _DownloadPageState extends State<DownloadPage> {
               : Colors.transparent,
           borderRadius: BorderRadius.circular(16),
           border: Border.all(
-            color: selected ? AppColors.primary : AppColors.greyLight,
+            color: selected ? AppColors.primary : AppColors.greyLight.withValues(alpha: 0.25),
             width: selected ? 1.5 : 1,
           ),
         ),
