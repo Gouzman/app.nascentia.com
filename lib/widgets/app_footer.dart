@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:url_launcher/url_launcher.dart';
 import '../theme/app_colors.dart';
 import '../theme/app_constants.dart';
 import '../services/navigation_service.dart';
@@ -138,28 +139,54 @@ class AppFooter extends StatelessWidget {
               fontSize: 18, fontWeight: FontWeight.bold, color: Colors.white),
         ),
         const SizedBox(height: 20),
-        _buildContactItem(Icons.email_outlined, 'doumbiabonmanin@gmail.com'),
+        _buildContactItem(
+          Icons.email_outlined,
+          'doumbiabonmanin@gmail.com',
+          url: 'mailto:doumbiabonmanin@gmail.com',
+        ),
         const SizedBox(height: 12),
-        _buildContactItem(Icons.phone_outlined, '(+225) 07 78 68 33 53'),
+        _buildContactItem(
+          Icons.phone_outlined,
+          '(+225) 07 78 68 33 53',
+          url: 'tel:+2250778683353',
+        ),
         const SizedBox(height: 12),
-        _buildContactItem(Icons.location_on_outlined, 'Cocody, Côte d\'Ivoire'),
+        _buildContactItem(
+          Icons.location_on_outlined,
+          'Cocody, Côte d\'Ivoire',
+        ),
       ],
     );
   }
 
-  Widget _buildContactItem(IconData icon, String text) {
-    return Row(
+  Widget _buildContactItem(IconData icon, String text, {String? url}) {
+    final content = Row(
       children: [
-        Icon(icon, color: Colors.white70, size: 18),
+        Icon(icon, color: url != null ? Colors.white : Colors.white70, size: 18),
         const SizedBox(width: 10),
         Expanded(
           child: Text(
             text,
-            style: const TextStyle(
-                fontSize: 14, color: Colors.white70, height: 1.5),
+            style: TextStyle(
+              fontSize: 14,
+              color: url != null ? Colors.white : Colors.white70,
+              height: 1.5,
+              decoration: url != null ? TextDecoration.underline : null,
+              decorationColor: Colors.white54,
+            ),
           ),
         ),
       ],
+    );
+
+    if (url == null) return content;
+
+    return MouseRegion(
+      cursor: SystemMouseCursors.click,
+      child: GestureDetector(
+        onTap: () => launchUrl(Uri.parse(url)),
+        child: content,
+      ),
     );
   }
 
@@ -200,19 +227,36 @@ class AppFooter extends StatelessWidget {
   }
 
   void _handleLinkNavigation(String linkText, BuildContext context) {
+    final isOnDownload =
+        ModalRoute.of(context)?.settings.name == '/download';
+
     switch (linkText) {
       case 'Fonctionnalités':
-        NavigationService.scrollToSectionByName('Fonctionnalités');
+        if (isOnDownload) {
+          Navigator.pushReplacementNamed(context, '/',
+              arguments: 'Fonctionnalités');
+        } else {
+          NavigationService.scrollToSectionByName('Fonctionnalités');
+        }
         break;
       case 'Comment ça marche':
-        NavigationService.scrollToSectionByName('Comment ça marche');
+        if (isOnDownload) {
+          Navigator.pushReplacementNamed(context, '/',
+              arguments: 'Comment ça marche');
+        } else {
+          NavigationService.scrollToSectionByName('Comment ça marche');
+        }
         break;
       case 'Téléchargement':
-        // R3 — Navigation fonctionnelle vers la page de téléchargement
         Navigator.pushNamed(context, '/download');
         break;
       case 'Contact':
-        NavigationService.scrollToSectionByName('Contact');
+        if (isOnDownload) {
+          Navigator.pushReplacementNamed(context, '/',
+              arguments: 'Contact');
+        } else {
+          NavigationService.scrollToSectionByName('Contact');
+        }
         break;
     }
   }

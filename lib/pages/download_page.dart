@@ -18,6 +18,8 @@ class DownloadPage extends StatefulWidget {
 class _DownloadPageState extends State<DownloadPage> {
   int _selectedScreenshot = 0;
   bool _isDownloadHovered = false;
+  final ScrollController _scrollController = ScrollController();
+  bool _isNavScrolled = false;
 
   List<Review> _reviews = [];
   int _downloadsCount = 0;
@@ -52,6 +54,18 @@ class _DownloadPageState extends State<DownloadPage> {
   void initState() {
     super.initState();
     _loadData();
+    _scrollController.addListener(() {
+      final scrolled = _scrollController.offset > 100;
+      if (scrolled != _isNavScrolled) {
+        setState(() => _isNavScrolled = scrolled);
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    super.dispose();
   }
 
   Future<void> _loadData() async {
@@ -104,14 +118,17 @@ class _DownloadPageState extends State<DownloadPage> {
 
     return Scaffold(
       backgroundColor: AppColors.lightBg,
-      body: SingleChildScrollView(
-        child: Column(
-          children: [
-            // Navigation
-            const TopNavigationBar(),
+      body: Stack(
+        children: [
+          SingleChildScrollView(
+            controller: _scrollController,
+            child: Column(
+              children: [
+                // Nav en position normale (scrolle avec le contenu)
+                const TopNavigationBar(),
 
-            // Contenu principal
-            Container(
+                // Contenu principal
+                Container(
               constraints: const BoxConstraints(maxWidth: 1200),
               padding: EdgeInsets.symmetric(
                 horizontal: isMobile ? 20 : (isTablet ? 40 : 60),
@@ -185,10 +202,32 @@ class _DownloadPageState extends State<DownloadPage> {
               ),
             ),
 
-            // Footer
-            const AppFooter(),
-          ],
-        ),
+                // Footer
+                const AppFooter(),
+              ],
+            ),
+          ),
+
+          // Nav sticky — slide depuis le haut quand on dépasse la nav originale
+          Positioned(
+            top: 0,
+            left: 0,
+            right: 0,
+            child: AnimatedSlide(
+              offset: _isNavScrolled ? Offset.zero : const Offset(0, -1.5),
+              duration: const Duration(milliseconds: 350),
+              curve: Curves.easeOutCubic,
+              child: AnimatedOpacity(
+                opacity: _isNavScrolled ? 1.0 : 0.0,
+                duration: const Duration(milliseconds: 250),
+                child: IgnorePointer(
+                  ignoring: !_isNavScrolled,
+                  child: const TopNavigationBar(isScrolled: true),
+                ),
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }
@@ -380,13 +419,14 @@ class _DownloadPageState extends State<DownloadPage> {
 
   // Screenshots section
   Widget _buildScreenshotsSection(bool isMobile, bool isTablet) {
-    final screenshots = [
-      {'icon': Icons.calendar_month, 'color': AppColors.purple},
-      {'icon': Icons.analytics, 'color': AppColors.primary},
-      {'icon': Icons.favorite, 'color': AppColors.secondary},
-      {'icon': Icons.insights, 'color': const Color(0xFF7B3AA0)},
+    const screenshots = [
+      'lib/assets/images/Download_ScrenShot-1.jpg',
+      'lib/assets/images/Download_ScrenShot-2.png',
+      'lib/assets/images/Download_ScrenShot-3.png',
+      'lib/assets/images/Download_ScrenShot-4.png',
+      'lib/assets/images/Download_ScrenShot-5.png',
+      'lib/assets/images/Download_ScrenShot-6.png',
     ];
-    const screenshotDurations = [260, 320, 280, 350];
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -401,7 +441,7 @@ class _DownloadPageState extends State<DownloadPage> {
           child: Row(
             children: screenshots.asMap().entries.map((entry) {
               final index = entry.key;
-              final screenshot = entry.value;
+              final path = entry.value;
               final isSelected = _selectedScreenshot == index;
 
               return Padding(
@@ -409,40 +449,40 @@ class _DownloadPageState extends State<DownloadPage> {
                 child: GestureDetector(
                   onTap: () => setState(() => _selectedScreenshot = index),
                   child: AnimatedContainer(
-                    duration: Duration(
-                        milliseconds: screenshotDurations[index]),
+                    duration: const Duration(milliseconds: 280),
+                    curve: Curves.easeOutCubic,
                     width: isMobile ? 140 : 200,
                     height: isMobile ? 280 : 400,
                     decoration: BoxDecoration(
-                      gradient: LinearGradient(
-                        begin: Alignment.topLeft,
-                        end: Alignment.bottomRight,
-                        colors: [
-                          screenshot['color'] as Color,
-                          (screenshot['color'] as Color).withValues(alpha: 0.8),
-                        ],
-                      ),
                       borderRadius: BorderRadius.circular(20),
                       border: isSelected
-                          ? Border.all(
-                              color: AppColors.primary,
-                              width: 3,
-                            )
-                          : null,
+                          ? Border.all(color: AppColors.primary, width: 3)
+                          : Border.all(
+                              color: AppColors.greyLight.withValues(alpha: 0.15),
+                              width: 1,
+                            ),
                       boxShadow: [
                         BoxShadow(
-                          color: (screenshot['color'] as Color)
-                              .withValues(alpha: 0.3),
-                          blurRadius: isSelected ? 25 : 15,
-                          offset: Offset(0, isSelected ? 12 : 8),
+                          color: Colors.black
+                              .withValues(alpha: isSelected ? 0.18 : 0.08),
+                          blurRadius: isSelected ? 24 : 12,
+                          offset: Offset(0, isSelected ? 10 : 4),
                         ),
                       ],
                     ),
-                    child: Center(
-                      child: Icon(
-                        screenshot['icon'] as IconData,
-                        size: isMobile ? 60 : 80,
-                        color: AppColors.white,
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(
+                          isSelected ? 17 : 20),
+                      child: Image.asset(
+                        path,
+                        fit: BoxFit.cover,
+                        errorBuilder: (_, __, ___) => Container(
+                          color: AppColors.greyLight.withValues(alpha: 0.1),
+                          child: const Center(
+                            child: Icon(Icons.image_not_supported_outlined,
+                                color: Colors.grey),
+                          ),
+                        ),
                       ),
                     ),
                   ),

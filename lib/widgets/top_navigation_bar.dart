@@ -1,70 +1,87 @@
 import 'package:flutter/material.dart';
+import 'package:url_launcher/url_launcher.dart';
 import '../theme/app_colors.dart';
 import '../services/navigation_service.dart';
 
-/// Top Navigation Bar - Barre de navigation supérieure
-class TopNavigationBar extends StatelessWidget {
-  const TopNavigationBar({Key? key}) : super(key: key);
+class TopNavigationBar extends StatefulWidget {
+  final bool isScrolled;
+  const TopNavigationBar({Key? key, this.isScrolled = false}) : super(key: key);
 
   @override
+  State<TopNavigationBar> createState() => _TopNavigationBarState();
+}
+
+class _TopNavigationBarState extends State<TopNavigationBar> {
+  @override
   Widget build(BuildContext context) {
+    final s = widget.isScrolled;
     final size = MediaQuery.of(context).size;
     final isMobile = size.width < 768;
     final isTablet = size.width >= 768 && size.width < 1024;
 
-    return Container(
-      height: 80,
-      margin: const EdgeInsets.all(20),
-      padding: EdgeInsets.symmetric(
-        horizontal: isMobile ? 20 : (isTablet ? 40 : 60),
-        vertical: 12,
-      ),
-      decoration: BoxDecoration(
-        color: AppColors.lightCream,
-        borderRadius: BorderRadius.circular(20),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withValues(alpha: 0.05),
-            blurRadius: 10,
-            offset: const Offset(0, 2),
+    return AnimatedContainer(
+          duration: const Duration(milliseconds: 280),
+          curve: Curves.easeOutCubic,
+          height: s ? 66 : 80,
+          margin: s
+              ? const EdgeInsets.fromLTRB(12, 8, 12, 0)
+              : const EdgeInsets.all(20),
+          padding: EdgeInsets.symmetric(
+            horizontal: isMobile ? 16 : (isTablet ? 32 : 48),
+            vertical: s ? 8 : 12,
           ),
-        ],
-      ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          // Logo
-          _buildLogo(),
-
-          // Menu de navigation (Desktop & Tablet uniquement)
-          if (!isMobile) _buildNavigationMenu(),
-
-          // Contact + CTA
-          if (!isMobile) _buildRightSection(isTablet) else _buildMobileMenu(),
-        ],
-      ),
-    );
+          decoration: BoxDecoration(
+            color: s ? Colors.white : AppColors.lightCream,
+            borderRadius: BorderRadius.circular(s ? 16 : 20),
+            border: s
+                ? Border.all(
+                    color: Colors.black.withValues(alpha: 0.06),
+                    width: 1,
+                  )
+                : null,
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black.withValues(alpha: s ? 0.10 : 0.05),
+                blurRadius: s ? 28 : 10,
+                spreadRadius: s ? 1 : 0,
+                offset: const Offset(0, 2),
+              ),
+            ],
+          ),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              _buildLogo(s),
+              if (!isMobile) _buildNavigationMenu(),
+              if (!isMobile)
+                _buildRightSection(isTablet)
+              else
+                _buildMobileMenu(),
+            ],
+          ),
+        );
   }
 
-  /// Logo NASCENTIA
-  Widget _buildLogo() {
+  Widget _buildLogo(bool isScrolled) {
     return Row(
       children: [
-        Container(
-          width: 40,
-          height: 40,
+        AnimatedContainer(
+          duration: const Duration(milliseconds: 280),
+          width: isScrolled ? 34 : 40,
+          height: isScrolled ? 34 : 40,
           decoration: BoxDecoration(
             gradient: AppColors.heroGradient,
-            borderRadius: BorderRadius.circular(10),
+            borderRadius: BorderRadius.circular(isScrolled ? 8 : 10),
           ),
-          child: const Center(
-            child: Text(
-              'N',
+          child: Center(
+            child: AnimatedDefaultTextStyle(
+              duration: const Duration(milliseconds: 280),
               style: TextStyle(
-                fontSize: 24,
+                fontSize: isScrolled ? 20.0 : 24.0,
                 fontWeight: FontWeight.bold,
                 color: Colors.white,
               ),
+              child: const Text('N'),
             ),
           ),
         ),
@@ -82,7 +99,6 @@ class TopNavigationBar extends StatelessWidget {
     );
   }
 
-  /// Menu de navigation
   Widget _buildNavigationMenu() {
     final menuItems = [
       'Accueil',
@@ -91,27 +107,34 @@ class TopNavigationBar extends StatelessWidget {
       'Application',
       'Contact',
     ];
-
     return Row(
       children: menuItems.map((item) => _buildMenuItem(item)).toList(),
     );
   }
 
   Widget _buildMenuItem(String title) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16),
-      child: MouseRegion(
-        cursor: SystemMouseCursors.click,
-        child: GestureDetector(
-          onTap: () {
-            NavigationService.scrollToSectionByName(title);
-          },
-          child: Text(
-            title,
-            style: const TextStyle(
-              fontSize: 15,
-              fontWeight: FontWeight.w500,
-              color: AppColors.darkText,
+    return Builder(
+      builder: (context) => Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 16),
+        child: MouseRegion(
+          cursor: SystemMouseCursors.click,
+          child: GestureDetector(
+            onTap: () {
+              final route = ModalRoute.of(context)?.settings.name;
+              if (route == '/download') {
+                Navigator.pushReplacementNamed(context, '/',
+                    arguments: title);
+              } else {
+                NavigationService.scrollToSectionByName(title);
+              }
+            },
+            child: Text(
+              title,
+              style: const TextStyle(
+                fontSize: 15,
+                fontWeight: FontWeight.w500,
+                color: AppColors.darkText,
+              ),
             ),
           ),
         ),
@@ -119,44 +142,43 @@ class TopNavigationBar extends StatelessWidget {
     );
   }
 
-  /// Section droite (Téléphone + Bouton)
   Widget _buildRightSection(bool isTablet) {
     return Row(
       children: [
-        // Numéro de téléphone
         if (!isTablet) ...[
-          const Icon(
-            Icons.phone,
-            size: 18,
-            color: AppColors.primaryPink,
-          ),
-          const SizedBox(width: 8),
-          const Text(
-            '(+225) 07 78 68 33 53',
-            style: TextStyle(
-              fontSize: 14,
-              fontWeight: FontWeight.w600,
-              color: AppColors.darkText,
+          MouseRegion(
+            cursor: SystemMouseCursors.click,
+            child: GestureDetector(
+              onTap: () => launchUrl(Uri.parse('tel:+2250778683353')),
+              child: const Row(
+                children: [
+                  Icon(Icons.phone, size: 18, color: AppColors.primaryPink),
+                  SizedBox(width: 8),
+                  Text(
+                    '(+225) 07 78 68 33 53',
+                    style: TextStyle(
+                      fontSize: 14,
+                      fontWeight: FontWeight.w600,
+                      color: AppColors.darkText,
+                    ),
+                  ),
+                ],
+              ),
             ),
           ),
           const SizedBox(width: 20),
         ],
-
-        // Bouton CTA
         _buildCTAButton(isTablet),
       ],
     );
   }
 
-  /// Bouton CTA principal
   Widget _buildCTAButton(bool isSmall) {
     return Builder(
       builder: (context) => MouseRegion(
         cursor: SystemMouseCursors.click,
         child: GestureDetector(
-          onTap: () {
-            Navigator.pushNamed(context, '/download');
-          },
+          onTap: () => Navigator.pushNamed(context, '/download'),
           child: Container(
             padding: EdgeInsets.symmetric(
               horizontal: isSmall ? 20 : 28,
@@ -187,14 +209,11 @@ class TopNavigationBar extends StatelessWidget {
     );
   }
 
-  /// Menu hamburger (Mobile)
   Widget _buildMobileMenu() {
     return Builder(
       builder: (context) => IconButton(
         icon: const Icon(Icons.menu, color: AppColors.darkText),
-        onPressed: () {
-          Scaffold.of(context).openDrawer();
-        },
+        onPressed: () => Scaffold.of(context).openDrawer(),
       ),
     );
   }

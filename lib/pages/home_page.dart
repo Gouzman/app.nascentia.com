@@ -22,18 +22,50 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  final ScrollController _scrollController = ScrollController();
+  bool _isNavScrolled = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _scrollController.addListener(() {
+      final scrolled = _scrollController.offset > 100;
+      if (scrolled != _isNavScrolled) {
+        setState(() => _isNavScrolled = scrolled);
+      }
+    });
+    // Scroll vers la section demandée si on vient de la DownloadPage
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      final args = ModalRoute.of(context)?.settings.arguments;
+      if (args is String && args.isNotEmpty) {
+        Future.delayed(const Duration(milliseconds: 400), () {
+          NavigationService.scrollToSectionByName(args);
+        });
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
       drawer: _buildMobileDrawer(),
-      body: SingleChildScrollView(
-        child: Column(
-          children: [
-            // Top Navigation Bar (toujours visible, pas d'animation)
-            const TopNavigationBar(),
+      body: Stack(
+        children: [
+          SingleChildScrollView(
+            controller: _scrollController,
+            child: Column(
+              children: [
+                // Nav en position normale (scrolle avec le contenu)
+                const TopNavigationBar(),
 
-            // Hero — animation propre intégrée dans la section
+                // Hero — animation propre intégrée dans la section
             _wrapWithKey(
               key: NavigationService.heroKey,
               child: const HeroSection(),
@@ -117,6 +149,28 @@ class _HomePageState extends State<HomePage> {
             ),
           ],
         ),
+      ),
+
+          // Nav sticky — slide depuis le haut quand on dépasse la nav originale
+          Positioned(
+            top: 0,
+            left: 0,
+            right: 0,
+            child: AnimatedSlide(
+              offset: _isNavScrolled ? Offset.zero : const Offset(0, -1.5),
+              duration: const Duration(milliseconds: 350),
+              curve: Curves.easeOutCubic,
+              child: AnimatedOpacity(
+                opacity: _isNavScrolled ? 1.0 : 0.0,
+                duration: const Duration(milliseconds: 250),
+                child: IgnorePointer(
+                  ignoring: !_isNavScrolled,
+                  child: const TopNavigationBar(isScrolled: true),
+                ),
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }

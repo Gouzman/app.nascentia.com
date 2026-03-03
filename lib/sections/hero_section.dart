@@ -275,7 +275,7 @@ class _HeroSectionState extends State<HeroSection>
           right: isDesktop ? 100 : 50,
           bottom: 30,
           child: _AnimatedPhone(
-            imagePath: 'assets/images/phone_1.png',
+            imagePath: 'lib/assets/images/image_header-1.png',
             rotation: -8 * math.pi / 180,
             delay: 200,
             scale: isDesktop ? 0.9 : 0.75,
@@ -285,7 +285,7 @@ class _HeroSectionState extends State<HeroSection>
           right: isDesktop ? 280 : 180,
           top: 70,
           child: _AnimatedPhone(
-            imagePath: 'assets/images/phone_2.png',
+            imagePath: 'lib/assets/images/image_header-2.png',
             rotation: 6 * math.pi / 180,
             delay: 400,
             scale: isDesktop ? 0.9 : 0.75,

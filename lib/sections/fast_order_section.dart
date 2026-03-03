@@ -115,7 +115,7 @@ class _FastOrderSectionState extends State<FastOrderSection> {
               child: _buildPhoneMockup(
                 phoneWidth,
                 phoneHeight,
-                'assets/images/phone_2.png',
+                'lib/assets/images/image_section2-2.png',
                 isBack: true,
               ),
             ),
@@ -128,7 +128,7 @@ class _FastOrderSectionState extends State<FastOrderSection> {
               child: _buildPhoneMockup(
                 phoneWidth,
                 phoneHeight,
-                'assets/images/phone_1.png',
+                'lib/assets/images/image_section2-1.png',
                 isBack: false,
               ),
             ),

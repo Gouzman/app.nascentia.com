@@ -21,6 +21,9 @@ dependencies:
   # Backend Supabase
   supabase_flutter: ^2.8.4
 
+  # Liens externes (mailto, tel, https)
+  url_launcher: ^6.3.2
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
@@ -32,4 +35,4 @@ flutter:
   
   # Assets - Images des mockups
   assets:
-    - assets/images/
+    - lib/assets/images/
