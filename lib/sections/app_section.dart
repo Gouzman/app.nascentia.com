@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../theme/app_colors.dart';
 import '../theme/app_text_styles.dart';
+import '../services/navigation_service.dart';
 
 /// Section "CTA Téléchargement" - NASCENTIA
 class AppSection extends StatefulWidget {
@@ -15,12 +16,11 @@ class _AppSectionState extends State<AppSection> {
 
   @override
   Widget build(BuildContext context) {
-    final screenWidth = MediaQuery.of(context).size.width;
-    final isMobile = screenWidth < 768;
+    final isMobile = MediaQuery.of(context).size.width < 768; // R4
 
     return Container(
       width: double.infinity,
-      decoration: BoxDecoration(
+      decoration: const BoxDecoration(
         gradient: AppColors.heroGradient,
       ),
       padding: EdgeInsets.symmetric(
@@ -32,7 +32,6 @@ class _AppSectionState extends State<AppSection> {
           constraints: const BoxConstraints(maxWidth: 800),
           child: Column(
             children: [
-              // Badge "Téléchargement"
               Container(
                 padding:
                     const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
@@ -47,15 +46,12 @@ class _AppSectionState extends State<AppSection> {
                 child: Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    const Icon(
-                      Icons.rocket_launch_outlined,
-                      color: AppColors.white,
-                      size: 18,
-                    ),
+                    const Icon(Icons.rocket_launch_outlined,
+                        color: AppColors.white, size: 18),
                     const SizedBox(width: 8),
                     Text(
                       'TÉLÉCHARGEMENT',
-                      style: TextStyle(
+                      style: const TextStyle(
                         fontSize: 13,
                         fontWeight: FontWeight.w700,
                         letterSpacing: 1.2,
@@ -67,20 +63,17 @@ class _AppSectionState extends State<AppSection> {
               ),
               const SizedBox(height: 24),
 
-              // Titre
               Text(
-                'Prêt à commencer ?',
+                'Prêt à commencer ?',
                 style: isMobile
                     ? AppTextStyles.displayMedium(context)
-                    : AppTextStyles.displayLarge(context).copyWith(
-                        fontSize: 56,
-                      ),
+                    : AppTextStyles.displayLarge(context)
+                        .copyWith(fontSize: 56),
                 textAlign: TextAlign.center,
               ),
 
               const SizedBox(height: 16),
 
-              // Sous-texte
               Text(
                 'Téléchargez NASCENTIA maintenant et découvrez votre avenir.',
                 style: AppTextStyles.bodyLarge(context),
@@ -89,41 +82,32 @@ class _AppSectionState extends State<AppSection> {
 
               const SizedBox(height: 32),
 
-              // Stats de crédibilité
+              // R1 — Statistiques unifiées à 90 %
               Wrap(
                 spacing: isMobile ? 16 : 32,
                 runSpacing: 16,
                 alignment: WrapAlignment.center,
                 children: [
                   _buildStat(Icons.star, '4.8/5', 'Note moyenne', isMobile),
-                  _buildStat(
-                      Icons.download, '10k+', 'Téléchargements', isMobile),
-                  _buildStat(Icons.verified, '90%', 'Fiabilité', isMobile),
+                  _buildStat(Icons.download, '10k+', 'Téléchargements', isMobile),
+                  _buildStat(Icons.verified, '90 %', 'Fiabilité', isMobile),
                 ],
               ),
 
               const SizedBox(height: 40),
 
-              // Boutons
               Wrap(
                 spacing: 20,
                 runSpacing: 20,
                 alignment: WrapAlignment.center,
                 children: [
                   _buildButton(
-                    'android',
-                    'Télécharger Android',
-                    Icons.android,
-                    true,
-                    isMobile,
-                  ),
+                      'android', 'Télécharger Android', Icons.android,
+                      true, isMobile),
+                  // R3 — Bouton "Contactez-nous" navigue vers la section Contact
                   _buildButton(
-                    'contact',
-                    'Contactez-nous',
-                    Icons.email_outlined,
-                    false,
-                    isMobile,
-                  ),
+                      'contact', 'Contactez-nous', Icons.email_outlined,
+                      false, isMobile),
                 ],
               ),
             ],
@@ -145,25 +129,24 @@ class _AppSectionState extends State<AppSection> {
         onTap: () {
           if (id == 'android') {
             Navigator.pushNamed(context, '/download');
+          } else if (id == 'contact') {
+            // R3 — Navigation fonctionnelle vers la section Contact
+            NavigationService.scrollToSectionByName('Contact');
           }
-          // Pour 'contact', vous pouvez ajouter une action différente
         },
         child: AnimatedContainer(
           duration: const Duration(milliseconds: 300),
           curve: Curves.easeOut,
-          transform: Matrix4.identity()
-            ..scale(isHovered ? 1.08 : 1.0)
-            ..translate(0.0, isHovered ? -4.0 : 0.0),
+          transform: Matrix4.diagonal3Values(
+            isHovered ? 1.08 : 1.0, isHovered ? 1.08 : 1.0, 1.0,
+          )..setTranslationRaw(0.0, isHovered ? -4.0 : 0.0, 0.0),
           padding: EdgeInsets.symmetric(
-            horizontal: isMobile ? 28 : 36, // Augmenté pour plus de présence
-            vertical: isMobile ? 16 : 20, // Augmenté
+            horizontal: isMobile ? 28 : 36,
+            vertical: isMobile ? 16 : 20,
           ),
           decoration: BoxDecoration(
             color: isPrimary ? AppColors.white : Colors.transparent,
-            border: Border.all(
-              color: AppColors.white,
-              width: 2,
-            ),
+            border: Border.all(color: AppColors.white, width: 2),
             borderRadius: BorderRadius.circular(999),
             boxShadow: isHovered
                 ? [
@@ -181,7 +164,7 @@ class _AppSectionState extends State<AppSection> {
               Icon(
                 icon,
                 color: isPrimary ? AppColors.purple : AppColors.white,
-                size: isMobile ? 20 : 24, // Légèrement plus grand
+                size: isMobile ? 20 : 24,
               ),
               const SizedBox(width: 12),
               Text(
@@ -198,15 +181,12 @@ class _AppSectionState extends State<AppSection> {
     );
   }
 
-  Widget _buildStat(IconData icon, String value, String label, bool isMobile) {
+  Widget _buildStat(
+      IconData icon, String value, String label, bool isMobile) {
     return Row(
       mainAxisSize: MainAxisSize.min,
       children: [
-        Icon(
-          icon,
-          color: AppColors.white,
-          size: isMobile ? 20 : 24,
-        ),
+        Icon(icon, color: AppColors.white, size: isMobile ? 20 : 24),
         const SizedBox(width: 8),
         Column(
           crossAxisAlignment: CrossAxisAlignment.start,

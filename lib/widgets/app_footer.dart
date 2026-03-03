@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import '../theme/app_colors.dart';
 import '../theme/app_constants.dart';
+import '../services/navigation_service.dart';
 
-/// Footer NASCENTIA - Design Premium
+/// Footer NASCENTIA — Design Premium
 class AppFooter extends StatelessWidget {
   const AppFooter({Key? key}) : super(key: key);
 
@@ -10,7 +12,7 @@ class AppFooter extends StatelessWidget {
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
     final isTablet = size.width >= 768 && size.width < 1024;
-    final isMobile = size.width < 768;
+    final isMobile = size.width < 768; // R4 — breakpoint unifié
 
     return Container(
       width: double.infinity,
@@ -23,7 +25,6 @@ class AppFooter extends StatelessWidget {
       ),
       child: Column(
         children: [
-          // Ligne principale avec 4 colonnes
           isMobile
               ? _buildMobileLayout(context)
               : isTablet
@@ -32,61 +33,36 @@ class AppFooter extends StatelessWidget {
 
           const SizedBox(height: 50),
 
-          // Séparateur
           Divider(
-            color: Colors.white.withOpacity(0.1),
+            // R12 — withValues au lieu de withOpacity
+            color: Colors.white.withValues(alpha: 0.1),
             thickness: 1,
           ),
 
           const SizedBox(height: 24),
 
-          // Barre inférieure
           _buildBottomBar(context, isMobile),
         ],
       ),
     );
   }
 
-  /// Layout Desktop - 4 colonnes
   Widget _buildDesktopLayout(BuildContext context) {
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        // Colonne 1 - Message principal
-        Expanded(
-          flex: 3,
-          child: _buildBrandColumn(),
-        ),
-
+        Expanded(flex: 3, child: _buildBrandColumn()),
         const SizedBox(width: 60),
-
-        // Colonne 2 - Contact
-        Expanded(
-          flex: 2,
-          child: _buildContactColumn(),
-        ),
-
+        Expanded(flex: 2, child: _buildContactColumn()),
         const SizedBox(width: 60),
-
-        // Colonne 3 - Liens
-        Expanded(
-          flex: 2,
-          child: _buildLinksColumn(),
-        ),
-
+        Expanded(flex: 2, child: _buildLinksColumn(context)),
         const SizedBox(width: 60),
-
-        // Colonne 4 - Newsletter
-        Expanded(
-          flex: 3,
-          child: _buildNewsletterColumn(),
-        ),
+        Expanded(flex: 3, child: _buildNewsletterColumn()),
       ],
     );
   }
 
-  /// Layout Tablet - 2×2
   Widget _buildTabletLayout(BuildContext context) {
     return Column(
       children: [
@@ -102,7 +78,7 @@ class AppFooter extends StatelessWidget {
         Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Expanded(child: _buildLinksColumn()),
+            Expanded(child: _buildLinksColumn(context)),
             const SizedBox(width: 40),
             Expanded(child: _buildNewsletterColumn()),
           ],
@@ -111,7 +87,6 @@ class AppFooter extends StatelessWidget {
     );
   }
 
-  /// Layout Mobile - Colonne unique
   Widget _buildMobileLayout(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -120,16 +95,15 @@ class AppFooter extends StatelessWidget {
         const SizedBox(height: 40),
         _buildContactColumn(),
         const SizedBox(height: 40),
-        _buildLinksColumn(),
+        _buildLinksColumn(context),
         const SizedBox(height: 40),
         _buildNewsletterColumn(),
       ],
     );
   }
 
-  /// Colonne 1 - Message principal
   Widget _buildBrandColumn() {
-    return Column(
+    return const Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
@@ -141,7 +115,7 @@ class AppFooter extends StatelessWidget {
             height: 1.4,
           ),
         ),
-        const SizedBox(height: 16),
+        SizedBox(height: 16),
         Text(
           'Une approche scientifique au service des familles.',
           style: TextStyle(
@@ -154,18 +128,14 @@ class AppFooter extends StatelessWidget {
     );
   }
 
-  /// Colonne 2 - Contact
   Widget _buildContactColumn() {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
+        const Text(
           'Contact',
           style: TextStyle(
-            fontSize: 18,
-            fontWeight: FontWeight.bold,
-            color: Colors.white,
-          ),
+              fontSize: 18, fontWeight: FontWeight.bold, color: Colors.white),
         ),
         const SizedBox(height: 20),
         _buildContactItem(Icons.email_outlined, 'doumbiabonmanin@gmail.com'),
@@ -180,89 +150,88 @@ class AppFooter extends StatelessWidget {
   Widget _buildContactItem(IconData icon, String text) {
     return Row(
       children: [
-        Icon(
-          icon,
-          color: Colors.white70,
-          size: 18,
-        ),
+        Icon(icon, color: Colors.white70, size: 18),
         const SizedBox(width: 10),
         Expanded(
           child: Text(
             text,
-            style: TextStyle(
-              fontSize: 14,
-              color: Colors.white70,
-              height: 1.5,
-            ),
+            style: const TextStyle(
+                fontSize: 14, color: Colors.white70, height: 1.5),
           ),
         ),
       ],
     );
   }
 
-  /// Colonne 3 - Liens
-  Widget _buildLinksColumn() {
+  /// R3 — Liens fonctionnels (Téléchargement navigue vers /download)
+  Widget _buildLinksColumn(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
+        const Text(
           'NASCENTIA',
           style: TextStyle(
-            fontSize: 18,
-            fontWeight: FontWeight.bold,
-            color: Colors.white,
-          ),
+              fontSize: 18, fontWeight: FontWeight.bold, color: Colors.white),
         ),
         const SizedBox(height: 20),
-        _buildLink('Fonctionnalités'),
-        _buildLink('Comment ça marche'),
-        _buildLink('Téléchargement'),
-        _buildLink('Contact'),
+        _buildLink('Fonctionnalités', context),
+        _buildLink('Comment ça marche', context),
+        _buildLink('Téléchargement', context),
+        _buildLink('Contact', context),
       ],
     );
   }
 
-  Widget _buildLink(String text) {
+  Widget _buildLink(String text, BuildContext context) {
     return Padding(
       padding: const EdgeInsets.only(bottom: 12),
       child: MouseRegion(
         cursor: SystemMouseCursors.click,
         child: GestureDetector(
-          onTap: () {
-            // TODO: Navigation
-          },
+          onTap: () => _handleLinkNavigation(text, context),
           child: Text(
             text,
-            style: TextStyle(
-              fontSize: 14,
-              color: Colors.white70,
-              height: 1.5,
-            ),
+            style: const TextStyle(
+                fontSize: 14, color: Colors.white70, height: 1.5),
           ),
         ),
       ),
     );
   }
 
-  /// Colonne 4 - Newsletter
+  void _handleLinkNavigation(String linkText, BuildContext context) {
+    switch (linkText) {
+      case 'Fonctionnalités':
+        NavigationService.scrollToSectionByName('Fonctionnalités');
+        break;
+      case 'Comment ça marche':
+        NavigationService.scrollToSectionByName('Comment ça marche');
+        break;
+      case 'Téléchargement':
+        // R3 — Navigation fonctionnelle vers la page de téléchargement
+        Navigator.pushNamed(context, '/download');
+        break;
+      case 'Contact':
+        NavigationService.scrollToSectionByName('Contact');
+        break;
+    }
+  }
+
   Widget _buildNewsletterColumn() {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
+        const Text(
           'Restons en contact',
           style: TextStyle(
-            fontSize: 18,
-            fontWeight: FontWeight.bold,
-            color: Colors.white,
-          ),
+              fontSize: 18, fontWeight: FontWeight.bold, color: Colors.white),
         ),
         const SizedBox(height: 20),
 
-        // Champ email + bouton
         Container(
           decoration: BoxDecoration(
-            color: Colors.white.withOpacity(0.1),
+            // R12 — withValues au lieu de withOpacity
+            color: Colors.white.withValues(alpha: 0.1),
             borderRadius: AppConstants.borderRadiusPill,
           ),
           padding: EdgeInsets.all(AppConstants.spacing4),
@@ -270,11 +239,11 @@ class AppFooter extends StatelessWidget {
             children: [
               Expanded(
                 child: TextField(
-                  style: TextStyle(color: Colors.white, fontSize: 14),
+                  style: const TextStyle(color: Colors.white, fontSize: 14),
                   decoration: InputDecoration(
                     hintText: 'Entrez votre email',
                     hintStyle: TextStyle(
-                      color: Colors.white.withOpacity(0.5),
+                      color: Colors.white.withValues(alpha: 0.5),
                       fontSize: 14,
                     ),
                     border: InputBorder.none,
@@ -294,14 +263,10 @@ class AppFooter extends StatelessWidget {
                   color: Colors.transparent,
                   child: InkWell(
                     borderRadius: BorderRadius.circular(999),
-                    onTap: () {
-                      // TODO: Action inscription
-                    },
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 24,
-                        vertical: 12,
-                      ),
+                    onTap: () {},
+                    child: const Padding(
+                      padding: EdgeInsets.symmetric(
+                          horizontal: 24, vertical: 12),
                       child: Text(
                         'S\'inscrire',
                         style: TextStyle(
@@ -320,21 +285,20 @@ class AppFooter extends StatelessWidget {
 
         const SizedBox(height: 24),
 
-        // Icônes sociales
+        // R11 — Vraies icônes de marque avec FontAwesome
         _buildSocialIcons(),
       ],
     );
   }
 
-  /// Icônes sociales
   Widget _buildSocialIcons() {
     return Row(
       children: [
-        _buildSocialIcon(Icons.facebook),
+        _buildSocialIcon(FontAwesomeIcons.facebookF),
         const SizedBox(width: 16),
-        _buildSocialIcon(Icons.camera_alt), // Instagram
+        _buildSocialIcon(FontAwesomeIcons.instagram),
         const SizedBox(width: 16),
-        _buildSocialIcon(Icons.chat), // WhatsApp
+        _buildSocialIcon(FontAwesomeIcons.whatsapp),
       ],
     );
   }
@@ -343,36 +307,33 @@ class AppFooter extends StatelessWidget {
     return MouseRegion(
       cursor: SystemMouseCursors.click,
       child: GestureDetector(
-        onTap: () {
-          // TODO: Liens sociaux
-        },
+        onTap: () {},
         child: Container(
           width: 40,
           height: 40,
           decoration: BoxDecoration(
-            color: Colors.white.withOpacity(0.1),
+            // R12 — withValues au lieu de withOpacity
+            color: Colors.white.withValues(alpha: 0.1),
             shape: BoxShape.circle,
           ),
-          child: Icon(
-            icon,
-            color: Colors.white,
-            size: 18,
+          child: Center(
+            child: FaIcon(icon, color: Colors.white, size: 16),
           ),
         ),
       ),
     );
   }
 
-  /// Barre inférieure - Copyright
   Widget _buildBottomBar(BuildContext context, bool isMobile) {
     if (isMobile) {
       return Column(
         children: [
+          // R3 — Copyright mis à jour 2025 → 2026
           Text(
-            '© 2025 NASCENTIA. Tous droits réservés.',
+            '© 2026 NASCENTIA. Tous droits réservés.',
             style: TextStyle(
               fontSize: 13,
-              color: Colors.white.withOpacity(0.5),
+              color: Colors.white.withValues(alpha: 0.5),
             ),
             textAlign: TextAlign.center,
           ),
@@ -383,7 +344,7 @@ class AppFooter extends StatelessWidget {
               _buildBottomLink('Confidentialité'),
               Text(
                 ' · ',
-                style: TextStyle(color: Colors.white.withOpacity(0.5)),
+                style: TextStyle(color: Colors.white.withValues(alpha: 0.5)),
               ),
               _buildBottomLink('Conditions'),
             ],
@@ -396,10 +357,10 @@ class AppFooter extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         Text(
-          '© 2025 NASCENTIA. Tous droits réservés.',
+          '© 2026 NASCENTIA. Tous droits réservés.',
           style: TextStyle(
             fontSize: 13,
-            color: Colors.white.withOpacity(0.5),
+            color: Colors.white.withValues(alpha: 0.5),
           ),
         ),
         Row(
@@ -407,7 +368,7 @@ class AppFooter extends StatelessWidget {
             _buildBottomLink('Confidentialité'),
             Text(
               ' · ',
-              style: TextStyle(color: Colors.white.withOpacity(0.5)),
+              style: TextStyle(color: Colors.white.withValues(alpha: 0.5)),
             ),
             _buildBottomLink('Conditions'),
           ],
@@ -420,14 +381,12 @@ class AppFooter extends StatelessWidget {
     return MouseRegion(
       cursor: SystemMouseCursors.click,
       child: GestureDetector(
-        onTap: () {
-          // TODO: Navigation
-        },
+        onTap: () {},
         child: Text(
           text,
           style: TextStyle(
             fontSize: 13,
-            color: Colors.white.withOpacity(0.5),
+            color: Colors.white.withValues(alpha: 0.5),
           ),
         ),
       ),

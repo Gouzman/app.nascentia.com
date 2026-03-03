@@ -21,7 +21,7 @@ class ContactSection extends StatelessWidget {
           borderRadius: BorderRadius.circular(30),
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withOpacity(0.05),
+              color: Colors.black.withValues(alpha: 0.05),
               blurRadius: 30,
               offset: const Offset(0, 10),
             ),

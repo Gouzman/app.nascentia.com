@@ -17,61 +17,32 @@ class _CredibilitySectionState extends State<CredibilitySection> {
   @override
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
-    final isSmall = screenWidth < 600;
-    final isMedium = screenWidth >= 600 && screenWidth < 1024;
+    final isMobile = screenWidth < 768; // R4 — breakpoint unifié
 
+    // R5 — SectionContainer gère le padding ; plus de Container dupliqué
     return SectionContainer(
       backgroundColor: AppColors.lightBg,
-      child: Container(
-        constraints: const BoxConstraints(maxWidth: 1400),
-        padding: EdgeInsets.symmetric(
-          horizontal: isSmall ? 20 : (isMedium ? 40 : 80),
-          vertical: isSmall ? 60 : 100,
-        ),
-        decoration: BoxDecoration(
-          gradient: LinearGradient(
-            begin: Alignment.topCenter,
-            end: Alignment.bottomCenter,
-            colors: [
-              AppColors.white,
-              AppColors.lightBg,
-              AppColors.white,
-            ],
-            stops: const [0.0, 0.5, 1.0],
-          ),
-        ),
-        child: Column(
-          children: [
-            // Badge "Validation Scientifique"
-            _buildBadge(isSmall),
-            SizedBox(height: isSmall ? 24 : 32),
-
-            // Titre avec gradient text
-            _buildGradientTitle(context, isSmall),
-            SizedBox(height: isSmall ? 16 : 24),
-
-            // Description
-            _buildDescription(context, isSmall, isMedium),
-            SizedBox(height: isSmall ? 40 : 60),
-
-            // Stats badges
-            _buildStatsBadges(context, isSmall, isMedium),
-            SizedBox(height: isSmall ? 40 : 60),
-
-            // Partenariat
-            _buildPartnership(context, isSmall),
-          ],
-        ),
+      child: Column(
+        children: [
+          _buildBadge(isMobile),
+          SizedBox(height: isMobile ? 24 : 32),
+          _buildTitle(context, isMobile),
+          SizedBox(height: isMobile ? 16 : 24),
+          _buildDescription(context, isMobile),
+          SizedBox(height: isMobile ? 40 : 60),
+          _buildStatsBadges(context, isMobile),
+          SizedBox(height: isMobile ? 40 : 60),
+          _buildPartnership(context, isMobile),
+        ],
       ),
     );
   }
 
-  // Badge "Validation Scientifique"
-  Widget _buildBadge(bool isSmall) {
+  Widget _buildBadge(bool isMobile) {
     return Container(
       padding: EdgeInsets.symmetric(
-        horizontal: isSmall ? 16 : 24,
-        vertical: isSmall ? 8 : 12,
+        horizontal: isMobile ? 16 : 24,
+        vertical: isMobile ? 8 : 12,
       ),
       decoration: BoxDecoration(
         gradient: LinearGradient(
@@ -89,16 +60,13 @@ class _CredibilitySectionState extends State<CredibilitySection> {
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Icon(
-            Icons.verified_user_outlined,
-            color: AppColors.purple,
-            size: isSmall ? 16 : 20,
-          ),
-          SizedBox(width: isSmall ? 6 : 8),
+          Icon(Icons.verified_user_outlined,
+              color: AppColors.purple, size: isMobile ? 16 : 20),
+          SizedBox(width: isMobile ? 6 : 8),
           Text(
             'VALIDATION SCIENTIFIQUE',
             style: TextStyle(
-              fontSize: isSmall ? 11 : 13,
+              fontSize: isMobile ? 11 : 13,
               fontWeight: FontWeight.w700,
               letterSpacing: 1.2,
               color: AppColors.purple,
@@ -109,25 +77,20 @@ class _CredibilitySectionState extends State<CredibilitySection> {
     );
   }
 
-  // Titre avec couleur unique
-  Widget _buildGradientTitle(BuildContext context, bool isSmall) {
+  Widget _buildTitle(BuildContext context, bool isMobile) {
     return Text(
       'Un modèle mathématique testé et validé',
       textAlign: TextAlign.center,
-      style: (isSmall
+      style: (isMobile
               ? AppTextStyles.headlineMedium(context)
               : AppTextStyles.displayMedium(context))
-          .copyWith(
-        color: AppColors.purple,
-        height: 1.3,
-      ),
+          .copyWith(color: AppColors.purple, height: 1.3),
     );
   }
 
-  // Description
-  Widget _buildDescription(BuildContext context, bool isSmall, bool isMedium) {
-    return Container(
-      constraints: BoxConstraints(maxWidth: isMedium ? 700 : 900),
+  Widget _buildDescription(BuildContext context, bool isMobile) {
+    return ConstrainedBox(
+      constraints: BoxConstraints(maxWidth: isMobile ? 600 : 800),
       child: Text(
         'Le modèle NASCENTIA est le fruit de plusieurs années de recherches menées avec '
         'des professionnels de santé et des experts scientifiques. Notre approche combine '
@@ -141,12 +104,11 @@ class _CredibilitySectionState extends State<CredibilitySection> {
     );
   }
 
-  // Stats badges
-  Widget _buildStatsBadges(BuildContext context, bool isSmall, bool isMedium) {
+  Widget _buildStatsBadges(BuildContext context, bool isMobile) {
     final stats = [
       {
         'icon': Icons.analytics_outlined,
-        'value': '90%',
+        'value': '90 %', // R1 — unifié à 90 %
         'label': 'Taux de\nFiabilité',
       },
       {
@@ -161,7 +123,7 @@ class _CredibilitySectionState extends State<CredibilitySection> {
       },
     ];
 
-    if (isSmall || isMedium) {
+    if (isMobile) {
       return Column(
         children: stats
             .asMap()
@@ -175,7 +137,7 @@ class _CredibilitySectionState extends State<CredibilitySection> {
                     entry.value['value'] as String,
                     entry.value['label'] as String,
                     entry.key,
-                    isSmall,
+                    isMobile,
                   ),
                 ))
             .toList(),
@@ -197,7 +159,7 @@ class _CredibilitySectionState extends State<CredibilitySection> {
                     entry.value['value'] as String,
                     entry.value['label'] as String,
                     entry.key,
-                    isSmall,
+                    isMobile,
                   ),
                 ),
               ))
@@ -210,10 +172,11 @@ class _CredibilitySectionState extends State<CredibilitySection> {
     String value,
     String label,
     int index,
-    bool isSmall,
+    bool isMobile,
   ) {
     final isHovered = _hoveredStatIndex == index;
 
+    // R10 — Gradient hover adouci : 2 couleurs
     return MouseRegion(
       onEnter: (_) => setState(() => _hoveredStatIndex = index),
       onExit: (_) => setState(() => _hoveredStatIndex = -1),
@@ -223,13 +186,8 @@ class _CredibilitySectionState extends State<CredibilitySection> {
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(20),
           gradient: isHovered
-              ? LinearGradient(
-                  colors: [
-                    AppColors.purple,
-                    AppColors.primary,
-                    AppColors.secondary,
-                    AppColors.purple,
-                  ],
+              ? const LinearGradient(
+                  colors: [AppColors.purple, AppColors.primary],
                   begin: Alignment.topLeft,
                   end: Alignment.bottomRight,
                 )
@@ -243,11 +201,11 @@ class _CredibilitySectionState extends State<CredibilitySection> {
           ],
         ),
         padding: EdgeInsets.all(isHovered ? 2 : 1),
-        transform: Matrix4.identity()..translate(0.0, isHovered ? -6.0 : 0.0),
+        transform: Matrix4.translationValues(0.0, isHovered ? -6.0 : 0.0, 0.0),
         child: Container(
           padding: EdgeInsets.symmetric(
-            horizontal: isSmall ? 20 : 32,
-            vertical: isSmall ? 32 : 40,
+            horizontal: isMobile ? 20 : 32,
+            vertical: isMobile ? 32 : 40,
           ),
           decoration: BoxDecoration(
             color: AppColors.white,
@@ -261,10 +219,9 @@ class _CredibilitySectionState extends State<CredibilitySection> {
           ),
           child: Column(
             children: [
-              // Icône
               Container(
-                width: isSmall ? 56 : 64,
-                height: isSmall ? 56 : 64,
+                width: isMobile ? 56 : 64,
+                height: isMobile ? 56 : 64,
                 decoration: BoxDecoration(
                   gradient: LinearGradient(
                     colors: [
@@ -274,25 +231,18 @@ class _CredibilitySectionState extends State<CredibilitySection> {
                   ),
                   shape: BoxShape.circle,
                 ),
-                child: Icon(
-                  icon,
-                  size: isSmall ? 28 : 32,
-                  color: AppColors.purple,
-                ),
+                child: Icon(icon,
+                    size: isMobile ? 28 : 32, color: AppColors.purple),
               ),
-              SizedBox(height: isSmall ? 16 : 20),
-
-              // Valeur
+              SizedBox(height: isMobile ? 16 : 20),
               Text(
                 value,
                 style: AppTextStyles.displayMedium(context).copyWith(
                   color: AppColors.purple,
-                  fontSize: isSmall ? 36 : 48,
+                  fontSize: isMobile ? 36 : 48,
                 ),
               ),
-              SizedBox(height: isSmall ? 8 : 12),
-
-              // Label
+              SizedBox(height: isMobile ? 8 : 12),
               Text(
                 label,
                 textAlign: TextAlign.center,
@@ -309,10 +259,9 @@ class _CredibilitySectionState extends State<CredibilitySection> {
     );
   }
 
-  // Partenariat
-  Widget _buildPartnership(BuildContext context, bool isSmall) {
+  Widget _buildPartnership(BuildContext context, bool isMobile) {
     return Container(
-      padding: EdgeInsets.all(isSmall ? 24 : 32),
+      padding: EdgeInsets.all(isMobile ? 24 : 32),
       decoration: BoxDecoration(
         color: AppColors.purple.withValues(alpha: 0.05),
         borderRadius: BorderRadius.circular(20),
@@ -326,16 +275,13 @@ class _CredibilitySectionState extends State<CredibilitySection> {
           Row(
             mainAxisSize: MainAxisSize.min,
             children: [
-              Icon(
-                Icons.handshake_outlined,
-                color: AppColors.purple,
-                size: isSmall ? 20 : 24,
-              ),
-              SizedBox(width: isSmall ? 8 : 12),
+              Icon(Icons.handshake_outlined,
+                  color: AppColors.purple, size: isMobile ? 20 : 24),
+              SizedBox(width: isMobile ? 8 : 12),
               Text(
                 'PARTENARIAT OFFICIEL',
                 style: TextStyle(
-                  fontSize: isSmall ? 12 : 14,
+                  fontSize: isMobile ? 12 : 14,
                   fontWeight: FontWeight.w700,
                   letterSpacing: 1.2,
                   color: AppColors.purple,
@@ -343,7 +289,7 @@ class _CredibilitySectionState extends State<CredibilitySection> {
               ),
             ],
           ),
-          SizedBox(height: isSmall ? 12 : 16),
+          SizedBox(height: isMobile ? 12 : 16),
           Text(
             'Syndicat National des Médecins Privés de Côte d\'Ivoire',
             textAlign: TextAlign.center,

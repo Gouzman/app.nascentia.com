@@ -1,10 +1,60 @@
 import 'package:flutter/material.dart';
 import '../theme/app_colors.dart';
 import '../theme/app_text_styles.dart';
-import '../theme/app_constants.dart';
 import '../widgets/section_container.dart';
 
-/// Section "Comment ça marche" - Design Premium
+class _StepData {
+  final String number;
+  final String title;
+  final String description;
+  final IconData icon;
+  final Color color;
+
+  const _StepData({
+    required this.number,
+    required this.title,
+    required this.description,
+    required this.icon,
+    required this.color,
+  });
+}
+
+const List<_StepData> _steps = [
+  _StepData(
+    number: '1',
+    title: 'Téléchargez',
+    description:
+        'Installez NASCENTIA gratuitement sur iOS ou Android en moins de 30 secondes.',
+    icon: Icons.download_rounded,
+    color: AppColors.primary,
+  ),
+  _StepData(
+    number: '2',
+    title: 'Créez votre profil',
+    description:
+        'Renseignez vos informations personnelles de manière sécurisée et confidentielle.',
+    icon: Icons.person_add_rounded,
+    color: AppColors.secondary,
+  ),
+  _StepData(
+    number: '3',
+    title: 'Définissez votre objectif',
+    description:
+        'Choisissez entre détermination du sexe ou planification selon votre situation.',
+    icon: Icons.flag_rounded,
+    color: AppColors.accent,
+  ),
+  _StepData(
+    number: '4',
+    title: 'Accédez aux résultats',
+    description:
+        'Recevez vos recommandations personnalisées basées sur notre algorithme validé.',
+    icon: Icons.check_circle_rounded,
+    color: AppColors.successGreen,
+  ),
+];
+
+/// Section "Comment ça marche" — Timeline
 class HowItWorksSection extends StatefulWidget {
   const HowItWorksSection({Key? key}) : super(key: key);
 
@@ -17,8 +67,7 @@ class _HowItWorksSectionState extends State<HowItWorksSection> {
 
   @override
   Widget build(BuildContext context) {
-    final screenWidth = MediaQuery.of(context).size.width;
-    final isSmall = screenWidth < 900;
+    final isMobile = MediaQuery.of(context).size.width < 768;
 
     return Container(
       decoration: BoxDecoration(
@@ -36,9 +85,10 @@ class _HowItWorksSectionState extends State<HowItWorksSection> {
         backgroundColor: Colors.transparent,
         child: Column(
           children: [
-            // Badge "Comment ça marche"
+            // Badge
             Container(
-              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
+              padding:
+                  const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
               decoration: BoxDecoration(
                 color: AppColors.white.withValues(alpha: 0.2),
                 borderRadius: BorderRadius.circular(20),
@@ -56,256 +106,215 @@ class _HowItWorksSectionState extends State<HowItWorksSection> {
               ),
             ),
             const SizedBox(height: 24),
-            // Titre principal
             Text(
               'Seulement 4 étapes',
-              style: AppTextStyles.displayMedium(context).copyWith(
-                fontWeight: FontWeight.w900,
-              ),
+              style: AppTextStyles.displayMedium(context)
+                  .copyWith(fontWeight: FontWeight.w800),
               textAlign: TextAlign.center,
             ),
             const SizedBox(height: 16),
-            // Sous-titre
             Text(
               'Simple, rapide et efficace pour toute la famille',
-              style: AppTextStyles.bodyLarge(context).copyWith(
-                fontSize: 18,
-              ),
+              style: AppTextStyles.bodyLarge(context).copyWith(fontSize: 18),
               textAlign: TextAlign.center,
             ),
             const SizedBox(height: 60),
-            if (isSmall)
-              Column(
-                children: [
-                  _buildStepCard(
-                    context,
-                    0,
-                    '1',
-                    'Téléchargez',
-                    'Installez NASCENTIA gratuitement sur iOS ou Android en moins de 30 secondes.',
-                    Icons.download_rounded,
-                    AppColors.primary,
-                    isSmall,
-                  ),
-                  const SizedBox(height: 24),
-                  _buildStepCard(
-                    context,
-                    1,
-                    '2',
-                    'Créez votre profil',
-                    'Renseignez vos informations personnelles de manière sécurisée et confidentielle.',
-                    Icons.person_add_rounded,
-                    AppColors.secondary,
-                    isSmall,
-                  ),
-                  const SizedBox(height: 24),
-                  _buildStepCard(
-                    context,
-                    2,
-                    '3',
-                    'Définissez votre objectif',
-                    'Choisissez entre détermination du sexe ou planification selon votre situation.',
-                    Icons.flag_rounded,
-                    AppColors.accent,
-                    isSmall,
-                  ),
-                  const SizedBox(height: 24),
-                  _buildStepCard(
-                    context,
-                    3,
-                    '4',
-                    'Accédez aux résultats',
-                    'Recevez vos recommandations personnalisées basées sur notre algorithme validé.',
-                    Icons.check_circle_rounded,
-                    AppColors.successGreen,
-                    isSmall,
-                  ),
-                ],
-              )
-            else
-              Column(
-                children: [
-                  Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Expanded(
-                        child: _buildStepCard(
-                          context,
-                          0,
-                          '1',
-                          'Téléchargez',
-                          'Installez NASCENTIA gratuitement sur iOS ou Android en moins de 30 secondes.',
-                          Icons.download_rounded,
-                          AppColors.primary,
-                          isSmall,
-                        ),
-                      ),
-                      const SizedBox(width: 30),
-                      Expanded(
-                        child: _buildStepCard(
-                          context,
-                          1,
-                          '2',
-                          'Créez votre profil',
-                          'Renseignez vos informations personnelles de manière sécurisée et confidentielle.',
-                          Icons.person_add_rounded,
-                          AppColors.secondary,
-                          isSmall,
-                        ),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 30),
-                  Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Expanded(
-                        child: _buildStepCard(
-                          context,
-                          2,
-                          '3',
-                          'Définissez votre objectif',
-                          'Choisissez entre détermination du sexe ou planification selon votre situation.',
-                          Icons.flag_rounded,
-                          AppColors.accent,
-                          isSmall,
-                        ),
-                      ),
-                      const SizedBox(width: 30),
-                      Expanded(
-                        child: _buildStepCard(
-                          context,
-                          3,
-                          '4',
-                          'Accédez aux résultats',
-                          'Recevez vos recommandations personnalisées basées sur notre algorithme validé.',
-                          Icons.check_circle_rounded,
-                          AppColors.successGreen,
-                          isSmall,
-                        ),
-                      ),
-                    ],
-                  ),
-                ],
-              ),
+            isMobile
+                ? _buildMobileTimeline(context)
+                : _buildDesktopTimeline(context),
           ],
         ),
       ),
     );
   }
 
-  Widget _buildStepCard(
-    BuildContext context,
-    int index,
-    String number,
-    String title,
-    String description,
-    IconData icon,
-    Color accentColor,
-    bool isSmall,
-  ) {
+  Widget _buildDesktopTimeline(BuildContext context) {
+    return Stack(
+      children: [
+        // Horizontal connecting line at center of circles (circle h=64, center at 32)
+        Positioned(
+          top: 31,
+          left: 0,
+          right: 0,
+          child: Container(
+            height: 2,
+            color: AppColors.white.withValues(alpha: 0.3),
+          ),
+        ),
+        Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: List.generate(
+            _steps.length,
+            (i) => Expanded(child: _buildDesktopStep(context, i)),
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildDesktopStep(BuildContext context, int index) {
+    final step = _steps[index];
     final isHovered = _hoveredStep == index;
+    final dimmed = _hoveredStep != null && !isHovered;
 
     return MouseRegion(
       onEnter: (_) => setState(() => _hoveredStep = index),
       onExit: (_) => setState(() => _hoveredStep = null),
-      child: AnimatedContainer(
-        duration: const Duration(milliseconds: 300),
-        curve: Curves.easeOut,
-        transform: Matrix4.identity()..scale(isHovered ? 1.02 : 1.0),
-        padding: EdgeInsets.all(isSmall ? 32 : 40),
-        decoration: BoxDecoration(
-          // Glassmorphism effect
-          color: AppColors.white.withValues(alpha: isHovered ? 0.18 : 0.12),
-          borderRadius: AppConstants.borderRadiusXLarge,
-          border: Border.all(
-            color: AppColors.white.withValues(alpha: isHovered ? 0.4 : 0.25),
-            width: 1.5,
-          ),
-          boxShadow: isHovered
-              ? [
-                  BoxShadow(
-                    color: accentColor.withValues(alpha: 0.2),
-                    blurRadius: 25,
-                    offset: const Offset(0, 10),
-                  ),
-                ]
-              : null,
-        ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Row(
-              children: [
-                // Badge numéro avec effet néon
-                AnimatedContainer(
-                  duration: const Duration(milliseconds: 300),
-                  width: isSmall ? 56 : 64,
-                  height: isSmall ? 56 : 64,
-                  decoration: BoxDecoration(
-                    color: accentColor,
-                    borderRadius: BorderRadius.circular(16),
-                    boxShadow: isHovered
-                        ? [
-                            BoxShadow(
-                              color: accentColor.withValues(alpha: 0.5),
-                              blurRadius: 20,
-                              spreadRadius: 2,
-                            ),
-                          ]
-                        : null,
-                  ),
-                  child: Center(
-                    child: Text(
-                      number,
-                      style: TextStyle(
-                        fontSize: isSmall ? 24 : 28,
-                        fontWeight: FontWeight.w900,
-                        color: AppColors.white,
-                      ),
+      child: AnimatedOpacity(
+        duration: const Duration(milliseconds: 200),
+        opacity: dimmed ? 0.65 : 1.0,
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 12),
+          child: Column(
+            children: [
+              // Numbered circle
+              Container(
+                width: 64,
+                height: 64,
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  color: step.color,
+                  boxShadow: [
+                    BoxShadow(
+                      color: step.color.withValues(alpha: 0.45),
+                      blurRadius: 18,
+                      offset: const Offset(0, 6),
+                    ),
+                  ],
+                ),
+                child: Center(
+                  child: Text(
+                    step.number,
+                    style: const TextStyle(
+                      fontSize: 24,
+                      fontWeight: FontWeight.bold,
+                      color: AppColors.white,
                     ),
                   ),
                 ),
-                const Spacer(),
-                // Icône flottante
-                AnimatedContainer(
-                  duration: const Duration(milliseconds: 300),
-                  padding: const EdgeInsets.all(12),
-                  decoration: BoxDecoration(
-                    color: AppColors.white
-                        .withValues(alpha: isHovered ? 0.25 : 0.15),
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                  child: Icon(
-                    icon,
-                    color: AppColors.white,
-                    size: isSmall ? 24 : 28,
-                  ),
+              ),
+              const SizedBox(height: 20),
+              Icon(
+                step.icon,
+                color: AppColors.white.withValues(alpha: 0.85),
+                size: 28,
+              ),
+              const SizedBox(height: 16),
+              Text(
+                step.title,
+                style: AppTextStyles.titleLarge(context).copyWith(
+                  color: AppColors.white,
+                  fontWeight: FontWeight.w700,
                 ),
-              ],
-            ),
-            SizedBox(height: AppConstants.spacing32),
-            // Titre
-            Text(
-              title,
-              style: AppTextStyles.titleLarge(context).copyWith(
-                color: AppColors.white,
-                fontWeight: FontWeight.w900,
-                fontSize: isSmall ? 22 : 26,
+                textAlign: TextAlign.center,
               ),
-            ),
-            const SizedBox(height: 12),
-            // Description
-            Text(
-              description,
-              style: AppTextStyles.bodyLarge(context).copyWith(
-                fontSize: isSmall ? 15 : 16,
-                height: 1.6,
+              const SizedBox(height: 10),
+              Text(
+                step.description,
+                style: AppTextStyles.bodySmall(context).copyWith(
+                  color: AppColors.white.withValues(alpha: 0.8),
+                  height: 1.6,
+                ),
+                textAlign: TextAlign.center,
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
+    );
+  }
+
+  Widget _buildMobileTimeline(BuildContext context) {
+    return Column(
+      children: List.generate(_steps.length, (i) {
+        return _buildMobileStep(context, i, i == _steps.length - 1);
+      }),
+    );
+  }
+
+  Widget _buildMobileStep(BuildContext context, int index, bool isLast) {
+    final step = _steps[index];
+
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        // Left column: circle + vertical connector
+        Column(
+          children: [
+            Container(
+              width: 56,
+              height: 56,
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                color: step.color,
+                boxShadow: [
+                  BoxShadow(
+                    color: step.color.withValues(alpha: 0.4),
+                    blurRadius: 12,
+                    offset: const Offset(0, 4),
+                  ),
+                ],
+              ),
+              child: Center(
+                child: Text(
+                  step.number,
+                  style: const TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
+                    color: AppColors.white,
+                  ),
+                ),
+              ),
+            ),
+            if (!isLast)
+              Container(
+                width: 2,
+                height: 88,
+                color: AppColors.white.withValues(alpha: 0.3),
+              ),
+          ],
+        ),
+        const SizedBox(width: 20),
+        // Right: title + icon + description
+        Expanded(
+          child: Padding(
+            padding: const EdgeInsets.only(top: 12),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  children: [
+                    Expanded(
+                      child: Text(
+                        step.title,
+                        style: AppTextStyles.titleMedium(context).copyWith(
+                          color: AppColors.white,
+                          fontWeight: FontWeight.w700,
+                        ),
+                      ),
+                    ),
+                    const SizedBox(width: 8),
+                    Icon(
+                      step.icon,
+                      color: AppColors.white.withValues(alpha: 0.85),
+                      size: 20,
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 8),
+                Text(
+                  step.description,
+                  style: AppTextStyles.bodySmall(context).copyWith(
+                    color: AppColors.white.withValues(alpha: 0.8),
+                    height: 1.6,
+                  ),
+                ),
+                if (!isLast) const SizedBox(height: 24),
+              ],
+            ),
+          ),
+        ),
+      ],
     );
   }
 }

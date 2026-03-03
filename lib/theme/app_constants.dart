@@ -41,7 +41,7 @@ class AppConstants {
   // Ombres Material Design
   static List<BoxShadow> get shadowSmall => [
         BoxShadow(
-          color: Colors.black.withOpacity(0.04),
+          color: Colors.black.withValues(alpha: 0.04),
           blurRadius: 8,
           offset: const Offset(0, 2),
         ),
@@ -49,7 +49,7 @@ class AppConstants {
 
   static List<BoxShadow> get shadowMedium => [
         BoxShadow(
-          color: Colors.black.withOpacity(0.08),
+          color: Colors.black.withValues(alpha: 0.08),
           blurRadius: 16,
           offset: const Offset(0, 4),
         ),
@@ -57,7 +57,7 @@ class AppConstants {
 
   static List<BoxShadow> get shadowLarge => [
         BoxShadow(
-          color: Colors.black.withOpacity(0.12),
+          color: Colors.black.withValues(alpha: 0.12),
           blurRadius: 24,
           offset: const Offset(0, 8),
         ),
@@ -65,7 +65,7 @@ class AppConstants {
 
   static List<BoxShadow> get shadowXLarge => [
         BoxShadow(
-          color: Colors.black.withOpacity(0.16),
+          color: Colors.black.withValues(alpha: 0.16),
           blurRadius: 32,
           offset: const Offset(0, 12),
         ),

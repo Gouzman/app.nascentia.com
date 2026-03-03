@@ -37,6 +37,7 @@ class AppTextStyles {
       fontWeight: FontWeight.bold,
       color: AppColors.darkText,
       height: 1.2,
+      letterSpacing: -0.5,
     );
   }
 
@@ -47,6 +48,7 @@ class AppTextStyles {
       fontWeight: FontWeight.bold,
       color: AppColors.darkText,
       height: 1.3,
+      letterSpacing: -0.3,
     );
   }
 

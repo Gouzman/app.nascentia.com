@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import '../theme/app_colors.dart';
 import '../theme/app_text_styles.dart';
 import 'dart:math' as math;
@@ -47,12 +48,11 @@ class _HeroSectionState extends State<HeroSection>
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
     final isDesktop = size.width >= 1024;
-    final isTablet = size.width >= 768 && size.width < 1024;
     final isMobile = size.width < 768;
 
     return Container(
       constraints: BoxConstraints(
-        minHeight: size.height * 0.7, // Optimisé à 70vh pour respiration
+        minHeight: size.height * 0.7,
       ),
       margin: EdgeInsets.symmetric(
         horizontal: isMobile ? 16 : 20,
@@ -62,7 +62,7 @@ class _HeroSectionState extends State<HeroSection>
         borderRadius: BorderRadius.circular(40),
         boxShadow: [
           BoxShadow(
-            color: AppColors.primaryPink.withOpacity(0.2),
+            color: AppColors.primaryPink.withValues(alpha: 0.2),
             blurRadius: 30,
             offset: const Offset(0, 12),
           ),
@@ -75,20 +75,18 @@ class _HeroSectionState extends State<HeroSection>
             gradient: AppColors.heroGradient,
           ),
           child: Stack(
-            clipBehavior: Clip.hardEdge, // Clip strict
+            clipBehavior: Clip.hardEdge,
             children: [
-              // Contenu principal
               Padding(
                 padding: EdgeInsets.symmetric(
-                  horizontal: isMobile ? 32 : (isTablet ? 50 : 80), // Réduit
-                  vertical: isMobile ? 50 : 60, // Réduit de 80 à 60
+                  horizontal: isMobile ? 32 : (size.width < 1024 ? 50 : 80),
+                  vertical: isMobile ? 50 : 60,
                 ),
                 child: isMobile
                     ? _buildMobileLayout(context)
                     : _buildDesktopLayout(context, isDesktop),
               ),
 
-              // Mockups flottants (Desktop & Tablet uniquement)
               if (!isMobile)
                 Positioned.fill(
                   child: _buildPhoneMockups(context, isDesktop),
@@ -100,12 +98,10 @@ class _HeroSectionState extends State<HeroSection>
     );
   }
 
-  /// Layout Desktop & Tablet
   Widget _buildDesktopLayout(BuildContext context, bool isDesktop) {
     return Row(
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
-        // Colonne gauche - Contenu texte
         Expanded(
           flex: isDesktop ? 5 : 6,
           child: FadeTransition(
@@ -116,7 +112,6 @@ class _HeroSectionState extends State<HeroSection>
             ),
           ),
         ),
-        // Colonne droite - Espace pour mockups
         Expanded(
           flex: isDesktop ? 5 : 4,
           child: const SizedBox(),
@@ -125,7 +120,6 @@ class _HeroSectionState extends State<HeroSection>
     );
   }
 
-  /// Layout Mobile
   Widget _buildMobileLayout(BuildContext context) {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
@@ -140,7 +134,6 @@ class _HeroSectionState extends State<HeroSection>
     );
   }
 
-  /// Contenu texte
   Widget _buildTextContent(BuildContext context, bool isMobile) {
     return Column(
       crossAxisAlignment:
@@ -172,21 +165,18 @@ class _HeroSectionState extends State<HeroSection>
           ],
         ),
 
-        const SizedBox(height: 24), // Réduit de 32 à 24
+        const SizedBox(height: 24),
 
-        // Description
         Text(
           'Une application scientifique innovante permettant de déterminer le sexe du bébé dès la conception '
           'ou de planifier le sexe avant la grossesse grâce à un modèle validé.',
-          style: AppTextStyles.bodyLarge(context).copyWith(
-            height: 1.7, // Meilleure lisibilité
-          ),
+          style: AppTextStyles.bodyLarge(context).copyWith(height: 1.7),
           textAlign: isMobile ? TextAlign.center : TextAlign.left,
         ),
 
-        const SizedBox(height: 36), // Réduit de 48 à 36
+        const SizedBox(height: 36),
 
-        // Bouton principal
+        // R2 — Bouton CTA solide blanc (plus visible sur fond rose)
         _buildPrimaryButton(isMobile),
 
         if (!isMobile) ...[
@@ -197,30 +187,34 @@ class _HeroSectionState extends State<HeroSection>
     );
   }
 
-  /// Bouton principal - Style pill transparent
+  /// R2 — Bouton blanc plein avec icône download (remplace le ghost button)
   Widget _buildPrimaryButton(bool isMobile) {
     return MouseRegion(
       cursor: SystemMouseCursors.click,
       child: GestureDetector(
-        onTap: () {
-          Navigator.pushNamed(context, '/download');
-        },
+        onTap: () => Navigator.pushNamed(context, '/download'),
         child: Container(
           padding: EdgeInsets.symmetric(
             horizontal: isMobile ? 32 : 40,
             vertical: isMobile ? 16 : 20,
           ),
           decoration: BoxDecoration(
-            color: Colors.transparent,
-            border: Border.all(color: AppColors.white, width: 2),
+            color: AppColors.white,
             borderRadius: BorderRadius.circular(999),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black.withValues(alpha: 0.15),
+                blurRadius: 20,
+                offset: const Offset(0, 8),
+              ),
+            ],
           ),
           child: Row(
             mainAxisSize: MainAxisSize.min,
             children: [
               Icon(
-                Icons.play_circle_outline,
-                color: AppColors.white,
+                Icons.download_rounded,
+                color: AppColors.primary,
                 size: isMobile ? 20 : 24,
               ),
               const SizedBox(width: 12),
@@ -228,9 +222,9 @@ class _HeroSectionState extends State<HeroSection>
                 'Télécharger l\'application',
                 style: TextStyle(
                   fontSize: isMobile ? 15 : 18,
-                  fontWeight: FontWeight.w600,
-                  color: AppColors.white,
-                  letterSpacing: 0.5,
+                  fontWeight: FontWeight.w700,
+                  color: AppColors.primary,
+                  letterSpacing: 0.3,
                 ),
               ),
             ],
@@ -240,57 +234,61 @@ class _HeroSectionState extends State<HeroSection>
     );
   }
 
-  /// Icônes sociales
+  /// R11 — Icônes sociales avec vrais logos FontAwesome
   Widget _buildSocialIcons() {
     return Row(
       children: [
-        _buildSocialIcon(Icons.send),
+        _buildSocialIcon(FontAwesomeIcons.telegram),
         const SizedBox(width: 20),
-        _buildSocialIcon(Icons.facebook_outlined),
+        _buildSocialIcon(FontAwesomeIcons.facebookF),
         const SizedBox(width: 20),
-        _buildSocialIcon(Icons.camera_alt_outlined),
+        _buildSocialIcon(FontAwesomeIcons.instagram),
       ],
     );
   }
 
   Widget _buildSocialIcon(IconData icon) {
-    return Container(
-      width: 40,
-      height: 40,
-      decoration: BoxDecoration(
-        color: AppColors.white.withOpacity(0.1),
-        borderRadius: BorderRadius.circular(10),
+    return MouseRegion(
+      cursor: SystemMouseCursors.click,
+      child: GestureDetector(
+        onTap: () {},
+        child: Container(
+          width: 40,
+          height: 40,
+          decoration: BoxDecoration(
+            color: AppColors.white.withValues(alpha: 0.15),
+            borderRadius: BorderRadius.circular(10),
+          ),
+          child: Center(
+            child: FaIcon(icon, color: AppColors.white, size: 18),
+          ),
+        ),
       ),
-      child: Icon(icon, color: AppColors.white, size: 20),
     );
   }
 
-  /// Mockups smartphones avec animations
   Widget _buildPhoneMockups(BuildContext context, bool isDesktop) {
     return Stack(
-      clipBehavior: Clip.hardEdge, // Clip strict
+      clipBehavior: Clip.hardEdge,
       children: [
-        // Téléphone 1 - Position basse, rotation négative
         Positioned(
-          right: isDesktop ? 100 : 50, // Légèrement plus à gauche
-          bottom: 30, // Réduit de 40 à 30
+          right: isDesktop ? 100 : 50,
+          bottom: 30,
           child: _AnimatedPhone(
             imagePath: 'assets/images/phone_1.png',
             rotation: -8 * math.pi / 180,
             delay: 200,
-            scale: isDesktop ? 0.9 : 0.75, // Réduit pour éviter débordement
+            scale: isDesktop ? 0.9 : 0.75,
           ),
         ),
-
-        // Téléphone 2 - Position haute, rotation positive
         Positioned(
-          right: isDesktop ? 280 : 180, // Légèrement plus à gauche
-          top: 70, // Réduit de 80 à 70
+          right: isDesktop ? 280 : 180,
+          top: 70,
           child: _AnimatedPhone(
             imagePath: 'assets/images/phone_2.png',
             rotation: 6 * math.pi / 180,
             delay: 400,
-            scale: isDesktop ? 0.9 : 0.75, // Réduit pour éviter débordement
+            scale: isDesktop ? 0.9 : 0.75,
           ),
         ),
       ],
@@ -366,10 +364,9 @@ class _AnimatedPhoneState extends State<_AnimatedPhone>
                 borderRadius: BorderRadius.circular(30),
                 boxShadow: [
                   BoxShadow(
-                    color:
-                        Colors.black.withOpacity(0.18), // Réduit de 0.25 à 0.18
-                    blurRadius: 24, // Réduit de 30 à 24
-                    offset: const Offset(0, 14), // Réduit de 20 à 14
+                    color: Colors.black.withValues(alpha: 0.18),
+                    blurRadius: 24,
+                    offset: const Offset(0, 14),
                   ),
                 ],
               ),
@@ -383,7 +380,7 @@ class _AnimatedPhoneState extends State<_AnimatedPhone>
                       width: 280,
                       height: 560,
                       decoration: BoxDecoration(
-                        color: AppColors.white.withOpacity(0.2),
+                        color: AppColors.white.withValues(alpha: 0.2),
                         borderRadius: BorderRadius.circular(30),
                       ),
                       child: const Center(

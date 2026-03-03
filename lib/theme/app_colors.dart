@@ -17,7 +17,9 @@ class AppColors {
   static const Color greyLight = Color(0xFF6B7280); // Texte tertiaire
 
   // ==================== COULEURS FOND ====================
-  static const Color lightBg = Color(0xFFF8F9FA); // Fond clair
+  static const Color lightBg = Color(0xFFF7F4F0); // Fond chaud (crème)
+  static const Color warmCream = Color(0xFFF7F4F0); // Alias explicite
+  static const Color warmGrey = Color(0xFF6B6560); // Gris chaud
   static const Color darkBg = Color(0xFF1E1E1E); // Fond sombre footer
 
   // ==================== COULEURS FEEDBACK ====================

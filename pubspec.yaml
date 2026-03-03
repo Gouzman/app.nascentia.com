@@ -15,6 +15,12 @@ dependencies:
   # Google Fonts pour les polices personnalisées
   google_fonts: ^6.1.0
 
+  # Icônes de marques (Facebook, Instagram, WhatsApp, Telegram…)
+  font_awesome_flutter: ^10.7.0
+
+  # Backend Supabase
+  supabase_flutter: ^2.8.4
+
 dev_dependencies:
   flutter_test:
     sdk: flutter

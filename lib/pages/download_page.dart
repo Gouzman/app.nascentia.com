@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import '../models/review.dart';
+import '../services/download_service.dart';
 import '../theme/app_colors.dart';
 import '../theme/app_text_styles.dart';
+import '../widgets/scroll_reveal.dart';
 import '../widgets/top_navigation_bar.dart';
 import '../widgets/app_footer.dart';
 
@@ -15,6 +18,83 @@ class DownloadPage extends StatefulWidget {
 class _DownloadPageState extends State<DownloadPage> {
   int _selectedScreenshot = 0;
   bool _isDownloadHovered = false;
+
+  List<Review> _reviews = [];
+  int _downloadsCount = 0;
+  bool _isLoading = true;
+  String? _loadError;
+  int? _filterRating;
+  // null = pas voté, true = utile, false = pas utile
+  final Map<String, bool?> _helpfulVotes = {};
+  // compteur local (initialisé depuis DB, mis à jour à chaque vote)
+  final Map<String, int> _helpfulCounts = {};
+
+  double get _averageRating => _reviews.isEmpty
+      ? 0
+      : _reviews.map((r) => r.rating).reduce((a, b) => a + b) /
+          _reviews.length;
+
+  int get _reviewsCount => _reviews.length;
+
+  Map<int, int> get _ratingDistribution {
+    final dist = {1: 0, 2: 0, 3: 0, 4: 0, 5: 0};
+    for (final r in _reviews) {
+      dist[r.rating] = (dist[r.rating] ?? 0) + 1;
+    }
+    return dist;
+  }
+
+  List<Review> get _filteredReviews => _filterRating == null
+      ? _reviews
+      : _reviews.where((r) => r.rating == _filterRating).toList();
+
+  @override
+  void initState() {
+    super.initState();
+    _loadData();
+  }
+
+  Future<void> _loadData() async {
+    setState(() {
+      _isLoading = true;
+      _loadError = null;
+    });
+    try {
+      final results = await Future.wait([
+        DownloadService.getReviews(),
+        DownloadService.getDownloadsCount(),
+      ]);
+      if (mounted) {
+        final reviews = results[0] as List<Review>;
+        setState(() {
+          _reviews = reviews;
+          _downloadsCount = results[1] as int;
+          _isLoading = false;
+          for (final r in reviews) {
+            _helpfulCounts[r.id] = r.helpfulCount;
+          }
+        });
+      }
+    } catch (e) {
+      if (mounted) {
+        setState(() {
+          _loadError = 'Impossible de charger les données.';
+          _isLoading = false;
+        });
+      }
+    }
+  }
+
+  String _relativeDate(DateTime dt) {
+    final diff = DateTime.now().difference(dt);
+    if (diff.inDays < 1) return 'aujourd\'hui';
+    if (diff.inDays == 1) return 'il y a 1 jour';
+    if (diff.inDays < 7) return 'il y a ${diff.inDays} jours';
+    if (diff.inDays < 14) return 'il y a 1 semaine';
+    if (diff.inDays < 30) return 'il y a ${(diff.inDays / 7).floor()} semaines';
+    if (diff.inDays < 60) return 'il y a 1 mois';
+    return 'il y a ${(diff.inDays / 30).floor()} mois';
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -45,35 +125,62 @@ class _DownloadPageState extends State<DownloadPage> {
                   const SizedBox(height: 40),
 
                   // Stats row (note, téléchargements, âge)
-                  _buildStatsRow(isMobile),
+                  ScrollReveal(
+                    duration: const Duration(milliseconds: 700),
+                    child: _buildStatsRow(isMobile),
+                  ),
                   const SizedBox(height: 40),
 
                   // Bouton de téléchargement principal
-                  _buildDownloadButton(isMobile),
+                  ScrollReveal(
+                    delay: const Duration(milliseconds: 80),
+                    duration: const Duration(milliseconds: 640),
+                    child: _buildDownloadButton(isMobile),
+                  ),
                   const SizedBox(height: 50),
 
                   // Screenshots
-                  _buildScreenshotsSection(isMobile, isTablet),
+                  ScrollReveal(
+                    duration: const Duration(milliseconds: 780),
+                    child: _buildScreenshotsSection(isMobile, isTablet),
+                  ),
                   const SizedBox(height: 60),
 
                   // À propos
-                  _buildAboutSection(context, isMobile),
+                  ScrollReveal(
+                    duration: const Duration(milliseconds: 720),
+                    child: _buildAboutSection(context, isMobile),
+                  ),
                   const SizedBox(height: 50),
 
                   // Description détaillée
-                  _buildDescriptionSection(context, isMobile),
+                  ScrollReveal(
+                    delay: const Duration(milliseconds: 60),
+                    duration: const Duration(milliseconds: 660),
+                    child: _buildDescriptionSection(context, isMobile),
+                  ),
                   const SizedBox(height: 50),
 
                   // Fonctionnalités
-                  _buildFeaturesSection(context, isMobile),
+                  ScrollReveal(
+                    duration: const Duration(milliseconds: 750),
+                    child: _buildFeaturesSection(context, isMobile),
+                  ),
                   const SizedBox(height: 50),
 
                   // Informations techniques
-                  _buildTechnicalInfo(context, isMobile),
+                  ScrollReveal(
+                    delay: const Duration(milliseconds: 40),
+                    duration: const Duration(milliseconds: 680),
+                    child: _buildTechnicalInfo(context, isMobile),
+                  ),
                   const SizedBox(height: 50),
 
                   // Avis et notes
-                  _buildReviewsSection(context, isMobile),
+                  ScrollReveal(
+                    duration: const Duration(milliseconds: 720),
+                    child: _buildReviewsSection(context, isMobile),
+                  ),
                 ],
               ),
             ),
@@ -125,9 +232,7 @@ class _DownloadPageState extends State<DownloadPage> {
                 'NASCENTIA',
                 style: isMobile
                     ? AppTextStyles.headlineMedium(context)
-                    : AppTextStyles.headlineLarge(context).copyWith(
-                        fontWeight: FontWeight.w900,
-                      ),
+                    : AppTextStyles.headlineLarge(context),
               ),
               const SizedBox(height: 8),
               Text(
@@ -153,6 +258,14 @@ class _DownloadPageState extends State<DownloadPage> {
 
   // Stats row
   Widget _buildStatsRow(bool isMobile) {
+    final ratingStr = _averageRating == 0
+        ? '—'
+        : _averageRating.toStringAsFixed(1);
+    final reviewsStr = '$_reviewsCount avis';
+    final downloadsStr = _downloadsCount == 0
+        ? '—'
+        : '${(_downloadsCount / 1000).round()}k+';
+
     return Container(
       padding: EdgeInsets.all(isMobile ? 20 : 32),
       decoration: BoxDecoration(
@@ -165,9 +278,9 @@ class _DownloadPageState extends State<DownloadPage> {
       child: isMobile
           ? Column(
               children: [
-                _buildStatItem(Icons.star, '4.8', '2 341 avis'),
+                _buildStatItem(Icons.star, ratingStr, reviewsStr),
                 const Divider(height: 32),
-                _buildStatItem(Icons.download, '10k+', 'Téléchargements'),
+                _buildStatItem(Icons.download, downloadsStr, 'Téléchargements'),
                 const Divider(height: 32),
                 _buildStatItem(Icons.info_outline, '18+', 'Âge requis'),
               ],
@@ -175,12 +288,12 @@ class _DownloadPageState extends State<DownloadPage> {
           : Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
-                _buildStatItem(Icons.star, '4.8', '2 341 avis'),
+                _buildStatItem(Icons.star, ratingStr, reviewsStr),
                 Container(
                     width: 1,
                     height: 50,
                     color: AppColors.greyLight.withValues(alpha: 0.3)),
-                _buildStatItem(Icons.download, '10k+', 'Téléchargements'),
+                _buildStatItem(Icons.download, downloadsStr, 'Téléchargements'),
                 Container(
                     width: 1,
                     height: 50,
@@ -201,9 +314,7 @@ class _DownloadPageState extends State<DownloadPage> {
             const SizedBox(width: 6),
             Text(
               value,
-              style: TextStyle(
-                fontSize: 24,
-                fontWeight: FontWeight.w700,
+              style: AppTextStyles.headlineSmall(context).copyWith(
                 color: AppColors.darkText,
               ),
             ),
@@ -212,10 +323,7 @@ class _DownloadPageState extends State<DownloadPage> {
         const SizedBox(height: 4),
         Text(
           label,
-          style: TextStyle(
-            fontSize: 13,
-            color: AppColors.greyText,
-          ),
+          style: AppTextStyles.bodySmall(context),
         ),
       ],
     );
@@ -245,8 +353,8 @@ class _DownloadPageState extends State<DownloadPage> {
               ),
             ],
           ),
-          transform: Matrix4.identity()
-            ..translate(0.0, _isDownloadHovered ? -4.0 : 0.0),
+          transform: Matrix4.translationValues(
+              0.0, _isDownloadHovered ? -4.0 : 0.0, 0.0),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
@@ -258,11 +366,9 @@ class _DownloadPageState extends State<DownloadPage> {
               const SizedBox(width: 12),
               Text(
                 'Télécharger gratuitement',
-                style: TextStyle(
-                  fontSize: isMobile ? 18 : 20,
-                  fontWeight: FontWeight.w700,
+                style: AppTextStyles.titleMedium(context).copyWith(
                   color: AppColors.white,
-                  letterSpacing: 0.5,
+                  fontWeight: FontWeight.w700,
                 ),
               ),
             ],
@@ -280,15 +386,14 @@ class _DownloadPageState extends State<DownloadPage> {
       {'icon': Icons.favorite, 'color': AppColors.secondary},
       {'icon': Icons.insights, 'color': const Color(0xFF7B3AA0)},
     ];
+    const screenshotDurations = [260, 320, 280, 350];
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
           'Aperçu de l\'application',
-          style: AppTextStyles.headlineSmall(context).copyWith(
-            fontWeight: FontWeight.w700,
-          ),
+          style: AppTextStyles.headlineSmall(context),
         ),
         const SizedBox(height: 24),
         SingleChildScrollView(
@@ -304,7 +409,8 @@ class _DownloadPageState extends State<DownloadPage> {
                 child: GestureDetector(
                   onTap: () => setState(() => _selectedScreenshot = index),
                   child: AnimatedContainer(
-                    duration: const Duration(milliseconds: 300),
+                    duration: Duration(
+                        milliseconds: screenshotDurations[index]),
                     width: isMobile ? 140 : 200,
                     height: isMobile ? 280 : 400,
                     decoration: BoxDecoration(
@@ -388,9 +494,7 @@ class _DownloadPageState extends State<DownloadPage> {
       children: [
         Text(
           'Description complète',
-          style: AppTextStyles.headlineSmall(context).copyWith(
-            fontWeight: FontWeight.w700,
-          ),
+          style: AppTextStyles.headlineSmall(context),
         ),
         const SizedBox(height: 16),
         Container(
@@ -457,21 +561,25 @@ class _DownloadPageState extends State<DownloadPage> {
         'icon': Icons.analytics_outlined,
         'title': 'Détermination précise',
         'description': '90% de fiabilité validée cliniquement',
+        'accent': AppColors.primary,
       },
       {
         'icon': Icons.calendar_today_outlined,
         'title': 'Calendrier intelligent',
         'description': 'Planification selon vos objectifs',
+        'accent': AppColors.purple,
       },
       {
         'icon': Icons.favorite_outline,
         'title': 'Suivi personnalisé',
         'description': 'Accompagnement sur mesure',
+        'accent': AppColors.secondary,
       },
       {
         'icon': Icons.security_outlined,
         'title': 'Données sécurisées',
         'description': 'Confidentialité garantie',
+        'accent': AppColors.successGreen,
       },
     ];
 
@@ -480,70 +588,57 @@ class _DownloadPageState extends State<DownloadPage> {
       children: [
         Text(
           'Fonctionnalités principales',
-          style: AppTextStyles.headlineSmall(context).copyWith(
-            fontWeight: FontWeight.w700,
-          ),
+          style: AppTextStyles.headlineSmall(context),
         ),
         const SizedBox(height: 24),
-        Wrap(
-          spacing: isMobile ? 12 : 20,
-          runSpacing: isMobile ? 12 : 20,
-          children: features.map((feature) {
-            return Container(
-              width: isMobile
-                  ? double.infinity
-                  : (MediaQuery.of(context).size.width - 140) / 2,
-              padding: EdgeInsets.all(isMobile ? 20 : 24),
-              decoration: BoxDecoration(
-                color: AppColors.white,
-                borderRadius: BorderRadius.circular(16),
-                border: Border.all(
-                  color: AppColors.greyLight.withValues(alpha: 0.3),
-                ),
-              ),
-              child: Row(
-                children: [
-                  Container(
-                    width: 56,
-                    height: 56,
-                    decoration: BoxDecoration(
-                      gradient: LinearGradient(
-                        colors: [
-                          AppColors.primary.withValues(alpha: 0.1),
-                          AppColors.purple.withValues(alpha: 0.1),
-                        ],
+        Column(
+          children: features.asMap().entries.map((entry) {
+            final index = entry.key;
+            final feature = entry.value;
+            final accentColor = feature['accent'] as Color;
+
+            return Column(
+              children: [
+                Container(
+                  decoration: BoxDecoration(
+                    border: Border(
+                      left: BorderSide(color: accentColor, width: 3),
+                    ),
+                  ),
+                  padding: const EdgeInsets.symmetric(
+                      horizontal: 20, vertical: 16),
+                  child: Row(
+                    children: [
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              feature['title'] as String,
+                              style: AppTextStyles.titleMedium(context)
+                                  .copyWith(fontWeight: FontWeight.w600),
+                            ),
+                            const SizedBox(height: 4),
+                            Text(
+                              feature['description'] as String,
+                              style: AppTextStyles.bodySmall(context),
+                            ),
+                          ],
+                        ),
                       ),
-                      shape: BoxShape.circle,
-                    ),
-                    child: Icon(
-                      feature['icon'] as IconData,
-                      color: AppColors.primary,
-                      size: 28,
-                    ),
+                      const SizedBox(width: 16),
+                      Icon(
+                        feature['icon'] as IconData,
+                        size: 28,
+                        color: accentColor,
+                      ),
+                    ],
                   ),
-                  const SizedBox(width: 16),
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          feature['title'] as String,
-                          style: AppTextStyles.titleMedium(context).copyWith(
-                            fontWeight: FontWeight.w700,
-                          ),
-                        ),
-                        const SizedBox(height: 4),
-                        Text(
-                          feature['description'] as String,
-                          style: AppTextStyles.bodySmall(context).copyWith(
-                            color: AppColors.greyText,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
+                ),
+                if (index < features.length - 1)
+                  Divider(
+                      color: AppColors.greyLight.withValues(alpha: 0.2)),
+              ],
             );
           }).toList(),
         ),
@@ -558,9 +653,7 @@ class _DownloadPageState extends State<DownloadPage> {
       children: [
         Text(
           'Informations',
-          style: AppTextStyles.headlineSmall(context).copyWith(
-            fontWeight: FontWeight.w700,
-          ),
+          style: AppTextStyles.headlineSmall(context),
         ),
         const SizedBox(height: 24),
         Container(
@@ -639,50 +732,264 @@ class _DownloadPageState extends State<DownloadPage> {
         ),
         const SizedBox(height: 24),
 
+        // Vue d'ensemble de la note (histogramme style Play Store)
+        if (!_isLoading && _reviews.isNotEmpty)
+          _buildRatingOverview(isMobile),
+        if (!_isLoading && _reviews.isNotEmpty) const SizedBox(height: 20),
+
         // Bouton pour ajouter un commentaire
         _buildAddReviewButton(isMobile),
         const SizedBox(height: 20),
 
-        Container(
-          padding: EdgeInsets.all(isMobile ? 20 : 32),
-          decoration: BoxDecoration(
-            color: AppColors.white,
-            borderRadius: BorderRadius.circular(16),
+        // Filtres par étoiles
+        if (!_isLoading && _reviews.isNotEmpty)
+          _buildFilterChips(),
+        if (!_isLoading && _reviews.isNotEmpty) const SizedBox(height: 20),
+
+        if (_isLoading)
+          const Center(
+            child: Padding(
+              padding: EdgeInsets.all(32),
+              child: CircularProgressIndicator(),
+            ),
+          )
+        else if (_loadError != null)
+          Center(
+            child: Padding(
+              padding: const EdgeInsets.all(32),
+              child: Text(
+                _loadError!,
+                style: TextStyle(color: AppColors.greyText),
+              ),
+            ),
+          )
+        else
+          Container(
+            padding: EdgeInsets.all(isMobile ? 20 : 32),
+            decoration: BoxDecoration(
+              color: AppColors.white,
+              borderRadius: BorderRadius.circular(16),
+            ),
+            child: _reviews.isEmpty
+                ? Center(
+                    child: Padding(
+                      padding: const EdgeInsets.all(16),
+                      child: Text(
+                        'Aucun avis pour le moment. Soyez le premier !',
+                        style: AppTextStyles.bodyMedium(context).copyWith(
+                          color: AppColors.greyText,
+                        ),
+                      ),
+                    ),
+                  )
+                : _filteredReviews.isEmpty
+                    ? Center(
+                        child: Padding(
+                          padding: const EdgeInsets.all(16),
+                          child: Text(
+                            'Aucun avis pour cette note.',
+                            style: AppTextStyles.bodyMedium(context).copyWith(
+                              color: AppColors.greyText,
+                            ),
+                          ),
+                        ),
+                      )
+                    : Column(
+                    children: _filteredReviews.asMap().entries.map((entry) {
+                      final index = entry.key;
+                      final review = entry.value;
+                      return Column(
+                        children: [
+                          _buildReviewCard(
+                            review.authorName,
+                            review.rating,
+                            review.title,
+                            review.comment,
+                            _relativeDate(review.createdAt),
+                            reviewId: review.id,
+                          ),
+                          if (index < _filteredReviews.length - 1)
+                            const Divider(height: 40),
+                        ],
+                      );
+                    }).toList(),
+                  ),
           ),
-          child: Column(
-            children: [
-              _buildReviewCard(
-                'Sophie L.',
-                5,
-                'Application excellente !',
-                'Très satisfaite de NASCENTIA. L\'interface est intuitive et les résultats sont précis. Je recommande !',
-                '2 jours',
-              ),
-              const Divider(height: 40),
-              _buildReviewCard(
-                'Marc D.',
-                5,
-                'Méthode scientifique efficace',
-                'La méthode fonctionne vraiment. Nous sommes ravis du résultat après avoir suivi les recommandations.',
-                '1 semaine',
-              ),
-              const Divider(height: 40),
-              _buildReviewCard(
-                'Amina K.',
-                4,
-                'Très utile',
-                'Application complète avec un bon suivi. Le calendrier intelligent aide vraiment à la planification.',
-                '2 semaines',
-              ),
-            ],
-          ),
-        ),
       ],
     );
   }
 
+  // Histogramme style Play Store : grand score + barres de distribution
+  Widget _buildRatingOverview(bool isMobile) {
+    final dist = _ratingDistribution;
+    final maxCount = dist.values.reduce((a, b) => a > b ? a : b);
+
+    final scoreWidget = Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Text(
+          _averageRating.toStringAsFixed(1),
+          style: AppTextStyles.headlineLarge(context).copyWith(
+            fontSize: 64,
+            fontWeight: FontWeight.w900,
+            letterSpacing: -2,
+          ),
+        ),
+        Row(
+          mainAxisSize: MainAxisSize.min,
+          children: List.generate(5, (i) {
+            final filled = i < _averageRating.round();
+            return Icon(
+              filled ? Icons.star_rounded : Icons.star_outline_rounded,
+              size: 20,
+              color: Colors.amber,
+            );
+          }),
+        ),
+        const SizedBox(height: 4),
+        Text(
+          '$_reviewsCount avis',
+          style: AppTextStyles.bodySmall(context),
+        ),
+      ],
+    );
+
+    final barsWidget = Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: List.generate(5, (i) {
+        final star = 5 - i;
+        final count = dist[star] ?? 0;
+        final fraction = maxCount == 0 ? 0.0 : count / maxCount;
+        return Padding(
+          padding: const EdgeInsets.symmetric(vertical: 3),
+          child: Row(
+            children: [
+              Text(
+                '$star',
+                style: AppTextStyles.labelSmall(context).copyWith(
+                  color: AppColors.darkText,
+                ),
+              ),
+              const SizedBox(width: 4),
+              const Icon(Icons.star_rounded, size: 13, color: Colors.amber),
+              const SizedBox(width: 8),
+              Expanded(
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(4),
+                  child: LinearProgressIndicator(
+                    value: fraction,
+                    backgroundColor:
+                        AppColors.greyLight.withValues(alpha: 0.35),
+                    valueColor:
+                        const AlwaysStoppedAnimation<Color>(Colors.amber),
+                    minHeight: 8,
+                  ),
+                ),
+              ),
+              const SizedBox(width: 8),
+              SizedBox(
+                width: 22,
+                child: Text(
+                  '$count',
+                  textAlign: TextAlign.right,
+                  style: AppTextStyles.labelSmall(context),
+                ),
+              ),
+            ],
+          ),
+        );
+      }),
+    );
+
+    return Container(
+      padding: EdgeInsets.all(isMobile ? 20 : 28),
+      decoration: BoxDecoration(
+        color: AppColors.white,
+        borderRadius: BorderRadius.circular(16),
+      ),
+      child: isMobile
+          ? Column(
+              children: [
+                scoreWidget,
+                const SizedBox(height: 20),
+                barsWidget,
+              ],
+            )
+          : Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                SizedBox(width: 140, child: scoreWidget),
+                const SizedBox(width: 32),
+                Expanded(child: barsWidget),
+              ],
+            ),
+    );
+  }
+
+  // Chips de filtre par étoiles style Play Store
+  Widget _buildFilterChips() {
+    return SingleChildScrollView(
+      scrollDirection: Axis.horizontal,
+      child: Row(
+        children: [
+          _buildFilterChip(null, 'Toutes les notes'),
+          const SizedBox(width: 8),
+          ...List.generate(5, (i) {
+            final star = 5 - i;
+            return Padding(
+              padding: const EdgeInsets.only(right: 8),
+              child: _buildFilterChip(star, '$star étoile${star > 1 ? 's' : ''}'),
+            );
+          }),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildFilterChip(int? star, String label) {
+    final isSelected = _filterRating == star;
+    return GestureDetector(
+      onTap: () => setState(() => _filterRating = star),
+      child: AnimatedContainer(
+        duration: const Duration(milliseconds: 200),
+        padding:
+            const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+        decoration: BoxDecoration(
+          color: isSelected
+              ? AppColors.primary.withValues(alpha: 0.1)
+              : AppColors.white,
+          borderRadius: BorderRadius.circular(20),
+          border: Border.all(
+            color: isSelected ? AppColors.primary : AppColors.greyLight,
+            width: isSelected ? 2 : 1,
+          ),
+        ),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            if (star != null) ...[
+              const Icon(Icons.star_rounded, size: 14, color: Colors.amber),
+              const SizedBox(width: 4),
+            ],
+            Text(
+              label,
+              style: AppTextStyles.labelSmall(context).copyWith(
+                color: isSelected ? AppColors.primary : AppColors.greyText,
+                fontWeight:
+                    isSelected ? FontWeight.w700 : FontWeight.w500,
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
   Widget _buildReviewCard(
-      String name, int rating, String title, String comment, String date) {
+      String name, int rating, String title, String comment, String date,
+      {String? reviewId}) {
+    final vote = reviewId != null ? _helpfulVotes[reviewId] : null;
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -745,7 +1052,108 @@ class _DownloadPageState extends State<DownloadPage> {
             height: 1.6,
           ),
         ),
+        // Bandeau "Ce contenu vous a-t-il été utile ?"
+        if (reviewId != null) ...[
+          const SizedBox(height: 14),
+          Row(
+            children: [
+              Text(
+                'Ce contenu vous a-t-il été utile ?',
+                style: AppTextStyles.bodySmall(context).copyWith(
+                  color: AppColors.greyText,
+                ),
+              ),
+              const SizedBox(width: 12),
+              _buildHelpfulButton(
+                label: 'Oui',
+                selected: vote == true,
+                onTap: () => _handleHelpfulVote(reviewId, true),
+              ),
+              const SizedBox(width: 8),
+              _buildHelpfulButton(
+                label: 'Non',
+                selected: vote == false,
+                onTap: () => _handleHelpfulVote(reviewId, false),
+              ),
+            ],
+          ),
+          // Compteur de votes utiles
+          if ((_helpfulCounts[reviewId] ?? 0) > 0) ...[
+            const SizedBox(height: 6),
+            Text(
+              '${_formatHelpfulCount(_helpfulCounts[reviewId]!)} personne${_helpfulCounts[reviewId]! > 1 ? 's ont' : ' a'} trouvé cet avis utile',
+              style: AppTextStyles.labelSmall(context).copyWith(
+                color: AppColors.greyText,
+                fontWeight: FontWeight.w400,
+              ),
+            ),
+          ],
+        ],
       ],
+    );
+  }
+
+  void _handleHelpfulVote(String reviewId, bool isYes) {
+    final currentVote = _helpfulVotes[reviewId];
+    setState(() {
+      if (isYes) {
+        if (currentVote == true) {
+          // Annuler le vote utile
+          _helpfulVotes[reviewId] = null;
+          _helpfulCounts[reviewId] = (_helpfulCounts[reviewId] ?? 1) - 1;
+        } else {
+          // Voter utile (depuis null ou non)
+          if (currentVote == null) {
+            _helpfulCounts[reviewId] = (_helpfulCounts[reviewId] ?? 0) + 1;
+            DownloadService.incrementHelpful(reviewId);
+          }
+          _helpfulVotes[reviewId] = true;
+        }
+      } else {
+        // Bouton Non : toggle sans compteur public
+        _helpfulVotes[reviewId] = currentVote == false ? null : false;
+      }
+    });
+  }
+
+  String _formatHelpfulCount(int count) {
+    final s = count.toString();
+    final buf = StringBuffer();
+    for (int i = 0; i < s.length; i++) {
+      if (i > 0 && (s.length - i) % 3 == 0) buf.write('\u00a0');
+      buf.write(s[i]);
+    }
+    return buf.toString();
+  }
+
+  Widget _buildHelpfulButton({
+    required String label,
+    required bool selected,
+    required VoidCallback onTap,
+  }) {
+    return GestureDetector(
+      onTap: onTap,
+      child: AnimatedContainer(
+        duration: const Duration(milliseconds: 180),
+        padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 5),
+        decoration: BoxDecoration(
+          color: selected
+              ? AppColors.primary.withValues(alpha: 0.1)
+              : Colors.transparent,
+          borderRadius: BorderRadius.circular(16),
+          border: Border.all(
+            color: selected ? AppColors.primary : AppColors.greyLight,
+            width: selected ? 1.5 : 1,
+          ),
+        ),
+        child: Text(
+          label,
+          style: AppTextStyles.labelSmall(context).copyWith(
+            color: selected ? AppColors.primary : AppColors.greyText,
+            fontWeight: selected ? FontWeight.w700 : FontWeight.w500,
+          ),
+        ),
+      ),
     );
   }
 
@@ -780,10 +1188,9 @@ class _DownloadPageState extends State<DownloadPage> {
               const SizedBox(width: 12),
               Text(
                 'Écrire un avis',
-                style: TextStyle(
-                  fontSize: isMobile ? 16 : 18,
-                  fontWeight: FontWeight.w700,
+                style: AppTextStyles.titleSmall(context).copyWith(
                   color: AppColors.primary,
+                  fontWeight: FontWeight.w700,
                 ),
               ),
             ],
@@ -796,6 +1203,8 @@ class _DownloadPageState extends State<DownloadPage> {
   // Dialogue pour ajouter un avis
   void _showReviewDialog() {
     int selectedRating = 5;
+    bool isSubmitting = false;
+    final nameController = TextEditingController();
     final titleController = TextEditingController();
     final commentController = TextEditingController();
 
@@ -828,7 +1237,9 @@ class _DownloadPageState extends State<DownloadPage> {
                             ),
                           ),
                           IconButton(
-                            onPressed: () => Navigator.pop(dialogContext),
+                            onPressed: isSubmitting
+                                ? null
+                                : () => Navigator.pop(dialogContext),
                             icon: const Icon(Icons.close),
                           ),
                         ],
@@ -846,11 +1257,13 @@ class _DownloadPageState extends State<DownloadPage> {
                       Row(
                         children: List.generate(5, (index) {
                           return GestureDetector(
-                            onTap: () {
-                              setDialogState(() {
-                                selectedRating = index + 1;
-                              });
-                            },
+                            onTap: isSubmitting
+                                ? null
+                                : () {
+                                    setDialogState(() {
+                                      selectedRating = index + 1;
+                                    });
+                                  },
                             child: Padding(
                               padding: const EdgeInsets.only(right: 8),
                               child: Icon(
@@ -866,7 +1279,7 @@ class _DownloadPageState extends State<DownloadPage> {
                       ),
                       const SizedBox(height: 24),
 
-                      // Nom de la personne
+                      // Nom
                       Text(
                         'Votre nom',
                         style: AppTextStyles.bodyMedium(context).copyWith(
@@ -875,9 +1288,37 @@ class _DownloadPageState extends State<DownloadPage> {
                       ),
                       const SizedBox(height: 8),
                       TextField(
-                        controller: titleController,
+                        controller: nameController,
+                        enabled: !isSubmitting,
                         decoration: InputDecoration(
                           hintText: 'Ex: Sophie Martin',
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                          focusedBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(12),
+                            borderSide: BorderSide(
+                              color: AppColors.primary,
+                              width: 2,
+                            ),
+                          ),
+                        ),
+                      ),
+                      const SizedBox(height: 20),
+
+                      // Titre de l'avis
+                      Text(
+                        'Titre de votre avis',
+                        style: AppTextStyles.bodyMedium(context).copyWith(
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                      const SizedBox(height: 8),
+                      TextField(
+                        controller: titleController,
+                        enabled: !isSubmitting,
+                        decoration: InputDecoration(
+                          hintText: 'Ex: Application excellente !',
                           border: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(12),
                           ),
@@ -903,6 +1344,7 @@ class _DownloadPageState extends State<DownloadPage> {
                       TextField(
                         controller: commentController,
                         maxLines: 5,
+                        enabled: !isSubmitting,
                         decoration: InputDecoration(
                           hintText:
                               'Partagez votre expérience avec NASCENTIA...',
@@ -925,7 +1367,9 @@ class _DownloadPageState extends State<DownloadPage> {
                         children: [
                           Expanded(
                             child: TextButton(
-                              onPressed: () => Navigator.pop(dialogContext),
+                              onPressed: isSubmitting
+                                  ? null
+                                  : () => Navigator.pop(dialogContext),
                               style: TextButton.styleFrom(
                                 padding:
                                     const EdgeInsets.symmetric(vertical: 16),
@@ -942,28 +1386,75 @@ class _DownloadPageState extends State<DownloadPage> {
                           const SizedBox(width: 16),
                           Expanded(
                             child: ElevatedButton(
-                              onPressed: () {
-                                // Logique de soumission
-                                if (titleController.text.isNotEmpty &&
-                                    commentController.text.isNotEmpty) {
-                                  Navigator.pop(dialogContext);
-                                  // Afficher un message de confirmation
-                                  ScaffoldMessenger.of(context).showSnackBar(
-                                    SnackBar(
-                                      content: const Text(
-                                        'Merci pour votre avis !',
-                                        style: TextStyle(
-                                            fontWeight: FontWeight.w600),
-                                      ),
-                                      backgroundColor: AppColors.primary,
-                                      behavior: SnackBarBehavior.floating,
-                                      shape: RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.circular(10),
-                                      ),
-                                    ),
-                                  );
-                                }
-                              },
+                              onPressed: isSubmitting
+                                  ? null
+                                  : () async {
+                                      final name = nameController.text.trim();
+                                      final title =
+                                          titleController.text.trim();
+                                      final comment =
+                                          commentController.text.trim();
+                                      if (name.isEmpty ||
+                                          title.isEmpty ||
+                                          comment.isEmpty) return;
+
+                                      setDialogState(
+                                          () => isSubmitting = true);
+                                      try {
+                                        await DownloadService.submitReview(
+                                          name: name,
+                                          rating: selectedRating,
+                                          title: title,
+                                          comment: comment,
+                                        );
+                                        Navigator.pop(dialogContext);
+                                        if (mounted) {
+                                          ScaffoldMessenger.of(this.context)
+                                              .showSnackBar(
+                                            SnackBar(
+                                              content: const Text(
+                                                'Merci pour votre avis !',
+                                                style: TextStyle(
+                                                    fontWeight:
+                                                        FontWeight.w600),
+                                              ),
+                                              backgroundColor:
+                                                  AppColors.primary,
+                                              behavior:
+                                                  SnackBarBehavior.floating,
+                                              shape: RoundedRectangleBorder(
+                                                borderRadius:
+                                                    BorderRadius.circular(10),
+                                              ),
+                                            ),
+                                          );
+                                          _loadData();
+                                        }
+                                      } catch (e) {
+                                        setDialogState(
+                                            () => isSubmitting = false);
+                                        if (mounted) {
+                                          ScaffoldMessenger.of(this.context)
+                                              .showSnackBar(
+                                            SnackBar(
+                                              content: const Text(
+                                                'Erreur lors de la publication. Réessayez.',
+                                                style: TextStyle(
+                                                    fontWeight:
+                                                        FontWeight.w600),
+                                              ),
+                                              backgroundColor: Colors.red,
+                                              behavior:
+                                                  SnackBarBehavior.floating,
+                                              shape: RoundedRectangleBorder(
+                                                borderRadius:
+                                                    BorderRadius.circular(10),
+                                              ),
+                                            ),
+                                          );
+                                        }
+                                      }
+                                    },
                               style: ElevatedButton.styleFrom(
                                 backgroundColor: AppColors.primary,
                                 padding:
@@ -972,13 +1463,22 @@ class _DownloadPageState extends State<DownloadPage> {
                                   borderRadius: BorderRadius.circular(12),
                                 ),
                               ),
-                              child: const Text(
-                                'Publier',
-                                style: TextStyle(
-                                  color: AppColors.white,
-                                  fontWeight: FontWeight.w700,
-                                ),
-                              ),
+                              child: isSubmitting
+                                  ? const SizedBox(
+                                      width: 20,
+                                      height: 20,
+                                      child: CircularProgressIndicator(
+                                        strokeWidth: 2,
+                                        color: AppColors.white,
+                                      ),
+                                    )
+                                  : const Text(
+                                      'Publier',
+                                      style: TextStyle(
+                                        color: AppColors.white,
+                                        fontWeight: FontWeight.w700,
+                                      ),
+                                    ),
                             ),
                           ),
                         ],

@@ -3,7 +3,7 @@ import '../theme/app_colors.dart';
 import '../theme/app_constants.dart';
 import '../theme/app_text_styles.dart';
 
-/// Section "Problème & Solution" - Design Premium
+/// Section "Problème & Solution" — angle simplicité et accessibilité
 class FastOrderSection extends StatefulWidget {
   const FastOrderSection({Key? key}) : super(key: key);
 
@@ -17,8 +17,8 @@ class _FastOrderSectionState extends State<FastOrderSection> {
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
+    final isMobile = size.width < 768; // R4 — breakpoint unifié
     final isTablet = size.width >= 768 && size.width < 1024;
-    final isMobile = size.width < 768;
 
     return Container(
       width: double.infinity,
@@ -40,7 +40,7 @@ class _FastOrderSectionState extends State<FastOrderSection> {
                   colors: [
                     AppColors.purple,
                     AppColors.purple.withValues(alpha: 0.92),
-                    const Color(0xFF7B3AA0), // Violet plus clair
+                    const Color(0xFF7B3AA0),
                   ],
                 ),
                 boxShadow: [
@@ -67,49 +67,33 @@ class _FastOrderSectionState extends State<FastOrderSection> {
     );
   }
 
-  /// Layout Desktop et Tablet
   Widget _buildDesktopLayout(BuildContext context, bool isTablet) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
-        // Mockups téléphones (gauche)
-        Flexible(
-          flex: 5,
-          child: _buildPhoneMockups(isTablet),
-        ),
-
+        Flexible(flex: 5, child: _buildPhoneMockups(isTablet)),
         SizedBox(width: isTablet ? 40 : 60),
-
-        // Texte (droite)
-        Flexible(
-          flex: 5,
-          child: _buildTextContent(context),
-        ),
+        Flexible(flex: 5, child: _buildTextContent(context)),
       ],
     );
   }
 
-  /// Layout Mobile
   Widget _buildMobileLayout(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        // Texte en premier sur mobile
         _buildTextContent(context),
-
         const SizedBox(height: 40),
-
-        // Mockups en dessous
         Center(child: _buildPhoneMockups(false)),
       ],
     );
   }
 
-  /// Mockups téléphones (Stack de 2 téléphones superposés)
+  /// R6 — Mockups avec vraies images de l'app (au lieu de shopping_cart)
   Widget _buildPhoneMockups(bool isTablet) {
     final phoneHeight = isTablet ? 380.0 : 420.0;
-    final phoneWidth = phoneHeight * 0.47; // Ratio typique téléphone
+    final phoneWidth = phoneHeight * 0.47;
 
     return MouseRegion(
       onEnter: (_) => setState(() => _isHovered = true),
@@ -122,7 +106,7 @@ class _FastOrderSectionState extends State<FastOrderSection> {
         width: phoneWidth * 1.65,
         child: Stack(
           children: [
-            // Téléphone arrière (gauche)
+            // Téléphone arrière
             AnimatedPositioned(
               duration: const Duration(milliseconds: 400),
               curve: Curves.easeOut,
@@ -131,11 +115,11 @@ class _FastOrderSectionState extends State<FastOrderSection> {
               child: _buildPhoneMockup(
                 phoneWidth,
                 phoneHeight,
-                AppColors.lightBg,
+                'assets/images/phone_2.png',
+                isBack: true,
               ),
             ),
-
-            // Téléphone avant (droite)
+            // Téléphone avant
             AnimatedPositioned(
               duration: const Duration(milliseconds: 400),
               curve: Curves.easeOut,
@@ -144,7 +128,8 @@ class _FastOrderSectionState extends State<FastOrderSection> {
               child: _buildPhoneMockup(
                 phoneWidth,
                 phoneHeight,
-                Colors.white,
+                'assets/images/phone_1.png',
+                isBack: false,
               ),
             ),
           ],
@@ -153,13 +138,16 @@ class _FastOrderSectionState extends State<FastOrderSection> {
     );
   }
 
-  /// Un mockup de téléphone individuel
-  Widget _buildPhoneMockup(double width, double height, Color bgColor) {
+  Widget _buildPhoneMockup(
+    double width,
+    double height,
+    String imagePath, {
+    required bool isBack,
+  }) {
     return Container(
       width: width,
       height: height,
       decoration: BoxDecoration(
-        color: bgColor,
         borderRadius: BorderRadius.circular(28),
         boxShadow: [
           BoxShadow(
@@ -169,74 +157,67 @@ class _FastOrderSectionState extends State<FastOrderSection> {
           ),
         ],
       ),
-      child: Column(
-        children: [
-          // Notch / barre du haut
-          Container(
-            margin: const EdgeInsets.only(top: 12),
-            width: width * 0.35,
-            height: 4,
-            decoration: BoxDecoration(
-              color: Colors.black.withValues(alpha: 0.1),
-              borderRadius: BorderRadius.circular(2),
-            ),
-          ),
-
-          // Contenu factice du téléphone
-          Expanded(
-            child: Container(
-              margin: const EdgeInsets.all(16),
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(28),
+        child: Image.asset(
+          imagePath,
+          fit: BoxFit.cover,
+          errorBuilder: (context, error, stackTrace) {
+            // R6 — Placeholder avec icône calendrier (cohérent avec le produit)
+            return Container(
               decoration: BoxDecoration(
-                color: bgColor == Colors.white
-                    ? const Color(0xFFF5F5F5)
-                    : Colors.white.withValues(alpha: 0.5),
-                borderRadius: BorderRadius.circular(12),
+                gradient: LinearGradient(
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
+                  colors: [
+                    isBack
+                        ? AppColors.purple.withValues(alpha: 0.6)
+                        : Colors.white.withValues(alpha: 0.15),
+                    isBack
+                        ? AppColors.primary.withValues(alpha: 0.4)
+                        : Colors.white.withValues(alpha: 0.08),
+                  ],
+                ),
               ),
               child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Icon(
-                    Icons.shopping_cart_outlined,
-                    size: width * 0.2,
-                    color: AppColors.purple.withValues(alpha: 0.4),
-                  ),
-                  const SizedBox(height: 8),
                   Container(
-                    width: width * 0.6,
-                    height: 3,
+                    margin: const EdgeInsets.only(top: 12),
+                    width: width * 0.35,
+                    height: 4,
                     decoration: BoxDecoration(
-                      color: AppColors.purple.withValues(alpha: 0.2),
+                      color: Colors.white.withValues(alpha: 0.3),
                       borderRadius: BorderRadius.circular(2),
                     ),
                   ),
-                  const SizedBox(height: 6),
-                  Container(
-                    width: width * 0.5,
-                    height: 3,
-                    decoration: BoxDecoration(
-                      color: AppColors.purple.withValues(alpha: 0.15),
-                      borderRadius: BorderRadius.circular(2),
+                  Expanded(
+                    child: Center(
+                      child: Icon(
+                        isBack
+                            ? Icons.calendar_month_outlined
+                            : Icons.child_care_outlined,
+                        size: width * 0.35,
+                        color: AppColors.white.withValues(alpha: 0.8),
+                      ),
                     ),
                   ),
                 ],
               ),
-            ),
-          ),
-        ],
+            );
+          },
+        ),
       ),
     );
   }
 
-  /// Contenu texte (droite)
+  /// R13 — Focus sur simplicité et accessibilité (pas "méthode scientifique")
   Widget _buildTextContent(BuildContext context) {
-    final screenWidth = MediaQuery.of(context).size.width;
-    final isMobile = screenWidth < 768;
+    final isMobile = MediaQuery.of(context).size.width < 768;
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisSize: MainAxisSize.min,
       children: [
-        // Badge "Problème & Solution"
         Container(
           padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
           decoration: BoxDecoration(
@@ -250,11 +231,7 @@ class _FastOrderSectionState extends State<FastOrderSection> {
           child: Row(
             mainAxisSize: MainAxisSize.min,
             children: [
-              const Icon(
-                Icons.lightbulb_outline,
-                color: AppColors.white,
-                size: 16,
-              ),
+              const Icon(Icons.lightbulb_outline, color: AppColors.white, size: 16),
               const SizedBox(width: 6),
               Text(
                 'NOTRE MISSION',
@@ -269,16 +246,16 @@ class _FastOrderSectionState extends State<FastOrderSection> {
         ),
         const SizedBox(height: 24),
 
-        // Titre impact
+        // R13 — Titre axé sur le problème des familles, pas la répétition scientifique
         Text(
-          'Un besoin réel,',
+          'Des milliers de familles',
           style: AppTextStyles.displayMedium(context).copyWith(
             fontSize: isMobile ? 32 : 40,
             fontWeight: FontWeight.w900,
           ),
         ),
         Text(
-          'une solution scientifique',
+          'méritent une réponse claire',
           style: AppTextStyles.displayMedium(context).copyWith(
             fontSize: isMobile ? 32 : 40,
             fontWeight: FontWeight.w900,
@@ -294,13 +271,12 @@ class _FastOrderSectionState extends State<FastOrderSection> {
 
         const SizedBox(height: 24),
 
-        // Description enrichie
         ConstrainedBox(
           constraints: const BoxConstraints(maxWidth: 500),
           child: Text(
             'Des milliers de couples vivent avec incertitude et stress concernant '
-            'le sexe de leur futur enfant. NASCENTIA apporte une réponse claire et scientifique, '
-            'basée sur un algorithme fiable validé en clinique.',
+            'le sexe de leur futur enfant. NASCENTIA apporte une réponse claire, '
+            'disponible partout et protégée par une confidentialité totale.',
             style: AppTextStyles.bodyLarge(context).copyWith(
               fontSize: isMobile ? 15 : 17,
               height: 1.7,
@@ -310,30 +286,20 @@ class _FastOrderSectionState extends State<FastOrderSection> {
 
         const SizedBox(height: 32),
 
-        // Points clés avec icônes
+        // R13 — Points clés : simplicité, accessibilité, confidentialité
         Wrap(
           spacing: 24,
           runSpacing: 16,
           children: [
-            _buildFeaturePoint(
-              Icons.psychology_outlined,
-              'Méthode scientifique',
-            ),
-            _buildFeaturePoint(
-              Icons.verified_user_outlined,
-              'Testé en clinique',
-            ),
-            _buildFeaturePoint(
-              Icons.favorite_outline,
-              'Approche éthique',
-            ),
+            _buildFeaturePoint(Icons.speed, 'Résultat en quelques secondes'),
+            _buildFeaturePoint(Icons.phone_android, 'iOS & Android'),
+            _buildFeaturePoint(Icons.lock_outline, 'Données confidentielles'),
           ],
         ),
       ],
     );
   }
 
-  /// Point clé avec icône
   Widget _buildFeaturePoint(IconData icon, String text) {
     return Row(
       mainAxisSize: MainAxisSize.min,
@@ -344,19 +310,15 @@ class _FastOrderSectionState extends State<FastOrderSection> {
             color: AppColors.white.withValues(alpha: 0.15),
             borderRadius: BorderRadius.circular(10),
           ),
-          child: Icon(
-            icon,
-            color: AppColors.white,
-            size: 18,
-          ),
+          child: Icon(icon, color: AppColors.white, size: 18),
         ),
         const SizedBox(width: 10),
         Text(
           text,
-          style: TextStyle(
+          style: const TextStyle(
             fontSize: 15,
             fontWeight: FontWeight.w600,
-            color: AppColors.white.withValues(alpha: 0.95),
+            color: AppColors.white,
           ),
         ),
       ],

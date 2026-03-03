@@ -17,57 +17,31 @@ class _CalendarSectionState extends State<CalendarSection> {
   @override
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
-    final isSmall = screenWidth < 600;
-    final isMedium = screenWidth >= 600 && screenWidth < 1024;
+    final isMobile = screenWidth < 768; // R4 — breakpoint unifié
+    final isTablet = screenWidth >= 768 && screenWidth < 1024;
 
+    // R5 — SectionContainer gère déjà le padding ; Container interne supprimé
     return SectionContainer(
       backgroundColor: AppColors.lightBg,
-      child: Container(
-        constraints: const BoxConstraints(maxWidth: 1400),
-        padding: EdgeInsets.symmetric(
-          horizontal: isSmall ? 20 : (isMedium ? 40 : 80),
-          vertical: isSmall ? 60 : 100,
-        ),
-        decoration: BoxDecoration(
-          gradient: LinearGradient(
-            begin: Alignment.topCenter,
-            end: Alignment.bottomCenter,
-            colors: [
-              AppColors.white,
-              AppColors.lightBg,
-              AppColors.white,
-            ],
-            stops: const [0.0, 0.5, 1.0],
-          ),
-        ),
-        child: Column(
-          children: [
-            // Badge "Calendrier Intelligent"
-            _buildBadge(isSmall),
-            SizedBox(height: isSmall ? 24 : 32),
-
-            // Titre
-            _buildTitle(context, isSmall),
-            SizedBox(height: isSmall ? 16 : 24),
-
-            // Description
-            _buildDescription(context, isSmall, isMedium),
-            SizedBox(height: isSmall ? 40 : 60),
-
-            // Features en grid
-            _buildFeatureCards(context, isSmall, isMedium),
-          ],
-        ),
+      child: Column(
+        children: [
+          _buildBadge(isMobile),
+          SizedBox(height: isMobile ? 24 : 32),
+          _buildTitle(context, isMobile),
+          SizedBox(height: isMobile ? 16 : 24),
+          _buildDescription(context, isMobile),
+          SizedBox(height: isMobile ? 40 : 60),
+          _buildFeatureCards(context, screenWidth, isMobile, isTablet),
+        ],
       ),
     );
   }
 
-  // Badge "Calendrier Intelligent"
-  Widget _buildBadge(bool isSmall) {
+  Widget _buildBadge(bool isMobile) {
     return Container(
       padding: EdgeInsets.symmetric(
-        horizontal: isSmall ? 16 : 24,
-        vertical: isSmall ? 8 : 12,
+        horizontal: isMobile ? 16 : 24,
+        vertical: isMobile ? 8 : 12,
       ),
       decoration: BoxDecoration(
         gradient: LinearGradient(
@@ -85,16 +59,13 @@ class _CalendarSectionState extends State<CalendarSection> {
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Icon(
-            Icons.calendar_today_outlined,
-            color: AppColors.purple,
-            size: isSmall ? 16 : 20,
-          ),
-          SizedBox(width: isSmall ? 6 : 8),
+          Icon(Icons.calendar_today_outlined,
+              color: AppColors.purple, size: isMobile ? 16 : 20),
+          SizedBox(width: isMobile ? 6 : 8),
           Text(
             'CALENDRIER INTELLIGENT',
             style: TextStyle(
-              fontSize: isSmall ? 11 : 13,
+              fontSize: isMobile ? 11 : 13,
               fontWeight: FontWeight.w700,
               letterSpacing: 1.2,
               color: AppColors.purple,
@@ -105,25 +76,20 @@ class _CalendarSectionState extends State<CalendarSection> {
     );
   }
 
-  // Titre
-  Widget _buildTitle(BuildContext context, bool isSmall) {
+  Widget _buildTitle(BuildContext context, bool isMobile) {
     return Text(
       'Un calendrier personnalisé pour maximiser vos chances',
       textAlign: TextAlign.center,
-      style: (isSmall
+      style: (isMobile
               ? AppTextStyles.headlineMedium(context)
               : AppTextStyles.displayMedium(context))
-          .copyWith(
-        color: AppColors.purple,
-        height: 1.3,
-      ),
+          .copyWith(color: AppColors.purple, height: 1.3),
     );
   }
 
-  // Description
-  Widget _buildDescription(BuildContext context, bool isSmall, bool isMedium) {
-    return Container(
-      constraints: BoxConstraints(maxWidth: isMedium ? 700 : 900),
+  Widget _buildDescription(BuildContext context, bool isMobile) {
+    return ConstrainedBox(
+      constraints: BoxConstraints(maxWidth: isMobile ? 600 : 800),
       child: Text(
         'En fonction du sexe choisi, NASCENTIA génère un calendrier intelligent '
         'qui vous accompagne tout au long de votre parcours avec des informations '
@@ -137,8 +103,12 @@ class _CalendarSectionState extends State<CalendarSection> {
     );
   }
 
-  // Features en grid
-  Widget _buildFeatureCards(BuildContext context, bool isSmall, bool isMedium) {
+  Widget _buildFeatureCards(
+    BuildContext context,
+    double screenWidth,
+    bool isMobile,
+    bool isTablet,
+  ) {
     final features = [
       {
         'icon': Icons.event_available_outlined,
@@ -162,7 +132,7 @@ class _CalendarSectionState extends State<CalendarSection> {
       },
     ];
 
-    if (isSmall) {
+    if (isMobile) {
       return Column(
         children: features
             .asMap()
@@ -172,16 +142,20 @@ class _CalendarSectionState extends State<CalendarSection> {
                     bottom: entry.key < features.length - 1 ? 20 : 0,
                   ),
                   child: _buildFeatureCard(
+                    context,
                     entry.value['icon'] as IconData,
                     entry.value['title'] as String,
                     entry.value['description'] as String,
                     entry.key,
-                    isSmall,
+                    isMobile,
                   ),
                 ))
             .toList(),
       );
     }
+
+    // R4 — Utiliser le screenWidth passé en paramètre (plus de getter)
+    final cardWidth = isTablet ? (screenWidth - 100) / 2 - 10 : 280.0;
 
     return Wrap(
       spacing: 20,
@@ -191,30 +165,31 @@ class _CalendarSectionState extends State<CalendarSection> {
           .asMap()
           .entries
           .map((entry) => SizedBox(
-                width: isMedium ? (screenWidth - 100) / 2 - 10 : 280,
+                width: cardWidth,
                 child: _buildFeatureCard(
+                  context,
                   entry.value['icon'] as IconData,
                   entry.value['title'] as String,
                   entry.value['description'] as String,
                   entry.key,
-                  isSmall,
+                  isMobile,
                 ),
               ))
           .toList(),
     );
   }
 
-  double get screenWidth => MediaQuery.of(context).size.width;
-
   Widget _buildFeatureCard(
+    BuildContext context,
     IconData icon,
     String title,
     String description,
     int index,
-    bool isSmall,
+    bool isMobile,
   ) {
     final isHovered = _hoveredFeatureIndex == index;
 
+    // R10 — Gradient hover adouci : 2 couleurs
     return MouseRegion(
       onEnter: (_) => setState(() => _hoveredFeatureIndex = index),
       onExit: (_) => setState(() => _hoveredFeatureIndex = -1),
@@ -224,13 +199,8 @@ class _CalendarSectionState extends State<CalendarSection> {
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(20),
           gradient: isHovered
-              ? LinearGradient(
-                  colors: [
-                    AppColors.purple,
-                    AppColors.primary,
-                    AppColors.secondary,
-                    AppColors.purple,
-                  ],
+              ? const LinearGradient(
+                  colors: [AppColors.purple, AppColors.primary],
                   begin: Alignment.topLeft,
                   end: Alignment.bottomRight,
                 )
@@ -244,9 +214,9 @@ class _CalendarSectionState extends State<CalendarSection> {
           ],
         ),
         padding: EdgeInsets.all(isHovered ? 2 : 1),
-        transform: Matrix4.identity()..translate(0.0, isHovered ? -6.0 : 0.0),
+        transform: Matrix4.translationValues(0.0, isHovered ? -6.0 : 0.0, 0.0),
         child: Container(
-          padding: EdgeInsets.all(isSmall ? 24 : 32),
+          padding: EdgeInsets.all(isMobile ? 24 : 32),
           decoration: BoxDecoration(
             color: AppColors.white,
             borderRadius: BorderRadius.circular(18),
@@ -260,10 +230,9 @@ class _CalendarSectionState extends State<CalendarSection> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // Icône
               Container(
-                width: isSmall ? 56 : 64,
-                height: isSmall ? 56 : 64,
+                width: isMobile ? 56 : 64,
+                height: isMobile ? 56 : 64,
                 decoration: BoxDecoration(
                   gradient: LinearGradient(
                     colors: [
@@ -273,24 +242,16 @@ class _CalendarSectionState extends State<CalendarSection> {
                   ),
                   shape: BoxShape.circle,
                 ),
-                child: Icon(
-                  icon,
-                  size: isSmall ? 28 : 32,
-                  color: AppColors.purple,
-                ),
+                child: Icon(icon,
+                    size: isMobile ? 28 : 32, color: AppColors.purple),
               ),
-              SizedBox(height: isSmall ? 16 : 20),
-
-              // Titre
+              SizedBox(height: isMobile ? 16 : 20),
               Text(
                 title,
-                style: AppTextStyles.headlineSmall(context).copyWith(
-                  color: AppColors.darkText,
-                ),
+                style: AppTextStyles.headlineSmall(context)
+                    .copyWith(color: AppColors.darkText),
               ),
-              SizedBox(height: isSmall ? 8 : 12),
-
-              // Description
+              SizedBox(height: isMobile ? 8 : 12),
               Text(
                 description,
                 style: AppTextStyles.bodyMedium(context).copyWith(

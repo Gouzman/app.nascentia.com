@@ -43,8 +43,8 @@ class FeatureCardModern extends StatelessWidget {
         boxShadow: [
           BoxShadow(
             color: (gradient != null || backgroundColor == null)
-                ? AppColors.blue.withOpacity(0.2)
-                : Colors.black.withOpacity(0.05),
+                ? AppColors.blue.withValues(alpha: 0.2)
+                : Colors.black.withValues(alpha: 0.05),
             blurRadius: 40,
             offset: const Offset(0, 15),
           ),
@@ -72,8 +72,8 @@ class FeatureCardModern extends StatelessWidget {
         boxShadow: [
           BoxShadow(
             color: (gradient != null || backgroundColor == null)
-                ? AppColors.blue.withOpacity(0.2)
-                : Colors.black.withOpacity(0.05),
+                ? AppColors.blue.withValues(alpha: 0.2)
+                : Colors.black.withValues(alpha: 0.05),
             blurRadius: 40,
             offset: const Offset(0, 15),
           ),
@@ -116,7 +116,7 @@ class FeatureCardModern extends StatelessWidget {
     final hasGradient = gradient != null || backgroundColor == null;
     final textColor = hasGradient ? AppColors.white : AppColors.darkText;
     final descColor =
-        hasGradient ? AppColors.white.withOpacity(0.95) : AppColors.greyText;
+        hasGradient ? AppColors.white.withValues(alpha: 0.95) : AppColors.greyText;
 
     return Column(
       crossAxisAlignment:

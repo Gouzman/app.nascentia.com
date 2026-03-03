@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../theme/app_colors.dart';
+import '../services/navigation_service.dart';
 
 /// Top Navigation Bar - Barre de navigation supérieure
 class TopNavigationBar extends StatelessWidget {
@@ -102,7 +103,9 @@ class TopNavigationBar extends StatelessWidget {
       child: MouseRegion(
         cursor: SystemMouseCursors.click,
         child: GestureDetector(
-          onTap: () {},
+          onTap: () {
+            NavigationService.scrollToSectionByName(title);
+          },
           child: Text(
             title,
             style: const TextStyle(
@@ -186,9 +189,13 @@ class TopNavigationBar extends StatelessWidget {
 
   /// Menu hamburger (Mobile)
   Widget _buildMobileMenu() {
-    return IconButton(
-      icon: const Icon(Icons.menu, color: AppColors.darkText),
-      onPressed: () {},
+    return Builder(
+      builder: (context) => IconButton(
+        icon: const Icon(Icons.menu, color: AppColors.darkText),
+        onPressed: () {
+          Scaffold.of(context).openDrawer();
+        },
+      ),
     );
   }
 }

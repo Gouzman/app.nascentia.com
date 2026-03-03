@@ -48,7 +48,7 @@ class _PrimaryButtonState extends State<PrimaryButton> {
         height: AppConstants.buttonHeightMedium,
         decoration: BoxDecoration(
           color: _isHovered
-              ? AppColors.white.withOpacity(0.1)
+              ? AppColors.white.withValues(alpha: 0.1)
               : Colors.transparent,
           border: Border.all(
             color: AppColors.white,
