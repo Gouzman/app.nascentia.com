@@ -16,7 +16,8 @@ class DownloadPage extends StatefulWidget {
 }
 
 class _DownloadPageState extends State<DownloadPage> {
-  int _selectedScreenshot = 0;
+  late final ScrollController _screenshotController;
+  int _currentScreenshot = 0;
   bool _isDownloadHovered = false;
   final ScrollController _scrollController = ScrollController();
   bool _isNavScrolled = false;
@@ -53,6 +54,7 @@ class _DownloadPageState extends State<DownloadPage> {
   @override
   void initState() {
     super.initState();
+    _screenshotController = ScrollController();
     _loadData();
     _scrollController.addListener(() {
       final scrolled = _scrollController.offset > 100;
@@ -64,6 +66,7 @@ class _DownloadPageState extends State<DownloadPage> {
 
   @override
   void dispose() {
+    _screenshotController.dispose();
     _scrollController.dispose();
     super.dispose();
   }
@@ -427,6 +430,9 @@ class _DownloadPageState extends State<DownloadPage> {
       'lib/assets/images/Download_ScrenShot-5.png',
       'lib/assets/images/Download_ScrenShot-6.png',
     ];
+    final imageWidth = isMobile ? 140.0 : 200.0;
+    final imageHeight = isMobile ? 280.0 : 400.0;
+    final scrollStep = imageWidth + (isMobile ? 12.0 : 16.0);
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -436,62 +442,124 @@ class _DownloadPageState extends State<DownloadPage> {
           style: AppTextStyles.headlineSmall(context),
         ),
         const SizedBox(height: 24),
-        SingleChildScrollView(
-          scrollDirection: Axis.horizontal,
-          child: Row(
-            children: screenshots.asMap().entries.map((entry) {
-              final index = entry.key;
-              final path = entry.value;
-              final isSelected = _selectedScreenshot == index;
+        Stack(
+          alignment: Alignment.center,
+          children: [
+            // Liste horizontale originale
+            SingleChildScrollView(
+              controller: _screenshotController,
+              scrollDirection: Axis.horizontal,
+              child: Row(
+                children: screenshots.asMap().entries.map((entry) {
+                  final index = entry.key;
+                  final path = entry.value;
+                  final isSelected = _currentScreenshot == index;
 
-              return Padding(
-                padding: EdgeInsets.only(right: isMobile ? 12 : 16),
-                child: GestureDetector(
-                  onTap: () => setState(() => _selectedScreenshot = index),
-                  child: AnimatedContainer(
-                    duration: const Duration(milliseconds: 280),
-                    curve: Curves.easeOutCubic,
-                    width: isMobile ? 140 : 200,
-                    height: isMobile ? 280 : 400,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(20),
-                      border: isSelected
-                          ? Border.all(color: AppColors.primary, width: 3)
-                          : Border.all(
-                              color: AppColors.greyLight.withValues(alpha: 0.15),
-                              width: 1,
+                  return Padding(
+                    padding: EdgeInsets.only(right: isMobile ? 12 : 16),
+                    child: GestureDetector(
+                      onTap: () => setState(() => _currentScreenshot = index),
+                      child: AnimatedContainer(
+                        duration: const Duration(milliseconds: 280),
+                        curve: Curves.easeOutCubic,
+                        width: imageWidth,
+                        height: imageHeight,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(20),
+                          border: isSelected
+                              ? Border.all(color: AppColors.primary, width: 3)
+                              : Border.all(
+                                  color: AppColors.greyLight
+                                      .withValues(alpha: 0.15),
+                                  width: 1,
+                                ),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.black.withValues(
+                                  alpha: isSelected ? 0.18 : 0.08),
+                              blurRadius: isSelected ? 24 : 12,
+                              offset: Offset(0, isSelected ? 10 : 4),
                             ),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.black
-                              .withValues(alpha: isSelected ? 0.18 : 0.08),
-                          blurRadius: isSelected ? 24 : 12,
-                          offset: Offset(0, isSelected ? 10 : 4),
+                          ],
                         ),
-                      ],
-                    ),
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.circular(
-                          isSelected ? 17 : 20),
-                      child: Image.asset(
-                        path,
-                        fit: BoxFit.cover,
-                        errorBuilder: (_, __, ___) => Container(
-                          color: AppColors.greyLight.withValues(alpha: 0.1),
-                          child: const Center(
-                            child: Icon(Icons.image_not_supported_outlined,
-                                color: Colors.grey),
+                        child: ClipRRect(
+                          borderRadius:
+                              BorderRadius.circular(isSelected ? 17 : 20),
+                          child: Image.asset(
+                            path,
+                            fit: BoxFit.cover,
+                            errorBuilder: (_, __, ___) => Container(
+                              color:
+                                  AppColors.greyLight.withValues(alpha: 0.1),
+                              child: const Center(
+                                child: Icon(
+                                    Icons.image_not_supported_outlined,
+                                    color: Colors.grey),
+                              ),
+                            ),
                           ),
                         ),
                       ),
                     ),
-                  ),
+                  );
+                }).toList(),
+              ),
+            ),
+
+            // Bouton gauche
+            Positioned(
+              left: 0,
+              child: _buildScrollArrow(
+                icon: Icons.chevron_left_rounded,
+                onTap: () => _screenshotController.animateTo(
+                  (_screenshotController.offset - scrollStep).clamp(
+                      0, _screenshotController.position.maxScrollExtent),
+                  duration: const Duration(milliseconds: 350),
+                  curve: Curves.easeOutCubic,
                 ),
-              );
-            }).toList(),
-          ),
+              ),
+            ),
+
+            // Bouton droite
+            Positioned(
+              right: 0,
+              child: _buildScrollArrow(
+                icon: Icons.chevron_right_rounded,
+                onTap: () => _screenshotController.animateTo(
+                  (_screenshotController.offset + scrollStep).clamp(
+                      0, _screenshotController.position.maxScrollExtent),
+                  duration: const Duration(milliseconds: 350),
+                  curve: Curves.easeOutCubic,
+                ),
+              ),
+            ),
+          ],
         ),
       ],
+    );
+  }
+
+  Widget _buildScrollArrow(
+      {required IconData icon, required VoidCallback onTap}) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        width: 32,
+        height: 32,
+        decoration: BoxDecoration(
+          color: Colors.white.withValues(alpha: 0.90),
+          shape: BoxShape.circle,
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withValues(alpha: 0.10),
+              blurRadius: 8,
+              offset: const Offset(0, 2),
+            ),
+          ],
+        ),
+        child: Icon(icon, size: 20,
+            color: AppColors.darkText.withValues(alpha: 0.55)),
+      ),
     );
   }
 
