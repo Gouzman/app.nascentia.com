@@ -12,6 +12,7 @@ class NavigationService {
   static final GlobalKey howItWorksKey = GlobalKey();
   static final GlobalKey calendarKey = GlobalKey();
   static final GlobalKey appKey = GlobalKey();
+  static final GlobalKey podcastKey = GlobalKey();
   static final GlobalKey contactKey = GlobalKey();
 
   /// Dictionnaire des sections avec leurs noms
@@ -20,6 +21,7 @@ class NavigationService {
     'Fonctionnalités': featuresKey,
     'Comment ça marche': howItWorksKey,
     'Application': appKey,
+    'Podcast': podcastKey,
     'Contact': contactKey,
   };
 

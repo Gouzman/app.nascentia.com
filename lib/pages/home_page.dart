@@ -8,6 +8,7 @@ import '../sections/features_section.dart';
 import '../sections/how_it_works_section.dart';
 import '../sections/calendar_section.dart';
 import '../sections/app_section.dart';
+import '../sections/podcast_section.dart';
 import '../widgets/top_navigation_bar.dart';
 import '../widgets/app_footer.dart';
 import '../widgets/scroll_reveal.dart';
@@ -128,6 +129,15 @@ class _HomePageState extends State<HomePage> {
               child: const ScrollReveal(
                 duration: Duration(milliseconds: 680),
                 child: CalendarSection(),
+              ),
+            ),
+
+            _wrapWithKey(
+              key: NavigationService.podcastKey,
+              child: const ScrollReveal(
+                delay: Duration(milliseconds: 100),
+                duration: Duration(milliseconds: 720),
+                child: PodcastSection(),
               ),
             ),
 
