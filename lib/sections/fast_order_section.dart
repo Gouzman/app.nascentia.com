@@ -103,7 +103,7 @@ class FastOrderSection extends StatelessWidget {
         child: ClipRRect(
           borderRadius: BorderRadius.circular(28),
           child: Image.asset(
-            'lib/assets/images/image_section2.png',
+            'assets/images/image_section2.png',
             fit: BoxFit.cover,
             errorBuilder: (context, error, stackTrace) {
               return Container(

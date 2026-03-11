@@ -423,12 +423,12 @@ class _DownloadPageState extends State<DownloadPage> {
   // Screenshots section
   Widget _buildScreenshotsSection(bool isMobile, bool isTablet) {
     const screenshots = [
-      'lib/assets/images/Download_ScrenShot-1.jpg',
-      'lib/assets/images/Download_ScrenShot-2.png',
-      'lib/assets/images/Download_ScrenShot-3.png',
-      'lib/assets/images/Download_ScrenShot-4.png',
-      'lib/assets/images/Download_ScrenShot-5.png',
-      'lib/assets/images/Download_ScrenShot-6.png',
+      'assets/images/Download_ScrenShot-1.jpg',
+      'assets/images/Download_ScrenShot-2.png',
+      'assets/images/Download_ScrenShot-3.png',
+      'assets/images/Download_ScrenShot-4.png',
+      'assets/images/Download_ScrenShot-5.png',
+      'assets/images/Download_ScrenShot-6.png',
     ];
     final imageWidth = isMobile ? 140.0 : 200.0;
     final imageHeight = isMobile ? 280.0 : 400.0;

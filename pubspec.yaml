@@ -23,6 +23,8 @@ dependencies:
 
   # Liens externes (mailto, tel, https)
   url_launcher: ^6.3.2
+  flutter_dotenv: ^6.0.0
+  go_router: ^17.1.0
 
 dev_dependencies:
   flutter_test:
@@ -35,4 +37,5 @@ flutter:
   
   # Assets - Images des mockups
   assets:
-    - lib/assets/images/
+    - assets/images/
+    - .env

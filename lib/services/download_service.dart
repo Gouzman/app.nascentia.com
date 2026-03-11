@@ -1,8 +1,9 @@
 import 'package:supabase_flutter/supabase_flutter.dart';
+import '../core/supabase/supabase_service.dart';
 import '../models/review.dart';
 
 class DownloadService {
-  static SupabaseClient get _client => Supabase.instance.client;
+  static SupabaseClient get _client => SupabaseService.client;
 
   static Future<List<Review>> getReviews() async {
     final response = await _client

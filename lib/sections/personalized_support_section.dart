@@ -286,7 +286,7 @@ class _PersonalizedSupportSectionState
         child: ClipRRect(
           borderRadius: BorderRadius.circular(24),
           child: Image.asset(
-            'lib/assets/images/image_section1.png',
+            'assets/images/image_section1.png',
             fit: BoxFit.cover,
             errorBuilder: (context, error, stackTrace) {
               return Container(

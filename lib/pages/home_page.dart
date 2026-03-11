@@ -69,13 +69,13 @@ class _HomePageState extends State<HomePage> {
                 // Hero — animation propre intégrée dans la section
             _wrapWithKey(
               key: NavigationService.heroKey,
-              child: const HeroSection(),
+              child: HeroSection(),
             ),
 
             // R9 — Toutes les sections suivantes révélées au scroll
             _wrapWithKey(
               key: NavigationService.personalizedSupportKey,
-              child: const ScrollReveal(
+              child: ScrollReveal(
                 duration: Duration(milliseconds: 750),
                 child: PersonalizedSupportSection(),
               ),
@@ -83,7 +83,7 @@ class _HomePageState extends State<HomePage> {
 
             _wrapWithKey(
               key: NavigationService.fastOrderKey,
-              child: const ScrollReveal(
+              child: ScrollReveal(
                 delay: Duration(milliseconds: 130),
                 duration: Duration(milliseconds: 680),
                 child: FastOrderSection(),
@@ -92,7 +92,7 @@ class _HomePageState extends State<HomePage> {
 
             _wrapWithKey(
               key: NavigationService.aboutKey,
-              child: const ScrollReveal(
+              child: ScrollReveal(
                 duration: Duration(milliseconds: 820),
                 child: AboutSection(),
               ),
@@ -100,7 +100,7 @@ class _HomePageState extends State<HomePage> {
 
             _wrapWithKey(
               key: NavigationService.credibilityKey,
-              child: const ScrollReveal(
+              child: ScrollReveal(
                 delay: Duration(milliseconds: 70),
                 duration: Duration(milliseconds: 640),
                 child: CredibilitySection(),
@@ -109,7 +109,7 @@ class _HomePageState extends State<HomePage> {
 
             _wrapWithKey(
               key: NavigationService.featuresKey,
-              child: const ScrollReveal(
+              child: ScrollReveal(
                 duration: Duration(milliseconds: 760),
                 child: FeaturesSection(),
               ),
@@ -117,7 +117,7 @@ class _HomePageState extends State<HomePage> {
 
             _wrapWithKey(
               key: NavigationService.howItWorksKey,
-              child: const ScrollReveal(
+              child: ScrollReveal(
                 delay: Duration(milliseconds: 110),
                 duration: Duration(milliseconds: 700),
                 child: HowItWorksSection(),
@@ -126,7 +126,7 @@ class _HomePageState extends State<HomePage> {
 
             _wrapWithKey(
               key: NavigationService.calendarKey,
-              child: const ScrollReveal(
+              child: ScrollReveal(
                 duration: Duration(milliseconds: 680),
                 child: CalendarSection(),
               ),
@@ -134,7 +134,7 @@ class _HomePageState extends State<HomePage> {
 
             _wrapWithKey(
               key: NavigationService.podcastKey,
-              child: const ScrollReveal(
+              child: ScrollReveal(
                 delay: Duration(milliseconds: 100),
                 duration: Duration(milliseconds: 720),
                 child: PodcastSection(),
@@ -143,7 +143,7 @@ class _HomePageState extends State<HomePage> {
 
             _wrapWithKey(
               key: NavigationService.appKey,
-              child: const ScrollReveal(
+              child: ScrollReveal(
                 delay: Duration(milliseconds: 160),
                 duration: Duration(milliseconds: 750),
                 child: AppSection(),
@@ -152,7 +152,7 @@ class _HomePageState extends State<HomePage> {
 
             _wrapWithKey(
               key: NavigationService.contactKey,
-              child: const ScrollReveal(
+              child: ScrollReveal(
                 duration: Duration(milliseconds: 600),
                 child: AppFooter(),
               ),
@@ -175,7 +175,7 @@ class _HomePageState extends State<HomePage> {
                 duration: const Duration(milliseconds: 250),
                 child: IgnorePointer(
                   ignoring: !_isNavScrolled,
-                  child: const TopNavigationBar(isScrolled: true),
+                  child: TopNavigationBar(isScrolled: true),
                 ),
               ),
             ),

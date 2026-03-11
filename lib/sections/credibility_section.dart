@@ -263,22 +263,22 @@ class _CredibilitySectionState extends State<CredibilitySection> {
   Widget _buildPartnership(BuildContext context, bool isMobile) {
     const logos = [
       (
-        path: 'lib/assets/images/Logo_DEPPS.jpeg',
+        path: 'assets/images/Logo_DEPPS.jpeg',
         name: 'DEPPS',
         fullName: 'Direction des Établissements Privés\net Professions Sanitaires',
       ),
       (
-        path: 'lib/assets/images/Logo_OIPI.png',
+        path: 'assets/images/Logo_OIPI.png',
         name: 'OIPI',
         fullName: 'Organisation Ivoirienne\nde la Propriété Intellectuelle',
       ),
       (
-        path: 'lib/assets/images/Logo_ONMCI.jpg',
+        path: 'assets/images/Logo_ONMCI.jpg',
         name: 'ONMCI',
         fullName: 'Ordre National\ndes Médecins de Côte d\'Ivoire',
       ),
       (
-        path: 'lib/assets/images/Logo_UNAMEPCI.jpeg',
+        path: 'assets/images/Logo_UNAMEPCI.jpeg',
         name: 'UNAMEPCI',
         fullName: 'Union Nationale des Médecins\nPrivés de Côte d\'Ivoire',
       ),
