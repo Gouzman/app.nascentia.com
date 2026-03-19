@@ -67,22 +67,11 @@ class _TopNavigationBarState extends State<TopNavigationBar> {
       children: [
         AnimatedContainer(
           duration: const Duration(milliseconds: 280),
-          width: isScrolled ? 34 : 40,
-          height: isScrolled ? 34 : 40,
-          decoration: BoxDecoration(
-            gradient: AppColors.heroGradient,
-            borderRadius: BorderRadius.circular(isScrolled ? 8 : 10),
-          ),
-          child: Center(
-            child: AnimatedDefaultTextStyle(
-              duration: const Duration(milliseconds: 280),
-              style: TextStyle(
-                fontSize: isScrolled ? 20.0 : 24.0,
-                fontWeight: FontWeight.bold,
-                color: Colors.white,
-              ),
-              child: const Text('N'),
-            ),
+          width: isScrolled ? 50 : 62,
+          height: isScrolled ? 50 : 62,
+          child: Image.asset(
+            'lib/assets/images/logo-nascentia.png',
+            fit: BoxFit.contain,
           ),
         ),
         const SizedBox(width: 12),

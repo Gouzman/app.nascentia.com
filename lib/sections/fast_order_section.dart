@@ -147,8 +147,7 @@ class FastOrderSection extends StatelessWidget {
           child: Row(
             mainAxisSize: MainAxisSize.min,
             children: [
-              const Icon(Icons.lightbulb_outline, color: AppColors.white, size: 16),
-              const SizedBox(width: 6),
+              
               Text(
                 'NOTRE MISSION',
                 style: AppTextStyles.labelSmall(context).copyWith(

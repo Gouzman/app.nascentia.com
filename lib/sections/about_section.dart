@@ -60,9 +60,6 @@ class _AboutSectionState extends State<AboutSection> {
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Icon(Icons.auto_stories_outlined,
-              color: AppColors.primary, size: isMobile ? 16 : 20),
-          SizedBox(width: isMobile ? 6 : 8),
           Text(
             'NOTRE HISTOIRE',
             style: TextStyle(

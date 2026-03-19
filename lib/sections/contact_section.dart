@@ -51,7 +51,7 @@ class ContactSection extends StatelessWidget {
               context,
               Icons.email,
               'Email',
-              'doumbiabonmanin@gmail.com',
+              'nascentia.info@gmail.com',
             ),
             const SizedBox(height: 20),
             _buildContactItem(

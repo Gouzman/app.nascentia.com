@@ -30,6 +30,14 @@ const List<_StepData> _steps = [
   ),
   _StepData(
     number: '2',
+    title: 'Autorisez les sources inconnues',
+    description:
+        'Pour installer NASCENTIA sur Android en dehors du Play Store, activez l\u2019option "Sources inconnues" dans les param\u00e8tres de s\u00e9curit\u00e9 de votre t\u00e9l\u00e9phone.',
+    icon: Icons.security_rounded,
+    color: AppColors.warningOrange,
+  ),
+  _StepData(
+    number: '3',
     title: 'Créez votre profil',
     description:
         'Renseignez vos informations personnelles de manière sécurisée et confidentielle.',
@@ -37,7 +45,7 @@ const List<_StepData> _steps = [
     color: AppColors.secondary,
   ),
   _StepData(
-    number: '3',
+    number: '4',
     title: 'Définissez votre objectif',
     description:
         'Choisissez entre détermination du sexe ou planification selon votre situation.',
@@ -45,7 +53,7 @@ const List<_StepData> _steps = [
     color: AppColors.accent,
   ),
   _StepData(
-    number: '4',
+    number: '5',
     title: 'Accédez aux résultats',
     description:
         'Recevez vos recommandations personnalisées basées sur notre algorithme validé.',
@@ -98,7 +106,7 @@ class _HowItWorksSectionState extends State<HowItWorksSection> {
                 ),
               ),
               child: Text(
-                '🚀 COMMENT ÇA MARCHE',
+                ' COMMENT ÇA MARCHE',
                 style: AppTextStyles.labelLarge(context).copyWith(
                   fontSize: 14,
                   letterSpacing: 1.5,
@@ -107,7 +115,7 @@ class _HowItWorksSectionState extends State<HowItWorksSection> {
             ),
             const SizedBox(height: 24),
             Text(
-              'Seulement 4 étapes',
+              'Seulement 5 étapes',
               style: AppTextStyles.displayMedium(context)
                   .copyWith(fontWeight: FontWeight.w800),
               textAlign: TextAlign.center,

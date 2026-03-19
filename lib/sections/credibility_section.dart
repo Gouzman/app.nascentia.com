@@ -114,7 +114,7 @@ class _CredibilitySectionState extends State<CredibilitySection> {
       },
       {
         'icon': Icons.science_outlined,
-        'value': '+5 ans',
+        'value': '+13 ans',
         'label': 'Recherche &\nDéveloppement',
       },
       {

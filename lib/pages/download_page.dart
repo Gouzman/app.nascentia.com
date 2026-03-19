@@ -6,6 +6,7 @@ import '../theme/app_text_styles.dart';
 import '../widgets/scroll_reveal.dart';
 import '../widgets/top_navigation_bar.dart';
 import '../widgets/app_footer.dart';
+import 'dart:html' as html;
 
 /// Page de téléchargement NASCENTIA - Style App Store
 class DownloadPage extends StatefulWidget {
@@ -237,65 +238,81 @@ class _DownloadPageState extends State<DownloadPage> {
 
   // Header avec icône et infos principales
   Widget _buildHeader(BuildContext context, bool isMobile) {
-    return Row(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        // Icône de l'app
-        Container(
-          width: isMobile ? 80 : 120,
-          height: isMobile ? 80 : 120,
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(20),
-            gradient: AppColors.primaryGradient,
-            boxShadow: [
-              BoxShadow(
-                color: AppColors.primary.withValues(alpha: 0.3),
-                blurRadius: 20,
-                offset: const Offset(0, 8),
-              ),
-            ],
+   return Row(
+  crossAxisAlignment: CrossAxisAlignment.start,
+  children: [
+
+    // LOGO
+    Container(
+      width: isMobile ? 96 : 140,
+      height: isMobile ? 96 : 140,
+      decoration: BoxDecoration(
+        color: AppColors.white,
+        borderRadius: BorderRadius.circular(30),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withValues(alpha: 0.08),
+            blurRadius: 18,
+            offset: const Offset(0, 6),
           ),
-          child: Center(
-            child: Icon(
-              Icons.baby_changing_station,
-              size: isMobile ? 40 : 60,
-              color: AppColors.white,
+        ],
+      ),
+      child: Padding(
+        padding: EdgeInsets.all(isMobile ? 4 : 6),
+        child: Image.asset(
+          'lib/assets/images/logo-nascentia.png',
+          fit: BoxFit.contain,
+        ),
+      ),
+    ),
+
+    SizedBox(width: isMobile ? 16 : 24),
+
+    // TEXTE APPLICATION
+    Expanded(
+      flex: 2,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+
+          Text(
+            'NASCENTIA',
+            style: isMobile
+                ? AppTextStyles.headlineMedium(context)
+                : AppTextStyles.headlineLarge(context),
+          ),
+
+          const SizedBox(height: 8),
+
+          Text(
+            'NASCENTIA Health Tech',
+            style: AppTextStyles.bodyMedium(context).copyWith(
+              color: AppColors.primary,
+              fontWeight: FontWeight.w600,
             ),
           ),
-        ),
-        SizedBox(width: isMobile ? 16 : 24),
 
-        // Infos textuelles
-        Expanded(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                'NASCENTIA',
-                style: isMobile
-                    ? AppTextStyles.headlineMedium(context)
-                    : AppTextStyles.headlineLarge(context),
-              ),
-              const SizedBox(height: 8),
-              Text(
-                'NASCENTIA Health Tech',
-                style: AppTextStyles.bodyMedium(context).copyWith(
-                  color: AppColors.primary,
-                  fontWeight: FontWeight.w600,
-                ),
-              ),
-              const SizedBox(height: 4),
-              Text(
-                'Santé & Bien-être • Planification familiale',
-                style: AppTextStyles.bodySmall(context).copyWith(
-                  color: AppColors.greyText,
-                ),
-              ),
-            ],
+          const SizedBox(height: 4),
+
+          Text(
+            'Santé & Bien-être • Planification familiale',
+            style: AppTextStyles.bodySmall(context).copyWith(
+              color: AppColors.greyText,
+            ),
           ),
-        ),
-      ],
-    );
+        ],
+      ),
+    ),
+
+    const SizedBox(width: 40),
+
+    // BADGES SÉCURITÉ
+    Expanded(
+      flex: 2,
+      child: _buildSecurityBadges(),
+    ),
+  ],
+);
   }
 
   // Stats row
@@ -377,7 +394,30 @@ class _DownloadPageState extends State<DownloadPage> {
       onEnter: (_) => setState(() => _isDownloadHovered = true),
       onExit: (_) => setState(() => _isDownloadHovered = false),
       child: GestureDetector(
-        onTap: () {},
+
+
+      onTap: () {
+                try {
+                  final url = Uri.base.resolve('downloads/nascentia.apk').toString();
+
+                  final anchor = html.AnchorElement(href: url)
+                    ..setAttribute("download", "nascentia.apk")
+                    ..style.display = "none";
+
+                  html.document.body!.append(anchor);
+
+                  anchor.click();
+
+                  anchor.remove();
+                } catch (e) {
+                  print('Erreur téléchargement APK: $e');
+                }
+              },
+
+
+
+
+
         child: AnimatedContainer(
           duration: const Duration(milliseconds: 300),
           curve: Curves.easeOut,
@@ -1601,4 +1641,81 @@ class _DownloadPageState extends State<DownloadPage> {
       },
     );
   }
+  Widget _buildSecurityBadges() {
+  return Column(
+    crossAxisAlignment: CrossAxisAlignment.start,
+    children: [
+
+      const SizedBox(height: 12),
+
+      _buildSecurityItem('Application officielle NASCENTIA'),
+
+      _buildSecurityItem('Signée numériquement'),
+
+      _buildSecurityItem(
+        'Vérifiée par 70 antivirus',
+        link:
+            'https://www.virustotal.com/gui/file/03270bdbc14b3280904d16981f753704fa976d75f696cbb1f02b1262f991bcd8/detection',
+      ),
+
+      _buildSecurityItem('Téléchargement sécurisé'),
+
+      _buildSecurityItem('Mise à jour automatique'),
+    ],
+  );
+}
+
+/** Nouvelle ajoute de verification de l'application  */
+Widget _buildSecurityItem(String text, {String? link}) {
+  return Padding(
+    padding: const EdgeInsets.only(bottom: 6),
+    child: GestureDetector(
+      onTap: link != null
+          ? () {
+              html.window.open(link, "_blank");
+            }
+          : null,
+      child: Row(
+        children: [
+
+          Container(
+            width: 20,
+            height: 20,
+            decoration: const BoxDecoration(
+              color: Color(0xFF2ECC71),
+              shape: BoxShape.circle,
+            ),
+            child: const Icon(
+              Icons.check,
+              color: Colors.white,
+              size: 14,
+            ),
+          ),
+
+          const SizedBox(width: 8),
+
+          Text(
+            text,
+            style: const TextStyle(
+              fontSize: 14,
+              fontWeight: FontWeight.w500,
+            ),
+          ),
+
+          if (link != null) ...[
+            const SizedBox(width: 6),
+            const Icon(
+              Icons.open_in_new,
+              size: 14,
+              color: Colors.grey,
+            )
+          ]
+        ],
+      ),
+    ),
+  );
+}
+/** fin du code */
+
+
 }

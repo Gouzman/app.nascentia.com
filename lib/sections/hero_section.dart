@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:url_launcher/url_launcher.dart';
 import '../theme/app_colors.dart';
 import '../theme/app_text_styles.dart';
 import 'dart:math' as math;
@@ -168,7 +169,7 @@ class _HeroSectionState extends State<HeroSection>
         const SizedBox(height: 24),
 
         Text(
-          'Une application scientifique innovante permettant de déterminer le sexe du bébé dès la conception '
+          'scientifique innovante permettant de déterminer le sexe du bébé dès la conception '
           'ou de planifier le sexe avant la grossesse grâce à un modèle validé.',
           style: AppTextStyles.bodyLarge(context).copyWith(height: 1.7),
           textAlign: isMobile ? TextAlign.center : TextAlign.left,
@@ -238,20 +239,29 @@ class _HeroSectionState extends State<HeroSection>
   Widget _buildSocialIcons() {
     return Row(
       children: [
-        _buildSocialIcon(FontAwesomeIcons.telegram),
+        _buildSocialIcon(
+          FontAwesomeIcons.linkedinIn,
+          'https://www.linkedin.com/company/105408986/admin/dashboard/',
+        ),
         const SizedBox(width: 20),
-        _buildSocialIcon(FontAwesomeIcons.facebookF),
+        _buildSocialIcon(
+          FontAwesomeIcons.facebookF,
+          'https://www.facebook.com/NascentiaTechnologie',
+        ),
         const SizedBox(width: 20),
-        _buildSocialIcon(FontAwesomeIcons.instagram),
+        _buildSocialIcon(
+          FontAwesomeIcons.instagram,
+          'https://www.instagram.com/',
+        ),
       ],
     );
   }
 
-  Widget _buildSocialIcon(IconData icon) {
+  Widget _buildSocialIcon(IconData icon, String url) {
     return MouseRegion(
       cursor: SystemMouseCursors.click,
       child: GestureDetector(
-        onTap: () {},
+        onTap: () => launchUrl(Uri.parse(url)),
         child: Container(
           width: 40,
           height: 40,

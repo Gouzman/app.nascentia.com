@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:url_launcher/url_launcher.dart';
 import '../theme/app_colors.dart';
 import '../theme/app_text_styles.dart';
 import '../services/navigation_service.dart';
@@ -46,7 +47,7 @@ class _AppSectionState extends State<AppSection> {
                 child: Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    const Icon(Icons.rocket_launch_outlined,
+                    const Icon(Icons.download_rounded,
                         color: AppColors.white, size: 18),
                     const SizedBox(width: 8),
                     Text(
@@ -126,9 +127,18 @@ class _AppSectionState extends State<AppSection> {
       onEnter: (_) => setState(() => _hoveredButton = id),
       onExit: (_) => setState(() => _hoveredButton = null),
       child: GestureDetector(
-        onTap: () {
+        onTap: () async {
           if (id == 'android') {
-            Navigator.pushNamed(context, '/download');
+            // Télécharger directement l'APK
+            try {
+              // Construire l'URL dynamiquement basée sur le domaine courant
+              final apkUrl = Uri.base.resolve('/downloads/nascentia.apk');
+              if (await canLaunchUrl(apkUrl)) {
+                await launchUrl(apkUrl, mode: LaunchMode.externalApplication);
+              }
+            } catch (e) {
+              print('Erreur téléchargement APK: $e');
+            }
           } else if (id == 'contact') {
             // R3 — Navigation fonctionnelle vers la section Contact
             NavigationService.scrollToSectionByName('Contact');

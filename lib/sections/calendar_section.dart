@@ -188,6 +188,10 @@ class _CalendarSectionState extends State<CalendarSection> {
     bool isMobile,
   ) {
     final isHovered = _hoveredFeatureIndex == index;
+    final titleStyle = AppTextStyles.headlineSmall(context).copyWith(
+      color: AppColors.darkText,
+      fontSize: !isMobile && title == 'Dates de Menstruation' ? 30 : null,
+    );
 
     // R10 — Gradient hover adouci : 2 couleurs
     return MouseRegion(
@@ -248,8 +252,7 @@ class _CalendarSectionState extends State<CalendarSection> {
               SizedBox(height: isMobile ? 16 : 20),
               Text(
                 title,
-                style: AppTextStyles.headlineSmall(context)
-                    .copyWith(color: AppColors.darkText),
+                style: titleStyle,
               ),
               SizedBox(height: isMobile ? 8 : 12),
               Text(
