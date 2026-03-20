@@ -58,6 +58,19 @@
   "git.confirmSync": false,
   "git.enableSmartCommit": true,
 
+  // ─── GitHub Copilot ───────────────────────────────────────────────────────
+  // Active le mode Agent (Autopilot) pour créer des fichiers directement
+  "github.copilot.enable": {
+    "*": true,
+    "dart": true,
+    "yaml": true,
+    "markdown": true
+  },
+  "chat.agent.enabled": true,
+  "github.copilot.chat.codesearch.enabled": true,
+  "github.copilot.chat.agent.thinkingTool.enabled": true,
+  "github.copilot.renameSuggestions.triggerAutomatically": true,
+
   // ─── Recherche ────────────────────────────────────────────────────────────
   "search.exclude": {
     "**/build": true,
