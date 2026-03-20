@@ -105,6 +105,7 @@ class FastOrderSection extends StatelessWidget {
           child: Image.asset(
             'lib/assets/images/image_section2.png',
             fit: BoxFit.cover,
+            cacheWidth: 900,
             errorBuilder: (context, error, stackTrace) {
               return Container(
                 decoration: BoxDecoration(

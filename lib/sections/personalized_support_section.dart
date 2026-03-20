@@ -288,6 +288,7 @@ class _PersonalizedSupportSectionState
           child: Image.asset(
             'lib/assets/images/image_section1.png',
             fit: BoxFit.cover,
+            cacheWidth: 800,
             errorBuilder: (context, error, stackTrace) {
               return Container(
                 decoration: BoxDecoration(

@@ -380,6 +380,7 @@ class _CredibilitySectionState extends State<CredibilitySection> {
                           child: Image.asset(
                             logo.path,
                             fit: BoxFit.contain,
+                            cacheWidth: 200,
                             errorBuilder: (_, __, ___) => Center(
                               child: Text(
                                 logo.name,

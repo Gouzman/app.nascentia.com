@@ -385,6 +385,7 @@ class _AnimatedPhoneState extends State<_AnimatedPhone>
                 child: Image.asset(
                   widget.imagePath,
                   fit: BoxFit.cover,
+                  cacheWidth: 600,
                   errorBuilder: (context, error, stackTrace) {
                     return Container(
                       width: 280,

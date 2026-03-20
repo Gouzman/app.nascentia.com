@@ -77,6 +77,7 @@ class _PhoneMockupState extends State<PhoneMockup>
                     child: Image.asset(
                       widget.imagePath,
                       fit: BoxFit.contain,
+                      cacheWidth: 600,
                       errorBuilder: (context, error, stackTrace) {
                         // Placeholder si l'image n'existe pas encore
                         return Container(
