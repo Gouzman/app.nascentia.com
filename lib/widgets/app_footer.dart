@@ -6,14 +6,62 @@ import '../theme/app_constants.dart';
 import '../services/navigation_service.dart';
 
 /// Footer NASCENTIA — Design Premium
-class AppFooter extends StatelessWidget {
+class AppFooter extends StatefulWidget {
   const AppFooter({Key? key}) : super(key: key);
+
+  @override
+  State<AppFooter> createState() => _AppFooterState();
+}
+
+class _AppFooterState extends State<AppFooter> {
+  final TextEditingController _emailController = TextEditingController();
+  String? _emailError;
+  bool _isSubscribed = false;
+
+  static const _socialLinks = {
+    FontAwesomeIcons.facebookF: 'https://www.facebook.com/NascentiaTechnologie',
+    FontAwesomeIcons.instagram: 'https://www.instagram.com/',
+    FontAwesomeIcons.whatsapp: 'https://wa.me/2250778683353',
+  };
+
+  static const _socialLabels = {
+    FontAwesomeIcons.facebookF: 'Facebook',
+    FontAwesomeIcons.instagram: 'Instagram',
+    FontAwesomeIcons.whatsapp: 'WhatsApp',
+  };
+
+  @override
+  void dispose() {
+    _emailController.dispose();
+    super.dispose();
+  }
+
+  bool _isValidEmail(String email) {
+    return RegExp(r'^[^@\s]+@[^@\s]+\.[^@\s]+$').hasMatch(email);
+  }
+
+  void _handleSubscribe() {
+    final email = _emailController.text.trim();
+    if (email.isEmpty) {
+      setState(() => _emailError = 'Veuillez entrer votre email.');
+      return;
+    }
+    if (!_isValidEmail(email)) {
+      setState(() => _emailError = 'Email invalide. Ex : exemple@mail.com');
+      return;
+    }
+    setState(() {
+      _emailError = null;
+      _isSubscribed = true;
+    });
+    // TODO: appeler le service d'inscription (ex. Supabase, Mailchimp…)
+  }
 
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
     final isTablet = size.width >= 768 && size.width < 1024;
-    final isMobile = size.width < 768; // R4 — breakpoint unifié
+    final isMobile = size.width < 768;
 
     return Container(
       width: double.infinity,
@@ -35,7 +83,6 @@ class AppFooter extends StatelessWidget {
           const SizedBox(height: 50),
 
           Divider(
-            // R12 — withValues au lieu de withOpacity
             color: Colors.white.withValues(alpha: 0.1),
             thickness: 1,
           ),
@@ -272,60 +319,113 @@ class AppFooter extends StatelessWidget {
         ),
         const SizedBox(height: 20),
 
-        Container(
-          decoration: BoxDecoration(
-            // R12 — withValues au lieu de withOpacity
-            color: Colors.white.withValues(alpha: 0.1),
-            borderRadius: AppConstants.borderRadiusPill,
-          ),
-          padding: EdgeInsets.all(AppConstants.spacing4),
-          child: Row(
+        if (_isSubscribed)
+          Row(
             children: [
-              Expanded(
-                child: TextField(
-                  style: const TextStyle(color: Colors.white, fontSize: 14),
-                  decoration: InputDecoration(
-                    hintText: 'Entrez votre email',
-                    hintStyle: TextStyle(
-                      color: Colors.white.withValues(alpha: 0.5),
-                      fontSize: 14,
-                    ),
-                    border: InputBorder.none,
-                    contentPadding: const EdgeInsets.symmetric(
-                      horizontal: 20,
-                      vertical: 12,
-                    ),
-                  ),
-                ),
-              ),
-              Container(
-                decoration: BoxDecoration(
-                  gradient: AppColors.purpleGradient,
-                  borderRadius: BorderRadius.circular(999),
-                ),
-                child: Material(
-                  color: Colors.transparent,
-                  child: InkWell(
-                    borderRadius: BorderRadius.circular(999),
-                    onTap: () {},
-                    child: const Padding(
-                      padding: EdgeInsets.symmetric(
-                          horizontal: 24, vertical: 12),
-                      child: Text(
-                        'S\'inscrire',
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 14,
-                          fontWeight: FontWeight.w600,
-                        ),
-                      ),
-                    ),
-                  ),
+              const Icon(Icons.check_circle, color: AppColors.successGreen, size: 20),
+              const SizedBox(width: 8),
+              const Flexible(
+                child: Text(
+                  'Merci ! Vous êtes bien inscrit(e).',
+                  style: TextStyle(color: Colors.white70, fontSize: 14),
                 ),
               ),
             ],
+          )
+        else
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Container(
+                decoration: BoxDecoration(
+                  color: Colors.white.withValues(alpha: 0.1),
+                  borderRadius: AppConstants.borderRadiusPill,
+                  border: _emailError != null
+                      ? Border.all(color: AppColors.errorRed, width: 1.5)
+                      : null,
+                ),
+                padding: EdgeInsets.all(AppConstants.spacing4),
+                child: Row(
+                  children: [
+                    Expanded(
+                      child: Semantics(
+                        label: 'Champ email pour inscription à la newsletter',
+                        child: TextField(
+                          controller: _emailController,
+                          keyboardType: TextInputType.emailAddress,
+                          style: const TextStyle(
+                              color: Colors.white, fontSize: 14),
+                          onChanged: (_) {
+                            if (_emailError != null) {
+                              setState(() => _emailError = null);
+                            }
+                          },
+                          decoration: InputDecoration(
+                            hintText: 'Entrez votre email',
+                            hintStyle: TextStyle(
+                              color: Colors.white.withValues(alpha: 0.5),
+                              fontSize: 14,
+                            ),
+                            border: InputBorder.none,
+                            contentPadding: const EdgeInsets.symmetric(
+                              horizontal: 20,
+                              vertical: 12,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                    Semantics(
+                      button: true,
+                      label: 'S\'inscrire à la newsletter',
+                      child: Container(
+                        decoration: BoxDecoration(
+                          gradient: AppColors.purpleGradient,
+                          borderRadius: BorderRadius.circular(999),
+                        ),
+                        child: Material(
+                          color: Colors.transparent,
+                          child: InkWell(
+                            borderRadius: BorderRadius.circular(999),
+                            onTap: _handleSubscribe,
+                            child: const Padding(
+                              padding: EdgeInsets.symmetric(
+                                  horizontal: 24, vertical: 12),
+                              child: Text(
+                                'S\'inscrire',
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.w600,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              if (_emailError != null) ...[
+                const SizedBox(height: 6),
+                Row(
+                  children: [
+                    const Icon(Icons.error_outline,
+                        color: AppColors.errorRed, size: 14),
+                    const SizedBox(width: 4),
+                    Flexible(
+                      child: Text(
+                        _emailError!,
+                        style: const TextStyle(
+                            color: AppColors.errorRed, fontSize: 12),
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ],
           ),
-        ),
 
         const SizedBox(height: 24),
 
@@ -348,20 +448,31 @@ class AppFooter extends StatelessWidget {
   }
 
   Widget _buildSocialIcon(IconData icon) {
-    return MouseRegion(
-      cursor: SystemMouseCursors.click,
-      child: GestureDetector(
-        onTap: () {},
-        child: Container(
-          width: 40,
-          height: 40,
-          decoration: BoxDecoration(
-            // R12 — withValues au lieu de withOpacity
-            color: Colors.white.withValues(alpha: 0.1),
-            shape: BoxShape.circle,
-          ),
-          child: Center(
-            child: FaIcon(icon, color: Colors.white, size: 16),
+    final url = _socialLinks[icon] ?? '';
+    final label = _socialLabels[icon] ?? 'Réseau social';
+    return Semantics(
+      button: true,
+      label: 'Nous suivre sur $label',
+      child: Tooltip(
+        message: label,
+        child: MouseRegion(
+          cursor: SystemMouseCursors.click,
+          child: GestureDetector(
+            onTap: () => launchUrl(
+              Uri.parse(url),
+              mode: LaunchMode.externalApplication,
+            ),
+            child: Container(
+              width: 40,
+              height: 40,
+              decoration: BoxDecoration(
+                color: Colors.white.withValues(alpha: 0.1),
+                shape: BoxShape.circle,
+              ),
+              child: Center(
+                child: FaIcon(icon, color: Colors.white, size: 16),
+              ),
+            ),
           ),
         ),
       ),
@@ -422,15 +533,21 @@ class AppFooter extends StatelessWidget {
   }
 
   Widget _buildBottomLink(String text) {
-    return MouseRegion(
-      cursor: SystemMouseCursors.click,
-      child: GestureDetector(
-        onTap: () {},
-        child: Text(
-          text,
-          style: TextStyle(
-            fontSize: 13,
-            color: Colors.white.withValues(alpha: 0.5),
+    return Semantics(
+      button: true,
+      label: text,
+      child: MouseRegion(
+        cursor: SystemMouseCursors.click,
+        child: GestureDetector(
+          onTap: () {
+            // TODO: naviguer vers la page correspondante
+          },
+          child: Text(
+            text,
+            style: TextStyle(
+              fontSize: 13,
+              color: Colors.white.withValues(alpha: 0.5),
+            ),
           ),
         ),
       ),

@@ -1352,6 +1352,7 @@ class _DownloadPageState extends State<DownloadPage> {
   void _showReviewDialog() {
     int selectedRating = 5;
     bool isSubmitting = false;
+    String? validationError;
     final nameController = TextEditingController();
     final titleController = TextEditingController();
     final commentController = TextEditingController();
@@ -1508,7 +1509,29 @@ class _DownloadPageState extends State<DownloadPage> {
                           ),
                         ),
                       ),
-                      const SizedBox(height: 32),
+                      const SizedBox(height: 16),
+
+                      // Message d'erreur de validation
+                      if (validationError != null)
+                        Padding(
+                          padding: const EdgeInsets.only(bottom: 12),
+                          child: Row(
+                            children: [
+                              const Icon(Icons.error_outline,
+                                  color: AppColors.errorRed, size: 16),
+                              const SizedBox(width: 6),
+                              Flexible(
+                                child: Text(
+                                  validationError!,
+                                  style: const TextStyle(
+                                    color: AppColors.errorRed,
+                                    fontSize: 13,
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
 
                       // Boutons
                       Row(
@@ -1544,10 +1567,16 @@ class _DownloadPageState extends State<DownloadPage> {
                                           commentController.text.trim();
                                       if (name.isEmpty ||
                                           title.isEmpty ||
-                                          comment.isEmpty) return;
+                                          comment.isEmpty) {
+                                        setDialogState(() => validationError =
+                                            'Veuillez remplir tous les champs.');
+                                        return;
+                                      }
 
-                                      setDialogState(
-                                          () => isSubmitting = true);
+                                      setDialogState(() {
+                                        validationError = null;
+                                        isSubmitting = true;
+                                      });
                                       try {
                                         await DownloadService.submitReview(
                                           name: name,
