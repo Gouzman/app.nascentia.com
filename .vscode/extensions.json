@@ -1,0 +1,27 @@
+{
+  "recommendations": [
+    // ─── Flutter & Dart (obligatoires) ──────────────────────────────────────
+    "Dart-Code.flutter",
+    "Dart-Code.dart-code",
+
+    // ─── Git & GitHub ────────────────────────────────────────────────────────
+    "eamodio.gitlens",
+    "github.copilot",
+    "github.vscode-pull-request-github",
+
+    // ─── Qualité du code ─────────────────────────────────────────────────────
+    "streetsidesoftware.code-spell-checker",
+    "streetsidesoftware.code-spell-checker-french",
+
+    // ─── UI & Productivité ───────────────────────────────────────────────────
+    "pkief.material-icon-theme",
+    "zhuangtongfa.material-theme",
+    "oderwat.indent-rainbow",
+    "usernamehw.errorlens",
+    "christian-kohler.path-intellisense",
+
+    // ─── Utilitaires ────────────────────────────────────────────────────────
+    "yzhang.markdown-all-in-one",
+    "mechatroner.rainbow-csv"
+  ]
+}

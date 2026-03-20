@@ -1,6 +1,6 @@
 # Downloads - NASCENTIA APK
 
-Cette dossier contient les fichiers téléchargeables de l'application NASCENTIA.
+Ce dossier contient les fichiers téléchargeables de l'application NASCENTIA.
 
 ## Structure
 

@@ -1,0 +1,116 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    // ─── 1. Installer les dépendances ────────────────────────────────────────
+    {
+      "label": "📦 Flutter: pub get",
+      "type": "shell",
+      "command": "flutter pub get",
+      "group": "build",
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "panel": "shared",
+        "clear": true
+      },
+      "problemMatcher": "$dart-pub"
+    },
+
+    // ─── 2. Analyser le code ─────────────────────────────────────────────────
+    {
+      "label": "🔍 Flutter: analyze",
+      "type": "shell",
+      "command": "flutter analyze",
+      "group": "test",
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "panel": "shared",
+        "clear": true
+      },
+      "problemMatcher": "$dart"
+    },
+
+    // ─── 3. Lancer l'app web dans Chrome ────────────────────────────────────
+    {
+      "label": "🌐 Flutter: run Chrome",
+      "type": "shell",
+      "command": "flutter run -d chrome --web-renderer canvaskit",
+      "group": "build",
+      "isBackground": true,
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "panel": "dedicated",
+        "clear": true
+      },
+      "problemMatcher": {
+        "owner": "dart",
+        "pattern": {
+          "regexp": "^(.*):(\\d+):(\\d+): (error|warning|info): (.*)$",
+          "file": 1,
+          "line": 2,
+          "column": 3,
+          "severity": 4,
+          "message": 5
+        },
+        "background": {
+          "activeOnStart": true,
+          "beginsPattern": "Launching",
+          "endsPattern": "To hot restart changes"
+        }
+      }
+    },
+
+    // ─── 4. Build pour la production ─────────────────────────────────────────
+    {
+      "label": "🏗️ Flutter: build web (production)",
+      "type": "shell",
+      "command": "flutter build web --release --web-renderer canvaskit",
+      "group": {
+        "kind": "build",
+        "isDefault": true
+      },
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "panel": "shared",
+        "clear": true
+      },
+      "problemMatcher": "$dart"
+    },
+
+    // ─── 5. Nettoyer le projet ───────────────────────────────────────────────
+    {
+      "label": "🧹 Flutter: clean",
+      "type": "shell",
+      "command": "flutter clean && flutter pub get",
+      "group": "build",
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "panel": "shared",
+        "clear": true
+      },
+      "problemMatcher": []
+    },
+
+    // ─── 6. Lancer les tests ─────────────────────────────────────────────────
+    {
+      "label": "🧪 Flutter: test",
+      "type": "shell",
+      "command": "flutter test",
+      "group": {
+        "kind": "test",
+        "isDefault": true
+      },
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "panel": "shared",
+        "clear": true
+      },
+      "problemMatcher": "$dart"
+    }
+  ]
+}

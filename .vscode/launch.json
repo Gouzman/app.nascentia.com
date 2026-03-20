@@ -1,0 +1,62 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    // ─── 1. Lancer en mode Debug dans Chrome ─────────────────────────────────
+    {
+      "name": "🌐 Flutter Web (Chrome) – Debug",
+      "type": "dart",
+      "request": "launch",
+      "program": "lib/main.dart",
+      "deviceId": "chrome",
+      "args": [
+        "--web-renderer",
+        "canvaskit",
+        "--dart-define=FLUTTER_WEB_USE_SKIA=true"
+      ]
+    },
+
+    // ─── 2. Lancer sans debug (plus rapide) ──────────────────────────────────
+    {
+      "name": "⚡ Flutter Web (Chrome) – Sans Debug",
+      "type": "dart",
+      "request": "launch",
+      "program": "lib/main.dart",
+      "deviceId": "chrome",
+      "noDebug": true,
+      "args": [
+        "--web-renderer",
+        "canvaskit"
+      ]
+    },
+
+    // ─── 3. Lancer en mode Web HTML renderer (compatible plus d'appareils) ───
+    {
+      "name": "🌍 Flutter Web (Chrome) – HTML Renderer",
+      "type": "dart",
+      "request": "launch",
+      "program": "lib/main.dart",
+      "deviceId": "chrome",
+      "args": [
+        "--web-renderer",
+        "html"
+      ]
+    },
+
+    // ─── 4. Lancer sur Edge ──────────────────────────────────────────────────
+    {
+      "name": "🌐 Flutter Web (Edge) – Debug",
+      "type": "dart",
+      "request": "launch",
+      "program": "lib/main.dart",
+      "deviceId": "edge"
+    },
+
+    // ─── 5. Exécuter les tests ───────────────────────────────────────────────
+    {
+      "name": "🧪 Flutter Tests",
+      "type": "dart",
+      "request": "launch",
+      "program": "test"
+    }
+  ]
+}

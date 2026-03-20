@@ -9,7 +9,7 @@ build/
 
 # Fichiers IDE
 .idea/
-.vscode/
+# .vscode/ est versionné pour partager la config Flutter avec l'équipe
 *.swp
 *.swo
 *~
