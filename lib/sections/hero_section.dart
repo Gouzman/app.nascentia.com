@@ -257,20 +257,37 @@ class _HeroSectionState extends State<HeroSection>
     );
   }
 
+  static const _socialLabels = {
+    'https://www.linkedin.com/company/105408986/admin/dashboard/': 'LinkedIn',
+    'https://www.facebook.com/NascentiaTechnologie': 'Facebook',
+    'https://www.instagram.com/': 'Instagram',
+  };
+
   Widget _buildSocialIcon(IconData icon, String url) {
-    return MouseRegion(
-      cursor: SystemMouseCursors.click,
-      child: GestureDetector(
-        onTap: () => launchUrl(Uri.parse(url)),
-        child: Container(
-          width: 40,
-          height: 40,
-          decoration: BoxDecoration(
-            color: AppColors.white.withValues(alpha: 0.15),
-            borderRadius: BorderRadius.circular(10),
-          ),
-          child: Center(
-            child: FaIcon(icon, color: AppColors.white, size: 18),
+    final label = _socialLabels[url] ?? 'Réseau social';
+    return Semantics(
+      button: true,
+      label: 'Nous suivre sur $label',
+      child: Tooltip(
+        message: label,
+        child: MouseRegion(
+          cursor: SystemMouseCursors.click,
+          child: GestureDetector(
+            onTap: () => launchUrl(
+              Uri.parse(url),
+              mode: LaunchMode.externalApplication,
+            ),
+            child: Container(
+              width: 40,
+              height: 40,
+              decoration: BoxDecoration(
+                color: AppColors.white.withValues(alpha: 0.15),
+                borderRadius: BorderRadius.circular(10),
+              ),
+              child: Center(
+                child: FaIcon(icon, color: AppColors.white, size: 18),
+              ),
+            ),
           ),
         ),
       ),

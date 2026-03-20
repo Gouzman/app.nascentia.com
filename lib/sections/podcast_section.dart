@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:url_launcher/url_launcher.dart';
 import '../theme/app_colors.dart';
 import '../theme/app_constants.dart';
 import '../theme/app_text_styles.dart';
@@ -51,9 +52,9 @@ class _PodcastSectionState extends State<PodcastSection>
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
           colors: [
-            Color(0xFF140826),
-            Color(0xFF2A0D52),
-            Color(0xFF3D1060),
+            AppColors.podcastDark,
+            AppColors.podcastMid,
+            AppColors.podcastDeep,
           ],
           stops: [0.0, 0.55, 1.0],
         ),
@@ -253,7 +254,10 @@ class _PodcastSectionState extends State<PodcastSection>
         MouseRegion(
           cursor: SystemMouseCursors.click,
           child: GestureDetector(
-            onTap: () {},
+            onTap: () => launchUrl(
+              Uri.parse('https://www.youtube.com/@nascentia'),
+              mode: LaunchMode.externalApplication,
+            ),
             child: Container(
               padding: EdgeInsets.symmetric(
                 horizontal: isMobile ? 28 : 34,
@@ -336,7 +340,7 @@ class _PodcastSectionState extends State<PodcastSection>
                     gradient: const LinearGradient(
                       begin: Alignment.topLeft,
                       end: Alignment.bottomRight,
-                      colors: [Color(0xFF5C1A88), Color(0xFF3D1060)],
+                      colors: [AppColors.podcastVisualDark, AppColors.podcastDeep],
                     ),
                     border: Border.all(
                       color: AppColors.primary.withValues(alpha: 0.55),

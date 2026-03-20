@@ -33,7 +33,7 @@ class FastOrderSection extends StatelessWidget {
                   colors: [
                     AppColors.purple,
                     AppColors.purple.withValues(alpha: 0.92),
-                    const Color(0xFF7B3AA0),
+                    AppColors.purpleMid,
                   ],
                 ),
                 boxShadow: [

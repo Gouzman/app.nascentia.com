@@ -77,4 +77,15 @@ class AppColors {
   static const Color blue = primary;
   static const Color accentPurple = purple;
   static const Color lightCream = Color(0xFFFFF8F5); // Crème clair
+
+  // ==================== COULEURS PODCAST ====================
+  // Dégradé sombre utilisé dans PodcastSection
+  static const Color podcastDark = Color(0xFF140826);
+  static const Color podcastMid = Color(0xFF2A0D52);
+  static const Color podcastDeep = Color(0xFF3D1060);
+
+  // Violet intermédiaire (gradient FastOrderSection)
+  static const Color purpleMid = Color(0xFF7B3AA0);
+  // Violet sombre pour l'élément visuel du centre dans PodcastSection
+  static const Color podcastVisualDark = Color(0xFF5C1A88);
 }
