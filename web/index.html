@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <!--
+    Si vous servez votre application depuis un sous-chemin,
+    changez href ci-dessous pour refléter ce chemin (doit commencer et finir par "/").
+    Pour plus d'informations : https://developer.mozilla.org/en-US/docs/Web/HTML/Element/base
+  -->
+  <base href="$FLUTTER_BASE_HREF">
+
+  <meta charset="UTF-8">
+  <meta content="IE=Edge" http-equiv="X-UA-Compatible">
+
+  <!-- Viewport optimisé pour mobile -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+
+  <!-- SEO principal -->
+  <meta name="description" content="NASCENTIA – Application de planification familiale naturelle. Gérez votre fertilité avec intelligence grâce à une IA de pointe. Disponible sur Android.">
+  <meta name="keywords" content="nascentia, planification familiale, fertilité, santé reproductive, application mobile, android, méthode naturelle, cycle menstruel">
+  <meta name="author" content="NASCENTIA">
+  <meta name="robots" content="index, follow">
+  <meta name="theme-color" content="#E95263">
+
+  <!-- Open Graph (partage réseaux sociaux) -->
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://app.nascentia.com/">
+  <meta property="og:title" content="NASCENTIA – Application de Planification Familiale">
+  <meta property="og:description" content="Gérez votre fertilité avec intelligence. Téléchargez l'application NASCENTIA sur Android.">
+  <meta property="og:image" content="https://app.nascentia.com/icons/Icon-512.png">
+  <meta property="og:locale" content="fr_FR">
+  <meta property="og:site_name" content="NASCENTIA">
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="NASCENTIA – Application de Planification Familiale">
+  <meta name="twitter:description" content="Application de planification familiale naturelle – Gérez votre fertilité avec intelligence.">
+  <meta name="twitter:image" content="https://app.nascentia.com/icons/Icon-512.png">
+
+  <!-- PWA / iOS -->
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="NASCENTIA">
+  <meta name="mobile-web-app-capable" content="yes">
+
+  <!-- Icônes -->
+  <link rel="apple-touch-icon" href="icons/Icon-192.png">
+  <link rel="icon" type="image/png" href="favicon.png">
+  <link rel="manifest" href="manifest.json">
+
+  <!-- Preconnect pour améliorer les performances réseau -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="preconnect" href="https://ukqbpzpqlaejgddzsqml.supabase.co">
+
+  <title>NASCENTIA – Application de Planification Familiale</title>
+
+  <!-- Écran de chargement -->
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      padding: 0;
+      background: linear-gradient(135deg, #E95263 0%, #F43666 50%, #582674 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      overflow: hidden;
+    }
+
+    #loading-screen {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 24px;
+      color: white;
+      text-align: center;
+      padding: 24px;
+      transition: opacity 0.4s ease-out;
+    }
+
+    #loading-screen.fade-out {
+      opacity: 0;
+    }
+
+    .loading-logo-container {
+      width: 90px;
+      height: 90px;
+      border-radius: 20px;
+      background: rgba(255, 255, 255, 0.15);
+      backdrop-filter: blur(10px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      animation: pulse 2s ease-in-out infinite;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+    }
+
+    .loading-logo-text {
+      font-size: 28px;
+      font-weight: 800;
+      color: white;
+      letter-spacing: 2px;
+    }
+
+    .loading-title {
+      font-size: 22px;
+      font-weight: 700;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      margin: 0;
+    }
+
+    .loading-subtitle {
+      font-size: 13px;
+      opacity: 0.75;
+      letter-spacing: 0.5px;
+      margin: 0;
+    }
+
+    .loading-bar-container {
+      width: 160px;
+      height: 3px;
+      background: rgba(255, 255, 255, 0.2);
+      border-radius: 999px;
+      overflow: hidden;
+    }
+
+    .loading-bar {
+      height: 100%;
+      background: white;
+      border-radius: 999px;
+      animation: progress 2.5s ease-in-out infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { transform: scale(1); opacity: 1; }
+      50% { transform: scale(0.96); opacity: 0.85; }
+    }
+
+    @keyframes progress {
+      0%   { width: 0%;   transform: translateX(-100%); }
+      50%  { width: 70%;  transform: translateX(0%); }
+      100% { width: 100%; transform: translateX(100%); }
+    }
+  </style>
+</head>
+<body>
+  <!-- Écran de chargement visible pendant l'initialisation Flutter -->
+  <div id="loading-screen">
+    <div class="loading-logo-container">
+      <span class="loading-logo-text">N</span>
+    </div>
+    <p class="loading-title">NASCENTIA</p>
+    <p class="loading-subtitle">Planification familiale naturelle</p>
+    <div class="loading-bar-container">
+      <div class="loading-bar"></div>
+    </div>
+  </div>
+
+  <!-- Script Bootstrap Flutter (compatible Flutter 3.22+) -->
+  <script src="flutter_bootstrap.js" async></script>
+
+  <script>
+    // Masquer l'écran de chargement une fois Flutter démarré
+    window.addEventListener('flutter-first-frame', function() {
+      var loadingScreen = document.getElementById('loading-screen');
+      if (loadingScreen) {
+        loadingScreen.classList.add('fade-out');
+        setTimeout(function() {
+          loadingScreen.remove();
+        }, 450);
+      }
+    });
+  </script>
+</body>
+</html>

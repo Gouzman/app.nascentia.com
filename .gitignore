@@ -9,7 +9,7 @@ build/
 
 # Fichiers IDE
 .idea/
-.vscode/
+# .vscode/ est versionné pour partager la config Flutter avec l'équipe
 *.swp
 *.swo
 *~
@@ -20,12 +20,9 @@ build/
 # Fichiers Windows
 Thumbs.db
 
-# Fichiers de build Web
-web/
-!web/index.html
-!web/favicon.png
-!web/icons/
-!web/manifest.json
+# Fichiers de build Web (générés par flutter build web, PAS les sources)
+# Note : web/ est un dossier SOURCE, ne pas l'exclure entièrement
+build/web/
 
 # Fichiers de dépendances
 pubspec.lock
@@ -37,3 +34,9 @@ test/.test_coverage.dart
 # Fichiers de déploiement
 .firebase/
 .vercel/
+
+# Fichiers temporaires des agents
+tmpclaude-*
+
+# APK binaire (héberger sur Supabase Storage ou un CDN externe)
+lib/downloads/*.apk

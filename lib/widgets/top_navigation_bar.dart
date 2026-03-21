@@ -72,6 +72,7 @@ class _TopNavigationBarState extends State<TopNavigationBar> {
           child: Image.asset(
             'lib/assets/images/logo-nascentia.png',
             fit: BoxFit.contain,
+            cacheWidth: 124,
           ),
         ),
         const SizedBox(width: 12),
