@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <!--
+    Si vous modifiez ce fichier, vous devez rebuild l'app web
+    avec: flutter build web
+  -->
+    <base href="$FLUTTER_BASE_HREF">
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
+
+    <!-- Meta SEO -->
+    <meta name="description"
+        content="NASCENTIA - Application mobile pour la restauration en Côte d'Ivoire. Commandez vos repas rapidement, suivez vos commandes et profitez d'une expérience culinaire exceptionnelle.">
+    <meta name="keywords"
+        content="NASCENTIA, restaurant, Côte d'Ivoire, livraison repas, commande en ligne, food delivery, restauration rapide, Abidjan">
+    <meta name="author" content="NASCENTIA">
+    <meta name="robots" content="index, follow">
+    <meta name="theme-color" content="#E95263">
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://nascentia.com/">
+    <meta property="og:title" content="NASCENTIA - Application de commande de repas">
+    <meta property="og:description"
+        content="Commandez vos repas rapidement et suivez vos commandes en temps réel avec NASCENTIA.">
+    <meta property="og:image" content="/icons/nascentia-og-image.png">
+    <meta property="og:locale" content="fr_FR">
+    <meta property="og:site_name" content="NASCENTIA">
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:url" content="https://nascentia.com/">
+    <meta name="twitter:title" content="NASCENTIA - Application de commande de repas">
+    <meta name="twitter:description" content="Commandez vos repas rapidement et suivez vos commandes en temps réel.">
+    <meta name="twitter:image" content="/icons/nascentia-twitter-card.png">
+
+    <!-- PWA iOS -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="NASCENTIA">
+    <link rel="apple-touch-icon" href="/icons/Icon-192.png">
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="/favicon.png" />
+
+    <!-- Preconnect pour optimiser les performances -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preconnect" href="https://ukqbpzpqlaejgddzsqml.supabase.co">
+
+    <!-- Manifest PWA -->
+    <link rel="manifest" href="/manifest.json">
+
+    <title>NASCENTIA - Application de commande de repas en Côte d'Ivoire</title>
+
+    <!-- Styles d'attente avec branding NASCENTIA -->
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: linear-gradient(135deg, #E95263 0%, #582674 100%);
+            overflow: hidden;
+        }
+
+        .loading-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, #E95263 0%, #582674 100%);
+            z-index: 9999;
+        }
+
+        .logo-container {
+            margin-bottom: 2rem;
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        .logo-text {
+            font-size: 3rem;
+            font-weight: 800;
+            color: white;
+            letter-spacing: -1px;
+            text-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+        }
+
+        .spinner {
+            width: 50px;
+            height: 50px;
+            border: 4px solid rgba(255, 255, 255, 0.3);
+            border-top-color: white;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        .loading-text {
+            margin-top: 1.5rem;
+            color: white;
+            font-size: 1rem;
+            opacity: 0.9;
+            letter-spacing: 0.5px;
+        }
+
+        @keyframes spin {
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
+        @keyframes pulse {
+
+            0%,
+            100% {
+                transform: scale(1);
+                opacity: 1;
+            }
+
+            50% {
+                transform: scale(1.05);
+                opacity: 0.9;
+            }
+        }
+
+        /* Cacher le loader une fois l'app chargée */
+        body.loaded .loading-container {
+            opacity: 0;
+            transition: opacity 0.5s ease;
+            pointer-events: none;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Écran de chargement -->
+    <div class="loading-container">
+        <div class="logo-container">
+            <div class="logo-text">NASCENTIA</div>
+        </div>
+        <div class="spinner"></div>
+        <div class="loading-text">Chargement en cours...</div>
+    </div>
+
+    <!-- Flutter injecte l'application ici -->
+    <script>
+        window.addEventListener('load', function () {
+            // Cacher le loader quand Flutter est prêt
+            setTimeout(function () {
+                document.body.classList.add('loaded');
+            }, 500);
+        });
+
+        // Service Worker pour PWA
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('flutter-first-frame', function () {
+                navigator.serviceWorker.register('flutter_service_worker.js');
+            });
+        }
+    </script>
+
+    <!-- Le script Flutter sera injecté ici par le build -->
+    <script src="flutter_bootstrap.js" async></script>
+</body>
+
+</html>

@@ -28,7 +28,7 @@ class _PhoneMockupState extends State<PhoneMockup>
   void initState() {
     super.initState();
     _controller = AnimationController(
-      duration: const Duration(seconds: 2),
+      duration: const Duration(milliseconds: 500), // Réduit de 2000ms pour fluidité
       vsync: this,
     );
 
@@ -77,6 +77,7 @@ class _PhoneMockupState extends State<PhoneMockup>
                     child: Image.asset(
                       widget.imagePath,
                       fit: BoxFit.contain,
+                      cacheWidth: 600, // Phone mockups (800KB-1.4MB)
                       errorBuilder: (context, error, stackTrace) {
                         // Placeholder si l'image n'existe pas encore
                         return Container(

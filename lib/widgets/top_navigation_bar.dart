@@ -72,6 +72,7 @@ class _TopNavigationBarState extends State<TopNavigationBar> {
           child: Image.asset(
             'lib/assets/images/logo-nascentia.png',
             fit: BoxFit.contain,
+            cacheWidth: 124, // Optimisation mémoire
           ),
         ),
         const SizedBox(width: 12),
@@ -187,7 +188,7 @@ class _TopNavigationBarState extends State<TopNavigationBar> {
             child: Text(
               'Découvrir l\'application',
               style: TextStyle(
-                fontSize: isSmall ? 13 : 15,
+                fontSize: isSmall ? 14 : 15,
                 fontWeight: FontWeight.w600,
                 color: Colors.white,
               ),

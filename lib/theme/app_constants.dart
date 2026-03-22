@@ -11,12 +11,15 @@ class AppConstants {
   static const double spacing16 = 16.0;
   static const double spacing20 = 20.0;
   static const double spacing24 = 24.0;
+  static const double spacing30 = 30.0;
   static const double spacing32 = 32.0;
   static const double spacing40 = 40.0;
   static const double spacing48 = 48.0;
   static const double spacing56 = 56.0;
+  static const double spacing60 = 60.0;
   static const double spacing64 = 64.0;
   static const double spacing80 = 80.0;
+  static const double spacing100 = 100.0;
 
   // ==================== BORDER RADIUS ====================
   // Système cohérent de border radius
@@ -96,7 +99,95 @@ class AppConstants {
   static const double maxTextWidth = 680.0;
 
   // Breakpoints responsive
+  static const double breakpointSmallMobile = 600.0; // iPhone SE, petits Android
   static const double breakpointMobile = 768.0;
   static const double breakpointTablet = 1024.0;
   static const double breakpointDesktop = 1440.0;
+
+  // ==================== RESPONSIVE HELPERS ====================
+  /// Vérifie si l'écran est très petit (< 600px) - iPhone SE, Android compacts
+  static bool isSmallMobile(BuildContext context) {
+    return MediaQuery.of(context).size.width < breakpointSmallMobile;
+  }
+
+  /// Vérifie si l'écran est en mode mobile (< 768px)
+  static bool isMobile(BuildContext context) {
+    return MediaQuery.of(context).size.width < breakpointMobile;
+  }
+
+  /// Vérifie si l'écran est en mode tablet (768px - 1024px)
+  static bool isTablet(BuildContext context) {
+    final width = MediaQuery.of(context).size.width;
+    return width >= breakpointMobile && width < breakpointTablet;
+  }
+
+  /// Vérifie si l'écran est en mode desktop (>= 1024px)
+  static bool isDesktop(BuildContext context) {
+    return MediaQuery.of(context).size.width >= breakpointTablet;
+  }
+
+  /// Retourne la largeur de l'écran
+  static double screenWidth(BuildContext context) {
+    return MediaQuery.of(context).size.width;
+  }
+
+  /// Padding horizontal responsive optimisé pour tous les téléphones
+  /// - Petit mobile (< 600px): 16px (gain d'espace)
+  /// - Mobile standard (< 768px): 20px
+  /// - Tablet: 40px
+  /// - Desktop: 80px
+  static double responsiveHorizontalPadding(BuildContext context) {
+    final width = screenWidth(context);
+    if (width < breakpointSmallMobile) return spacing16; // iPhone SE, petits Android
+    if (width < breakpointMobile) return spacing20; // Mobile standard
+    if (width < breakpointTablet) return spacing40; // Tablet
+    return spacing80; // Desktop
+  }
+
+  /// Padding vertical responsive basé sur la taille d'écran
+  static double responsiveVerticalPadding(BuildContext context) {
+    return isMobile(context) ? spacing56 : spacing80;
+  }
+
+  /// Espacement vertical entre sections responsive
+  /// Remplace les SizedBox(height: 60) fixes
+  /// - Petit mobile: 24px
+  /// - Mobile standard: 32px
+  /// - Tablet+: 60px
+  static double responsiveSectionSpacing(BuildContext context) {
+    final width = screenWidth(context);
+    if (width < breakpointSmallMobile) return spacing24;
+    if (width < breakpointMobile) return spacing32;
+    return spacing60;
+  }
+
+  /// Espacement vertical entre éléments dans une section
+  /// - Petit mobile: 16px
+  /// - Mobile standard: 20px
+  /// - Tablet+: 30px
+  static double responsiveItemSpacing(BuildContext context) {
+    final width = screenWidth(context);
+    if (width < breakpointSmallMobile) return spacing16;
+    if (width < breakpointMobile) return spacing20;
+    return spacing30;
+  }
+
+  /// Largeur maximale responsive pour images/phone mockups
+  /// Garantit qu'ils ne dépassent jamais l'écran avec marge confortable
+  /// - Retourne min(maxWidth, 70% de la largeur d'écran)
+  static double responsiveMaxWidth(BuildContext context, double maxWidth) {
+    final screenW = screenWidth(context);
+    if (isMobile(context)) {
+      return screenW < breakpointSmallMobile
+          ? screenW * 0.70 // Petit mobile: max 70%
+          : screenW * 0.75; // Mobile standard: max 75%
+    }
+    return maxWidth; // Tablet/Desktop: utiliser maxWidth fixe
+  }
+
+  /// Font size minimum pour lisibilité (WCAG compliance)
+  /// Augmente automatiquement si < 12px
+  static double ensureMinFontSize(double fontSize) {
+    return fontSize < 12.0 ? 12.0 : fontSize;
+  }
 }

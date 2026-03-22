@@ -67,7 +67,7 @@ class _CredibilitySectionState extends State<CredibilitySection> {
           Text(
             'VALIDATION SCIENTIFIQUE',
             style: TextStyle(
-              fontSize: isMobile ? 11 : 13,
+              fontSize: isMobile ? 12 : 13,
               fontWeight: FontWeight.w700,
               letterSpacing: 1.2,
               color: AppColors.purple,
@@ -308,7 +308,7 @@ class _CredibilitySectionState extends State<CredibilitySection> {
               Text(
                 'VALIDÉ PAR CES INSTITUTIONS',
                 style: TextStyle(
-                  fontSize: isMobile ? 11 : 13,
+                  fontSize: isMobile ? 12 : 13,
                   fontWeight: FontWeight.w700,
                   letterSpacing: 1.3,
                   color: validatedGreen,
@@ -380,6 +380,7 @@ class _CredibilitySectionState extends State<CredibilitySection> {
                           child: Image.asset(
                             logo.path,
                             fit: BoxFit.contain,
+                            cacheWidth: 200, // Logos partenaires
                             errorBuilder: (_, __, ___) => Center(
                               child: Text(
                                 logo.name,
@@ -409,7 +410,7 @@ class _CredibilitySectionState extends State<CredibilitySection> {
                       Text(
                         logo.fullName,
                         style: TextStyle(
-                          fontSize: isMobile ? 10 : 11,
+                          fontSize: isMobile ? 12 : 12,
                           fontWeight: FontWeight.w400,
                           color: AppColors.greyText,
                           height: 1.4,

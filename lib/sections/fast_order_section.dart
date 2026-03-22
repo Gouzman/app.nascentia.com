@@ -86,43 +86,54 @@ class FastOrderSection extends StatelessWidget {
   Widget _buildImage(bool isTablet) {
     final imageHeight = isTablet ? 380.0 : 420.0;
 
-    return Center(
-      child: Container(
-        height: imageHeight,
-        constraints: BoxConstraints(maxWidth: isTablet ? 320.0 : 360.0),
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(28),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withValues(alpha: 0.3),
-              blurRadius: 40,
-              offset: const Offset(0, 20),
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final maxWidth = AppConstants.responsiveMaxWidth(
+          context,
+          isTablet ? 320.0 : 360.0,
+        );
+        return Center(
+          child: Container(
+            height: imageHeight,
+            constraints: BoxConstraints(
+              maxWidth: maxWidth < 360 ? maxWidth : (isTablet ? 320.0 : 360.0),
             ),
-          ],
-        ),
-        child: ClipRRect(
-          borderRadius: BorderRadius.circular(28),
-          child: Image.asset(
-            'lib/assets/images/image_section2.png',
-            fit: BoxFit.cover,
-            errorBuilder: (context, error, stackTrace) {
-              return Container(
-                decoration: BoxDecoration(
-                  color: AppColors.white.withValues(alpha: 0.15),
-                  borderRadius: BorderRadius.circular(28),
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(28),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withValues(alpha: 0.3),
+                  blurRadius: 40,
+                  offset: const Offset(0, 20),
                 ),
-                child: const Center(
-                  child: Icon(
-                    Icons.phone_iphone,
-                    size: 80,
-                    color: AppColors.white,
-                  ),
-                ),
-              );
-            },
+              ],
+            ),
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(28),
+              child: Image.asset(
+                'lib/assets/images/image_section2.png',
+                fit: BoxFit.cover,
+                cacheWidth: 900, // image_section2.png (2.4 MB)
+                errorBuilder: (context, error, stackTrace) {
+                  return Container(
+                    decoration: BoxDecoration(
+                      color: AppColors.white.withValues(alpha: 0.15),
+                      borderRadius: BorderRadius.circular(28),
+                    ),
+                    child: const Center(
+                      child: Icon(
+                        Icons.phone_iphone,
+                        size: 80,
+                        color: AppColors.white,
+                      ),
+                    ),
+                  );
+                },
+              ),
+            ),
           ),
-        ),
-      ),
+        );
+      },
     );
   }
 
@@ -147,7 +158,7 @@ class FastOrderSection extends StatelessWidget {
           child: Row(
             mainAxisSize: MainAxisSize.min,
             children: [
-              
+
               Text(
                 'NOTRE MISSION',
                 style: AppTextStyles.labelSmall(context).copyWith(

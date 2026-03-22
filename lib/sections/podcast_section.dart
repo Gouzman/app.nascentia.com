@@ -21,7 +21,7 @@ class _PodcastSectionState extends State<PodcastSection>
   void initState() {
     super.initState();
     _controller = AnimationController(
-      duration: const Duration(milliseconds: 2200),
+      duration: const Duration(milliseconds: 400), // Réduit de 2200ms pour fluidité
       vsync: this,
     )..repeat(reverse: true);
 
@@ -64,35 +64,47 @@ class _PodcastSectionState extends State<PodcastSection>
           Positioned(
             top: -60,
             right: -40,
-            child: Container(
-              width: 300,
-              height: 300,
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                gradient: RadialGradient(
-                  colors: [
-                    AppColors.primary.withValues(alpha: 0.12),
-                    AppColors.primary.withValues(alpha: 0.0),
-                  ],
-                ),
-              ),
+            child: LayoutBuilder(
+              builder: (context, constraints) {
+                final size = MediaQuery.of(context).size;
+                final orbSize = size.width < 600 ? size.width * 0.6 : 300.0;
+                return Container(
+                  width: orbSize,
+                  height: orbSize,
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    gradient: RadialGradient(
+                      colors: [
+                        AppColors.primary.withValues(alpha: 0.12),
+                        AppColors.primary.withValues(alpha: 0.0),
+                      ],
+                    ),
+                  ),
+                );
+              },
             ),
           ),
           Positioned(
             bottom: -80,
             left: -60,
-            child: Container(
-              width: 350,
-              height: 350,
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                gradient: RadialGradient(
-                  colors: [
-                    AppColors.purple.withValues(alpha: 0.20),
-                    AppColors.purple.withValues(alpha: 0.0),
-                  ],
-                ),
-              ),
+            child: LayoutBuilder(
+              builder: (context, constraints) {
+                final size = MediaQuery.of(context).size;
+                final orbSize = size.width < 600 ? size.width * 0.7 : 350.0;
+                return Container(
+                  width: orbSize,
+                  height: orbSize,
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    gradient: RadialGradient(
+                      colors: [
+                        AppColors.purple.withValues(alpha: 0.20),
+                        AppColors.purple.withValues(alpha: 0.0),
+                      ],
+                    ),
+                  ),
+                );
+              },
             ),
           ),
 
@@ -293,74 +305,80 @@ class _PodcastSectionState extends State<PodcastSection>
   }
 
   Widget _buildVisual() {
-    return Center(
-      child: SizedBox(
-        width: 300,
-        height: 300,
-        child: AnimatedBuilder(
-          animation: _controller,
-          builder: (context, _) {
-            return Stack(
-              alignment: Alignment.center,
-              children: [
-                // Anneau externe — pulse lent
-                Transform.scale(
-                  scale: _outerAnim.value,
-                  child: Container(
-                    width: 290,
-                    height: 290,
-                    decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                      color: AppColors.primary.withValues(alpha: 0.06),
-                    ),
-                  ),
-                ),
-                // Anneau intermédiaire — pulse légèrement décalé
-                Transform.scale(
-                  scale: _middleAnim.value,
-                  child: Container(
-                    width: 215,
-                    height: 215,
-                    decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                      color: AppColors.primary.withValues(alpha: 0.11),
-                    ),
-                  ),
-                ),
-                // Cercle central statique avec micro
-                Container(
-                  width: 148,
-                  height: 148,
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    gradient: const LinearGradient(
-                      begin: Alignment.topLeft,
-                      end: Alignment.bottomRight,
-                      colors: [Color(0xFF5C1A88), Color(0xFF3D1060)],
-                    ),
-                    border: Border.all(
-                      color: AppColors.primary.withValues(alpha: 0.55),
-                      width: 2.5,
-                    ),
-                    boxShadow: [
-                      BoxShadow(
-                        color: AppColors.primary.withValues(alpha: 0.40),
-                        blurRadius: 36,
-                        offset: const Offset(0, 10),
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final size = MediaQuery.of(context).size;
+        final visualSize = size.width < 600 ? size.width * 0.7 : 300.0;
+        return Center(
+          child: SizedBox(
+            width: visualSize,
+            height: visualSize,
+            child: AnimatedBuilder(
+              animation: _controller,
+              builder: (context, _) {
+                return Stack(
+                  alignment: Alignment.center,
+                  children: [
+                    // Anneau externe — pulse lent
+                    Transform.scale(
+                      scale: _outerAnim.value,
+                      child: Container(
+                        width: 290,
+                        height: 290,
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          color: AppColors.primary.withValues(alpha: 0.06),
+                        ),
                       ),
-                    ],
-                  ),
-                  child: const Icon(
-                    Icons.mic_rounded,
-                    size: 60,
-                    color: Colors.white,
-                  ),
-                ),
-              ],
-            );
-          },
-        ),
-      ),
+                    ),
+                    // Anneau intermédiaire — pulse légèrement décalé
+                    Transform.scale(
+                      scale: _middleAnim.value,
+                      child: Container(
+                        width: 215,
+                        height: 215,
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          color: AppColors.primary.withValues(alpha: 0.11),
+                        ),
+                      ),
+                    ),
+                    // Cercle central statique avec micro
+                    Container(
+                      width: 148,
+                      height: 148,
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        gradient: const LinearGradient(
+                          begin: Alignment.topLeft,
+                          end: Alignment.bottomRight,
+                          colors: [Color(0xFF5C1A88), Color(0xFF3D1060)],
+                        ),
+                        border: Border.all(
+                          color: AppColors.primary.withValues(alpha: 0.55),
+                          width: 2.5,
+                        ),
+                        boxShadow: [
+                          BoxShadow(
+                            color: AppColors.primary.withValues(alpha: 0.40),
+                            blurRadius: 36,
+                            offset: const Offset(0, 10),
+                          ),
+                        ],
+                      ),
+                      child: const Icon(
+                        Icons.mic_rounded,
+                        size: 60,
+                        color: Colors.white,
+                      ),
+                    ),
+                  ],
+                );
+              },
+            ),
+          ),
+        );
+      },
     );
   }
 }

@@ -21,11 +21,15 @@ build/
 Thumbs.db
 
 # Fichiers de build Web
-web/
-!web/index.html
-!web/favicon.png
-!web/icons/
-!web/manifest.json
+# Note: web/ contient les sources (index.html, manifest.json)
+# Le build génère build/web/ qui est déjà exclu
+!web/
+web/flutter_service_worker.js
+web/flutter_bootstrap.js
+web/flutter.js
+web/version.json
+web/assets/
+web/canvaskit/
 
 # Fichiers de dépendances
 pubspec.lock
@@ -37,3 +41,18 @@ test/.test_coverage.dart
 # Fichiers de déploiement
 .firebase/
 .vercel/
+
+# Variables d'environnement - NE JAMAIS COMMIT !
+.env
+.env.local
+.env.*.local
+
+# Fichiers temporaires Claude
+tmpclaude-*
+
+# Fichiers binaires lourds (uploader sur Supabase Storage au lieu)
+*.apk
+*.ipa
+*.aab
+lib/downloads/
+web/downloads/

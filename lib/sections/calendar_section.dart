@@ -65,7 +65,7 @@ class _CalendarSectionState extends State<CalendarSection> {
           Text(
             'CALENDRIER INTELLIGENT',
             style: TextStyle(
-              fontSize: isMobile ? 11 : 13,
+              fontSize: isMobile ? 12 : 13,
               fontWeight: FontWeight.w700,
               letterSpacing: 1.2,
               color: AppColors.purple,

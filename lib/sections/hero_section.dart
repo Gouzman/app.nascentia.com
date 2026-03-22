@@ -3,6 +3,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../theme/app_colors.dart';
 import '../theme/app_text_styles.dart';
+import '../theme/app_constants.dart';
 import 'dart:math' as math;
 
 /// Hero Section NASCENTIA - Design Premium Pixel Perfect
@@ -23,7 +24,7 @@ class _HeroSectionState extends State<HeroSection>
   void initState() {
     super.initState();
     _controller = AnimationController(
-      duration: const Duration(milliseconds: 1200),
+      duration: const Duration(milliseconds: 600), // Réduit de 1200ms pour réactivité
       vsync: this,
     );
 
@@ -80,7 +81,7 @@ class _HeroSectionState extends State<HeroSection>
             children: [
               Padding(
                 padding: EdgeInsets.symmetric(
-                  horizontal: isMobile ? 32 : (size.width < 1024 ? 50 : 80),
+                  horizontal: AppConstants.responsiveHorizontalPadding(context),
                   vertical: isMobile ? 50 : 60,
                 ),
                 child: isMobile
@@ -129,7 +130,7 @@ class _HeroSectionState extends State<HeroSection>
           opacity: _fadeAnimation,
           child: _buildTextContent(context, true),
         ),
-        const SizedBox(height: 60),
+        SizedBox(height: AppConstants.responsiveSectionSpacing(context)),
         _buildPhoneMockups(context, false),
       ],
     );
@@ -166,7 +167,7 @@ class _HeroSectionState extends State<HeroSection>
           ],
         ),
 
-        const SizedBox(height: 24),
+        SizedBox(height: AppConstants.responsiveItemSpacing(context)),
 
         Text(
           'scientifique innovante permettant de déterminer le sexe du bébé dès la conception '
@@ -175,13 +176,13 @@ class _HeroSectionState extends State<HeroSection>
           textAlign: isMobile ? TextAlign.center : TextAlign.left,
         ),
 
-        const SizedBox(height: 36),
+        SizedBox(height: AppConstants.responsiveItemSpacing(context) * 1.5),
 
         // R2 — Bouton CTA solide blanc (plus visible sur fond rose)
         _buildPrimaryButton(isMobile),
 
         if (!isMobile) ...[
-          const SizedBox(height: 60),
+          SizedBox(height: AppConstants.responsiveSectionSpacing(context)),
           _buildSocialIcons(),
         ],
       ],
@@ -368,39 +369,46 @@ class _AnimatedPhoneState extends State<_AnimatedPhone>
           angle: widget.rotation,
           child: Transform.scale(
             scale: widget.scale,
-            child: Container(
-              width: 280,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(30),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.black.withValues(alpha: 0.18),
-                    blurRadius: 24,
-                    offset: const Offset(0, 14),
+            child: LayoutBuilder(
+              builder: (context, constraints) {
+                final maxWidth = AppConstants.responsiveMaxWidth(context, 280);
+                return Container(
+                  width: maxWidth,
+                  constraints: BoxConstraints(maxWidth: maxWidth),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(30),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black.withValues(alpha: 0.18),
+                        blurRadius: 24,
+                        offset: const Offset(0, 14),
+                      ),
+                    ],
                   ),
-                ],
-              ),
-              child: ClipRRect(
-                borderRadius: BorderRadius.circular(30),
-                child: Image.asset(
-                  widget.imagePath,
-                  fit: BoxFit.cover,
-                  errorBuilder: (context, error, stackTrace) {
-                    return Container(
-                      width: 280,
-                      height: 560,
-                      decoration: BoxDecoration(
-                        color: AppColors.white.withValues(alpha: 0.2),
-                        borderRadius: BorderRadius.circular(30),
-                      ),
-                      child: const Center(
-                        child: Icon(Icons.phone_iphone,
-                            size: 80, color: AppColors.white),
-                      ),
-                    );
-                  },
-                ),
-              ),
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(30),
+                    child: Image.asset(
+                      widget.imagePath,
+                      fit: BoxFit.cover,
+                      cacheWidth: 600, // Phone mockups hero (optimisation mémoire)
+                      errorBuilder: (context, error, stackTrace) {
+                        return Container(
+                          width: 280,
+                          height: 560,
+                          decoration: BoxDecoration(
+                            color: AppColors.white.withValues(alpha: 0.2),
+                            borderRadius: BorderRadius.circular(30),
+                          ),
+                          child: const Center(
+                            child: Icon(Icons.phone_iphone,
+                                size: 80, color: AppColors.white),
+                          ),
+                        );
+                      },
+                    ),
+                  ),
+                );
+              },
             ),
           ),
         ),

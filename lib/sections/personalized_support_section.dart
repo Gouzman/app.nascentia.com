@@ -48,11 +48,7 @@ class _PersonalizedSupportSectionState
               ],
             ),
             padding: EdgeInsets.symmetric(
-              horizontal: isMobile
-                  ? AppConstants.spacing32
-                  : (size.width < 1024
-                      ? AppConstants.spacing48
-                      : AppConstants.spacing64),
+              horizontal: AppConstants.responsiveHorizontalPadding(context),
               vertical:
                   isMobile ? AppConstants.spacing40 : AppConstants.spacing48,
             ),
@@ -256,7 +252,7 @@ class _PersonalizedSupportSectionState
               Text(
                 label,
                 style: TextStyle(
-                  fontSize: isMobile ? 11 : 12,
+                  fontSize: isMobile ? 12 : 12,
                   fontWeight: FontWeight.w600,
                   color: AppColors.greyText,
                 ),
@@ -269,43 +265,51 @@ class _PersonalizedSupportSectionState
   }
 
   Widget _buildPhoneMockup(bool isDesktop) {
-    return Center(
-      child: Container(
-        height: isDesktop ? 420 : 360,
-        constraints: const BoxConstraints(maxWidth: 240),
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(24),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withValues(alpha: 0.15),
-              blurRadius: 20,
-              offset: const Offset(0, 12),
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final maxWidth = AppConstants.responsiveMaxWidth(context, 240);
+        return Center(
+          child: Container(
+            height: isDesktop ? 420 : 360,
+            constraints: BoxConstraints(
+              maxWidth: maxWidth < 240 ? maxWidth : 240,
             ),
-          ],
-        ),
-        child: ClipRRect(
-          borderRadius: BorderRadius.circular(24),
-          child: Image.asset(
-            'lib/assets/images/image_section1.png',
-            fit: BoxFit.cover,
-            errorBuilder: (context, error, stackTrace) {
-              return Container(
-                decoration: BoxDecoration(
-                  color: AppColors.lightCream,
-                  borderRadius: BorderRadius.circular(24),
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(24),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withValues(alpha: 0.15),
+                  blurRadius: 20,
+                  offset: const Offset(0, 12),
                 ),
-                child: const Center(
-                  child: Icon(
-                    Icons.phone_iphone,
-                    size: 60,
-                    color: AppColors.primaryPink,
-                  ),
-                ),
-              );
-            },
+              ],
+            ),
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(24),
+              child: Image.asset(
+                'lib/assets/images/image_section1.png',
+                fit: BoxFit.cover,
+                cacheWidth: 800, // image_section1.png (944 KB)
+                errorBuilder: (context, error, stackTrace) {
+                  return Container(
+                    decoration: BoxDecoration(
+                      color: AppColors.lightCream,
+                      borderRadius: BorderRadius.circular(24),
+                    ),
+                    child: const Center(
+                      child: Icon(
+                        Icons.phone_iphone,
+                        size: 60,
+                        color: AppColors.primaryPink,
+                      ),
+                    ),
+                  );
+                },
+              ),
+            ),
           ),
-        ),
-      ),
+        );
+      },
     );
   }
 }

@@ -9,10 +9,12 @@ import '../sections/how_it_works_section.dart';
 import '../sections/calendar_section.dart';
 import '../sections/app_section.dart';
 import '../sections/podcast_section.dart';
+import '../sections/contact_section.dart';
 import '../widgets/top_navigation_bar.dart';
 import '../widgets/app_footer.dart';
 import '../widgets/scroll_reveal.dart';
 import '../services/navigation_service.dart';
+import '../main.dart'; // Pour precacheAppImages
 
 /// Page d'accueil principale de NASCENTIA
 class HomePage extends StatefulWidget {
@@ -35,8 +37,13 @@ class _HomePageState extends State<HomePage> {
         setState(() => _isNavScrolled = scrolled);
       }
     });
-    // Scroll vers la section demandée si on vient de la DownloadPage
+
+    // Post-frame callbacks
     WidgetsBinding.instance.addPostFrameCallback((_) {
+      // Précacher les images critiques pour améliorer les performances
+      precacheAppImages(context);
+
+      // Scroll vers la section demandée si on vient de la DownloadPage
       final args = ModalRoute.of(context)?.settings.arguments;
       if (args is String && args.isNotEmpty) {
         Future.delayed(const Duration(milliseconds: 400), () {
@@ -154,8 +161,14 @@ class _HomePageState extends State<HomePage> {
               key: NavigationService.contactKey,
               child: const ScrollReveal(
                 duration: Duration(milliseconds: 600),
-                child: AppFooter(),
+                child: ContactSection(),
               ),
+            ),
+
+            // Footer (sans key, pas une section de navigation)
+            const ScrollReveal(
+              duration: Duration(milliseconds: 500),
+              child: AppFooter(),
             ),
           ],
         ),

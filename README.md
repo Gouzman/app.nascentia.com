@@ -111,4 +111,4 @@ Le site est configuré pour être :
 
 ---
 
-© 2025 NASCENTIA. Tous droits réservés.
+© 2026 NASCENTIA-TECH. Tous droits réservés.

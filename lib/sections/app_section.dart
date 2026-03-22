@@ -3,6 +3,7 @@ import 'package:url_launcher/url_launcher.dart';
 import '../theme/app_colors.dart';
 import '../theme/app_text_styles.dart';
 import '../services/navigation_service.dart';
+import '../services/supabase_config.dart';
 
 /// Section "CTA Téléchargement" - NASCENTIA
 class AppSection extends StatefulWidget {
@@ -129,15 +130,16 @@ class _AppSectionState extends State<AppSection> {
       child: GestureDetector(
         onTap: () async {
           if (id == 'android') {
-            // Télécharger directement l'APK
+            // Télécharger l'APK depuis Supabase Storage
             try {
-              // Construire l'URL dynamiquement basée sur le domaine courant
-              final apkUrl = Uri.base.resolve('/downloads/nascentia.apk');
+              final apkUrl = Uri.parse(SupabaseConfig.apkDownloadUrl);
               if (await canLaunchUrl(apkUrl)) {
                 await launchUrl(apkUrl, mode: LaunchMode.externalApplication);
+              } else {
+                debugPrint('⚠️ Impossible d\'ouvrir l\'URL: ${SupabaseConfig.apkDownloadUrl}');
               }
             } catch (e) {
-              print('Erreur téléchargement APK: $e');
+              debugPrint('❌ Erreur téléchargement APK: $e');
             }
           } else if (id == 'contact') {
             // R3 — Navigation fonctionnelle vers la section Contact
@@ -212,7 +214,7 @@ class _AppSectionState extends State<AppSection> {
             Text(
               label,
               style: TextStyle(
-                fontSize: isMobile ? 11 : 12,
+                fontSize: isMobile ? 12 : 12,
                 color: AppColors.white.withValues(alpha: 0.8),
               ),
             ),

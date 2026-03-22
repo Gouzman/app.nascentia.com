@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../models/review.dart';
 import '../services/download_service.dart';
+import '../services/supabase_config.dart';
 import '../theme/app_colors.dart';
 import '../theme/app_text_styles.dart';
 import '../widgets/scroll_reveal.dart';
@@ -262,6 +263,7 @@ class _DownloadPageState extends State<DownloadPage> {
         child: Image.asset(
           'lib/assets/images/logo-nascentia.png',
           fit: BoxFit.contain,
+          cacheWidth: 80, // Optimisation mémoire
         ),
       ),
     ),
@@ -398,7 +400,8 @@ class _DownloadPageState extends State<DownloadPage> {
 
       onTap: () {
                 try {
-                  final url = Uri.base.resolve('downloads/nascentia.apk').toString();
+                  // Utiliser l'URL APK depuis Supabase Storage
+                  final url = SupabaseConfig.apkDownloadUrl;
 
                   final anchor = html.AnchorElement(href: url)
                     ..setAttribute("download", "nascentia.apk")
@@ -410,7 +413,7 @@ class _DownloadPageState extends State<DownloadPage> {
 
                   anchor.remove();
                 } catch (e) {
-                  print('Erreur téléchargement APK: $e');
+                  debugPrint('❌ Erreur téléchargement APK: $e');
                 }
               },
 
@@ -528,6 +531,7 @@ class _DownloadPageState extends State<DownloadPage> {
                           child: Image.asset(
                             path,
                             fit: BoxFit.cover,
+                            cacheWidth: 800, // Screenshots download page
                             errorBuilder: (_, __, ___) => Container(
                               color:
                                   AppColors.greyLight.withValues(alpha: 0.1),

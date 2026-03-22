@@ -63,7 +63,7 @@ class _AboutSectionState extends State<AboutSection> {
           Text(
             'NOTRE HISTOIRE',
             style: TextStyle(
-              fontSize: isMobile ? 11 : 13,
+              fontSize: isMobile ? 12 : 13,
               fontWeight: FontWeight.w700,
               letterSpacing: 1.2,
               color: AppColors.primary,
@@ -163,7 +163,7 @@ class _AboutSectionState extends State<AboutSection> {
           label,
           textAlign: TextAlign.center,
           style: TextStyle(
-            fontSize: isMobile ? 11 : 13,
+            fontSize: isMobile ? 12 : 13,
             color: AppColors.greyText,
             height: 1.4,
           ),

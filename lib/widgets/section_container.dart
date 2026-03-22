@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../theme/app_constants.dart';
 
 /// Container pour les sections avec responsive
 class SectionContainer extends StatelessWidget {
@@ -15,30 +16,22 @@ class SectionContainer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final screenWidth = MediaQuery.of(context).size.width;
-    final isSmall = screenWidth < 600;
-    final isMedium = screenWidth >= 600 && screenWidth < 1024;
-
-    double horizontalPadding;
-    if (isSmall) {
-      horizontalPadding = 20;
-    } else if (isMedium) {
-      horizontalPadding = 40;
-    } else {
-      horizontalPadding = 80;
-    }
+    // Utilisation des helpers centralisés pour la cohérence
+    final isMobile = AppConstants.isMobile(context);
 
     return Container(
       width: double.infinity,
       color: backgroundColor,
       padding: padding ??
           EdgeInsets.symmetric(
-            horizontal: horizontalPadding,
-            vertical: isSmall ? 60 : 100,
+            horizontal: AppConstants.responsiveHorizontalPadding(context),
+            vertical: AppConstants.responsiveVerticalPadding(context),
           ),
       child: Center(
         child: ConstrainedBox(
-          constraints: const BoxConstraints(maxWidth: 1200),
+          constraints: const BoxConstraints(
+            maxWidth: AppConstants.maxContentWidth,
+          ),
           child: child,
         ),
       ),

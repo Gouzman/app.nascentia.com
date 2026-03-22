@@ -4,6 +4,7 @@ import 'package:url_launcher/url_launcher.dart';
 import '../theme/app_colors.dart';
 import '../theme/app_constants.dart';
 import '../services/navigation_service.dart';
+import 'newsletter_form.dart';
 
 /// Footer NASCENTIA — Design Premium
 class AppFooter extends StatelessWidget {
@@ -141,8 +142,8 @@ class AppFooter extends StatelessWidget {
         const SizedBox(height: 20),
         _buildContactItem(
           Icons.email_outlined,
-          'doumbiabonmanin@gmail.com',
-          url: 'mailto:doumbiabonmanin@gmail.com',
+          'nascentia.info@gmail.com',
+          url: 'mailto:nascentia.info@gmail.com',
         ),
         const SizedBox(height: 12),
         _buildContactItem(
@@ -265,70 +266,8 @@ class AppFooter extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const Text(
-          'Restons en contact',
-          style: TextStyle(
-              fontSize: 18, fontWeight: FontWeight.bold, color: Colors.white),
-        ),
-        const SizedBox(height: 20),
-
-        Container(
-          decoration: BoxDecoration(
-            // R12 — withValues au lieu de withOpacity
-            color: Colors.white.withValues(alpha: 0.1),
-            borderRadius: AppConstants.borderRadiusPill,
-          ),
-          padding: EdgeInsets.all(AppConstants.spacing4),
-          child: Row(
-            children: [
-              Expanded(
-                child: TextField(
-                  style: const TextStyle(color: Colors.white, fontSize: 14),
-                  decoration: InputDecoration(
-                    hintText: 'Entrez votre email',
-                    hintStyle: TextStyle(
-                      color: Colors.white.withValues(alpha: 0.5),
-                      fontSize: 14,
-                    ),
-                    border: InputBorder.none,
-                    contentPadding: const EdgeInsets.symmetric(
-                      horizontal: 20,
-                      vertical: 12,
-                    ),
-                  ),
-                ),
-              ),
-              Container(
-                decoration: BoxDecoration(
-                  gradient: AppColors.purpleGradient,
-                  borderRadius: BorderRadius.circular(999),
-                ),
-                child: Material(
-                  color: Colors.transparent,
-                  child: InkWell(
-                    borderRadius: BorderRadius.circular(999),
-                    onTap: () {},
-                    child: const Padding(
-                      padding: EdgeInsets.symmetric(
-                          horizontal: 24, vertical: 12),
-                      child: Text(
-                        'S\'inscrire',
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 14,
-                          fontWeight: FontWeight.w600,
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-              ),
-            ],
-          ),
-        ),
-
+        const NewsletterForm(),
         const SizedBox(height: 24),
-
         // R11 — Vraies icônes de marque avec FontAwesome
         _buildSocialIcons(),
       ],
@@ -338,20 +277,20 @@ class AppFooter extends StatelessWidget {
   Widget _buildSocialIcons() {
     return Row(
       children: [
-        _buildSocialIcon(FontAwesomeIcons.facebookF),
+        _buildSocialIcon(FontAwesomeIcons.facebookF, url: null),
         const SizedBox(width: 16),
-        _buildSocialIcon(FontAwesomeIcons.instagram),
+        _buildSocialIcon(FontAwesomeIcons.instagram, url: null),
         const SizedBox(width: 16),
-        _buildSocialIcon(FontAwesomeIcons.whatsapp),
+        _buildSocialIcon(FontAwesomeIcons.whatsapp, url: 'https://wa.me/2250778683353'),
       ],
     );
   }
 
-  Widget _buildSocialIcon(IconData icon) {
+  Widget _buildSocialIcon(IconData icon, {String? url}) {
     return MouseRegion(
       cursor: SystemMouseCursors.click,
       child: GestureDetector(
-        onTap: () {},
+        onTap: url != null ? () => launchUrl(Uri.parse(url)) : () {},
         child: Container(
           width: 40,
           height: 40,
@@ -374,7 +313,7 @@ class AppFooter extends StatelessWidget {
         children: [
           // R3 — Copyright mis à jour 2025 → 2026
           Text(
-            '© 2026 NASCENTIA. Tous droits réservés.',
+            '© 2026 NASCENTIA-TECH. Tous droits réservés.',
             style: TextStyle(
               fontSize: 13,
               color: Colors.white.withValues(alpha: 0.5),
@@ -401,7 +340,7 @@ class AppFooter extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         Text(
-          '© 2026 NASCENTIA. Tous droits réservés.',
+          '© 2026 NASCENTIA-TECH. Tous droits réservés.',
           style: TextStyle(
             fontSize: 13,
             color: Colors.white.withValues(alpha: 0.5),

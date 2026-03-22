@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../theme/app_colors.dart';
 import '../theme/app_text_styles.dart';
+import '../theme/app_constants.dart';
 
 /// Carte de fonctionnalité moderne avec gradient - Style Make Market
 class FeatureCardModern extends StatelessWidget {
@@ -23,10 +24,9 @@ class FeatureCardModern extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final screenWidth = MediaQuery.of(context).size.width;
-    final isSmall = screenWidth < 900;
+    final isMobile = AppConstants.isMobile(context);
 
-    if (isSmall) {
+    if (isMobile) {
       return _buildMobileLayout(context);
     }
 
@@ -35,17 +35,17 @@ class FeatureCardModern extends StatelessWidget {
 
   Widget _buildMobileLayout(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.all(40),
+      padding: EdgeInsets.all(AppConstants.spacing40),
       decoration: BoxDecoration(
         gradient: gradient ?? AppColors.blueCardGradient,
         color: backgroundColor,
-        borderRadius: BorderRadius.circular(40),
+        borderRadius: BorderRadius.circular(AppConstants.spacing40),
         boxShadow: [
           BoxShadow(
             color: (gradient != null || backgroundColor == null)
                 ? AppColors.blue.withValues(alpha: 0.2)
                 : Colors.black.withValues(alpha: 0.05),
-            blurRadius: 40,
+            blurRadius: AppConstants.spacing40,
             offset: const Offset(0, 15),
           ),
         ],
@@ -54,7 +54,7 @@ class FeatureCardModern extends StatelessWidget {
         children: [
           _buildTextContent(context, true),
           if (phone != null) ...[
-            const SizedBox(height: 40),
+            SizedBox(height: AppConstants.spacing40),
             phone!,
           ],
         ],
@@ -64,17 +64,20 @@ class FeatureCardModern extends StatelessWidget {
 
   Widget _buildDesktopLayout(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 60, vertical: 60),
+      padding: EdgeInsets.symmetric(
+        horizontal: AppConstants.spacing60,
+        vertical: AppConstants.spacing60,
+      ),
       decoration: BoxDecoration(
         gradient: gradient ?? AppColors.blueCardGradient,
         color: backgroundColor,
-        borderRadius: BorderRadius.circular(50),
+        borderRadius: BorderRadius.circular(50), // 50 pour garder l'effet arrondi
         boxShadow: [
           BoxShadow(
             color: (gradient != null || backgroundColor == null)
                 ? AppColors.blue.withValues(alpha: 0.2)
                 : Colors.black.withValues(alpha: 0.05),
-            blurRadius: 40,
+            blurRadius: AppConstants.spacing40,
             offset: const Offset(0, 15),
           ),
         ],
@@ -88,7 +91,7 @@ class FeatureCardModern extends StatelessWidget {
                     flex: 2,
                     child: phone!,
                   ),
-                  const SizedBox(width: 80),
+                  SizedBox(width: AppConstants.spacing80),
                 ],
                 Expanded(
                   flex: 3,
@@ -101,7 +104,7 @@ class FeatureCardModern extends StatelessWidget {
                   child: _buildTextContent(context, false),
                 ),
                 if (phone != null) ...[
-                  const SizedBox(width: 80),
+                  SizedBox(width: AppConstants.spacing80),
                   Expanded(
                     flex: 2,
                     child: phone!,
@@ -131,7 +134,7 @@ class FeatureCardModern extends StatelessWidget {
           ),
           textAlign: isSmall ? TextAlign.center : TextAlign.left,
         ),
-        const SizedBox(height: 24),
+        SizedBox(height: AppConstants.spacing24),
         Text(
           description,
           style: AppTextStyles.bodyText(context).copyWith(
