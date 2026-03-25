@@ -1,0 +1,28 @@
+# robots.txt pour NASCENTIA - nascentia-tech.com
+# Dernière mise à jour: 25 Mars 2026
+
+User-agent: *
+Allow: /
+
+# Sitemap
+Sitemap: https://nascentia-tech.com/sitemap.xml
+
+# Bloquer fichiers systèmes et techniques
+Disallow: /flutter_service_worker.js
+Disallow: /flutter_bootstrap.js
+Disallow: /version-check.js
+Disallow: /manifest.json
+Disallow: /version.json
+
+# Bloquer dossiers build
+Disallow: /canvaskit/
+
+# Autoriser explicitement les pages importantes
+Allow: /
+Allow: /download
+Allow: /mentions-legales
+Allow: /politique-confidentialite
+Allow: /cgu
+
+# Crawl-delay pour éviter surcharge serveur
+Crawl-delay: 1

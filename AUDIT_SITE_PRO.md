@@ -1,7 +1,7 @@
 # 🔍 Audit Site Professionnel - NASCENTIA
 
-**Date:** 25 Mars 2026  
-**Statut:** Analyse complète effectuée  
+**Date:** 25 Mars 2026
+**Statut:** Analyse complète effectuée
 **Priorités:** 🔴 Critique | 🟠 Important | 🟡 Recommandé
 
 ---
@@ -82,7 +82,7 @@ TextButton(
 ### 2. Sécurité Web — CRITIQUE
 
 #### ❌ HTTPS non forcé
-**Fichier:** `web/.htaccess`  
+**Fichier:** `web/.htaccess`
 **Ligne 8-10:** Commenté
 
 ```apache
@@ -118,7 +118,7 @@ Ajouter dans `web/index.html` (ligne 12):
 ```
 
 #### ⚠️ Credentials exposés
-**Fichier:** `lib/services/supabase_config.dart`  
+**Fichier:** `lib/services/supabase_config.dart`
 **Lignes 14-16:** Credentials en dur (fallback)
 
 **Risque:** Clés Supabase exposées dans code source
@@ -180,7 +180,7 @@ Créer `web/sitemap.xml`:
 ```
 
 #### ❌ Images Open Graph manquantes
-**Fichier:** `web/index.html`  
+**Fichier:** `web/index.html`
 **Lignes 29, 38:** Fichiers inexistants
 
 ```html
@@ -203,7 +203,7 @@ Créer `web/sitemap.xml`:
 4. Tester: https://developers.facebook.com/tools/debug/
 
 #### ❌ Icons PWA manquants
-**Fichier:** `web/manifest.json`  
+**Fichier:** `web/manifest.json`
 **Lignes 17-34:** Références à `/icons/Icon-192.png` et `/icons/Icon-512.png`
 
 **Statut:** Fichiers n'existent PAS (dossier `web/icons/` vide)
@@ -223,7 +223,7 @@ convert logo.png -resize 180x180 web/icons/Icon-apple-touch.png
 ```
 
 #### ❌ URL hardcodées incorrectes
-**Fichier:** `web/index.html`  
+**Fichier:** `web/index.html`
 **Lignes 26, 34, 35:** `https://nascentia.com/` au lieu de `nascentia-tech.com`
 
 **FIX 🔧:**
@@ -351,7 +351,7 @@ Widget build(BuildContext context) {
 ### 5. Performance & Code Quality
 
 #### ⚠️ debugPrint() en production
-**Fichiers:** 
+**Fichiers:**
 - `lib/services/brevo_service.dart` (16 occurrences)
 - `lib/main.dart` (4 occurrences)
 - `lib/pages/download_page.dart` (1 occurrence)
@@ -379,7 +379,7 @@ logger.d('[BREVO] Email envoyé');
 ```
 
 #### ⚠️ Widget inutilisé
-**Fichier:** `lib/widgets/progressive_image.dart`  
+**Fichier:** `lib/widgets/progressive_image.dart`
 **Statut:** Jamais importé (cause problèmes scrolling d'après historique)
 
 **FIX 🔧:**
@@ -389,7 +389,7 @@ rm lib/widgets/progressive_image.dart
 ```
 
 #### ⚠️ Screenshots PWA manquants
-**Fichier:** `web/manifest.json` ligne 38-45  
+**Fichier:** `web/manifest.json` ligne 38-45
 **Références:** `/screenshots/home.png`, `/screenshots/desktop.png`
 
 **Impact:** PWA install prompt moins attractif

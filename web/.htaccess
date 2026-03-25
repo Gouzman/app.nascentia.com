@@ -8,9 +8,9 @@
     RewriteEngine On
     RewriteBase /
 
-    # Force HTTPS (décommenter si vous avez un certificat SSL)
-    # RewriteCond %{HTTPS} off
-    # RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+    # Force HTTPS - Actif pour sécurité et SEO
+    RewriteCond %{HTTPS} off
+    RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
 
     # Rediriger toutes les routes vers index.html (PWA/SPA)
     RewriteCond %{REQUEST_FILENAME} !-f

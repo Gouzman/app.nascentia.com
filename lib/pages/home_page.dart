@@ -14,7 +14,6 @@ import '../widgets/top_navigation_bar.dart';
 import '../widgets/app_footer.dart';
 import '../widgets/scroll_reveal.dart';
 import '../services/navigation_service.dart';
-import '../main.dart'; // Pour precacheAppImages
 
 /// Page d'accueil principale de NASCENTIA
 class HomePage extends StatefulWidget {

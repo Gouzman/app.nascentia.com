@@ -206,6 +206,16 @@ class AppFooter extends StatelessWidget {
         _buildLink('Comment ça marche', context),
         _buildLink('Téléchargement', context),
         _buildLink('Contact', context),
+        const SizedBox(height: 16),
+        const Text(
+          'Légal',
+          style: TextStyle(
+              fontSize: 14, fontWeight: FontWeight.w600, color: Colors.white70),
+        ),
+        const SizedBox(height: 12),
+        _buildLegalLink('Mentions légales', '/mentions-legales', context),
+        _buildLegalLink('Confidentialité', '/politique-confidentialite', context),
+        _buildLegalLink('CGU', '/cgu', context),
       ],
     );
   }
@@ -221,6 +231,23 @@ class AppFooter extends StatelessWidget {
             text,
             style: const TextStyle(
                 fontSize: 14, color: Colors.white70, height: 1.5),
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildLegalLink(String text, String route, BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 12),
+      child: MouseRegion(
+        cursor: SystemMouseCursors.click,
+        child: GestureDetector(
+          onTap: () => Navigator.pushNamed(context, route),
+          child: Text(
+            text,
+            style: const TextStyle(
+                fontSize: 13, color: Colors.white60, height: 1.5),
           ),
         ),
       ),
@@ -311,7 +338,7 @@ class AppFooter extends StatelessWidget {
     if (isMobile) {
       return Column(
         children: [
-          // R3 — Copyright mis à jour 2025 → 2026
+          // Copyright
           Text(
             '© 2026 NASCENTIA-TECH. Tous droits réservés.',
             style: TextStyle(
@@ -324,12 +351,17 @@ class AppFooter extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              _buildBottomLink('Confidentialité'),
+              _buildBottomLink('Mentions légales', '/mentions-legales', context),
               Text(
                 ' · ',
                 style: TextStyle(color: Colors.white.withValues(alpha: 0.5)),
               ),
-              _buildBottomLink('Conditions'),
+              _buildBottomLink('Confidentialité', '/politique-confidentialite', context),
+              Text(
+                ' · ',
+                style: TextStyle(color: Colors.white.withValues(alpha: 0.5)),
+              ),
+              _buildBottomLink('CGU', '/cgu', context),
             ],
           ),
         ],
@@ -348,28 +380,35 @@ class AppFooter extends StatelessWidget {
         ),
         Row(
           children: [
-            _buildBottomLink('Confidentialité'),
+            _buildBottomLink('Mentions légales', '/mentions-legales', context),
             Text(
               ' · ',
               style: TextStyle(color: Colors.white.withValues(alpha: 0.5)),
             ),
-            _buildBottomLink('Conditions'),
+            _buildBottomLink('Confidentialité', '/politique-confidentialite', context),
+            Text(
+              ' · ',
+              style: TextStyle(color: Colors.white.withValues(alpha: 0.5)),
+            ),
+            _buildBottomLink('CGU', '/cgu', context),
           ],
         ),
       ],
     );
   }
 
-  Widget _buildBottomLink(String text) {
+  Widget _buildBottomLink(String text, String route, BuildContext context) {
     return MouseRegion(
       cursor: SystemMouseCursors.click,
       child: GestureDetector(
-        onTap: () {},
+        onTap: () => Navigator.pushNamed(context, route),
         child: Text(
           text,
           style: TextStyle(
             fontSize: 13,
             color: Colors.white.withValues(alpha: 0.5),
+            decoration: TextDecoration.underline,
+            decorationColor: Colors.white.withValues(alpha: 0.3),
           ),
         ),
       ),

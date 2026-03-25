@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'theme/app_theme.dart';
 import 'pages/home_page.dart';
 import 'pages/download_page.dart';
+import 'pages/legal_page.dart';
 
 /// Widget principal de l'application NASCENTIA
 class NascentiaApp extends StatelessWidget {
@@ -17,6 +18,9 @@ class NascentiaApp extends StatelessWidget {
       routes: {
         '/': (context) => const HomePage(),
         '/download': (context) => const DownloadPage(),
+        '/mentions-legales': (context) => const LegalPage(contentType: 'mentions'),
+        '/politique-confidentialite': (context) => const LegalPage(contentType: 'privacy'),
+        '/cgu': (context) => const LegalPage(contentType: 'terms'),
       },
     );
   }
