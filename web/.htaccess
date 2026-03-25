@@ -1,0 +1,120 @@
+# ================================================
+# NASCENTIA - Configuration Apache pour cPanel
+# Gestion du cache et optimisation des performances
+# ================================================
+
+# Activer la réécriture d'URL
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+    RewriteBase /
+
+    # Force HTTPS (décommenter si vous avez un certificat SSL)
+    # RewriteCond %{HTTPS} off
+    # RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+
+    # Rediriger toutes les routes vers index.html (PWA/SPA)
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteCond %{REQUEST_FILENAME} !-d
+    RewriteRule ^(.*)$ index.html [L]
+</IfModule>
+
+# ================================================
+# CACHE CONTROL - Stratégie de mise à jour
+# ================================================
+
+<IfModule mod_headers.c>
+    # Par défaut : pas de cache (sécurité)
+    Header set Cache-Control "no-cache, no-store, must-revalidate"
+    Header set Pragma "no-cache"
+    Header set Expires 0
+
+    # HTML - Toujours revalider (contient les versions des assets)
+    <FilesMatch "\.(html|htm)$">
+        Header set Cache-Control "no-cache, no-store, must-revalidate"
+        Header set Pragma "no-cache"
+        Header set Expires 0
+    </FilesMatch>
+
+    # JSON de configuration - Pas de cache
+    <FilesMatch "\.(json)$">
+        Header set Cache-Control "no-cache, no-store, must-revalidate"
+    </FilesMatch>
+
+    # JavaScript et CSS - Cache court avec revalidation
+    # Flutter génère des hash dans les noms de fichiers, donc safe
+    <FilesMatch "\.(js|css)$">
+        Header set Cache-Control "public, max-age=3600, must-revalidate"
+    </FilesMatch>
+
+    # Images - Cache long (1 semaine)
+    <FilesMatch "\.(jpg|jpeg|png|gif|svg|webp|ico)$">
+        Header set Cache-Control "public, max-age=604800, immutable"
+    </FilesMatch>
+
+    # Fonts - Cache très long (1 an)
+    <FilesMatch "\.(woff|woff2|ttf|eot|otf)$">
+        Header set Cache-Control "public, max-age=31536000, immutable"
+    </FilesMatch>
+
+    # Service Worker - JAMAIS en cache
+    <FilesMatch "^(flutter_service_worker\.js|flutter_bootstrap\.js)$">
+        Header set Cache-Control "no-cache, no-store, must-revalidate"
+        Header set Pragma "no-cache"
+        Header set Expires 0
+    </FilesMatch>
+</IfModule>
+
+# ================================================
+# COMPRESSION GZIP
+# ================================================
+
+<IfModule mod_deflate.c>
+    # Compresser HTML, CSS, JavaScript, Text, XML et fonts
+    AddOutputFilterByType DEFLATE text/html
+    AddOutputFilterByType DEFLATE text/css
+    AddOutputFilterByType DEFLATE text/javascript
+    AddOutputFilterByType DEFLATE application/javascript
+    AddOutputFilterByType DEFLATE application/x-javascript
+    AddOutputFilterByType DEFLATE text/xml
+    AddOutputFilterByType DEFLATE application/xml
+    AddOutputFilterByType DEFLATE application/json
+    AddOutputFilterByType DEFLATE image/svg+xml
+    AddOutputFilterByType DEFLATE font/ttf
+    AddOutputFilterByType DEFLATE font/otf
+    AddOutputFilterByType DEFLATE font/woff
+    AddOutputFilterByType DEFLATE font/woff2
+</IfModule>
+
+# ================================================
+# TYPES MIME
+# ================================================
+
+<IfModule mod_mime.c>
+    AddType application/javascript .js
+    AddType text/css .css
+    AddType image/webp .webp
+    AddType font/woff .woff
+    AddType font/woff2 .woff2
+    AddType application/manifest+json .json
+</IfModule>
+
+# ================================================
+# SÉCURITÉ
+# ================================================
+
+<IfModule mod_headers.c>
+    # Protection XSS
+    Header set X-XSS-Protection "1; mode=block"
+
+    # Empêcher le MIME sniffing
+    Header set X-Content-Type-Options "nosniff"
+
+    # Clickjacking protection
+    Header set X-Frame-Options "SAMEORIGIN"
+
+    # Referrer policy
+    Header set Referrer-Policy "strict-origin-when-cross-origin"
+</IfModule>
+
+# Désactiver le listing des répertoires
+Options -Indexes

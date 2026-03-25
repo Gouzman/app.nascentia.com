@@ -54,11 +54,11 @@ class _NewsletterFormState extends State<NewsletterForm> {
       if (success) {
         setState(() {
           _isSuccess = true;
-          _message = '✅ Inscription réussie!';
+          _message = '✅ Inscription réussie! Consultez vos emails.';
         });
 
-        // Réinitialiser après 3 secondes
-        Future.delayed(const Duration(seconds: 3), () {
+        // Réinitialiser après 4 secondes
+        Future.delayed(const Duration(seconds: 4), () {
           if (mounted) {
             _emailController.clear();
             setState(() {

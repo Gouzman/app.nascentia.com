@@ -40,8 +40,9 @@ class _HomePageState extends State<HomePage> {
 
     // Post-frame callbacks
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      // Précacher les images critiques pour améliorer les performances
-      precacheAppImages(context);
+      // Note: precacheAppImages désactivé pour éviter le blocage au chargement
+      // Les images se chargent progressivement via LazyImage à la place
+      // precacheAppImages(context);
 
       // Scroll vers la section demandée si on vient de la DownloadPage
       final args = ModalRoute.of(context)?.settings.arguments;

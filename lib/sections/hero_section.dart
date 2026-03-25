@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:url_launcher/url_launcher.dart';
+import '../config/cdn_images.dart';
 import '../theme/app_colors.dart';
 import '../theme/app_text_styles.dart';
 import '../theme/app_constants.dart';
@@ -286,7 +287,7 @@ class _HeroSectionState extends State<HeroSection>
           right: isDesktop ? 100 : 50,
           bottom: 30,
           child: _AnimatedPhone(
-            imagePath: 'lib/assets/images/image_header-1.png',
+            imagePath: CdnImages.heroHeader1,
             rotation: -8 * math.pi / 180,
             delay: 200,
             scale: isDesktop ? 0.9 : 0.75,
@@ -296,7 +297,7 @@ class _HeroSectionState extends State<HeroSection>
           right: isDesktop ? 280 : 180,
           top: 70,
           child: _AnimatedPhone(
-            imagePath: 'lib/assets/images/image_header-2.png',
+            imagePath: CdnImages.heroHeader2,
             rotation: 6 * math.pi / 180,
             delay: 400,
             scale: isDesktop ? 0.9 : 0.75,
@@ -387,10 +388,10 @@ class _AnimatedPhoneState extends State<_AnimatedPhone>
                   ),
                   child: ClipRRect(
                     borderRadius: BorderRadius.circular(30),
-                    child: Image.asset(
+                    child: Image.network(
                       widget.imagePath,
                       fit: BoxFit.cover,
-                      cacheWidth: 600, // Phone mockups hero (optimisation mémoire)
+                      cacheWidth: 600,
                       errorBuilder: (context, error, stackTrace) {
                         return Container(
                           width: 280,

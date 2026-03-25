@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import '../theme/app_colors.dart';
 import '../theme/app_text_styles.dart';
 import '../widgets/section_container.dart';
+import '../widgets/lazy_image.dart';
 
 /// Section "Crédibilité Scientifique"
 class CredibilitySection extends StatefulWidget {
@@ -375,20 +376,19 @@ class _CredibilitySectionState extends State<CredibilitySection> {
                           ),
                         ),
                         padding: const EdgeInsets.all(14),
-                        child: ClipRRect(
+                        child: LazyImage(
+                          imagePath: logo.path,
+                          fit: BoxFit.contain,
+                          cacheWidth: 200, // Logos partenaires
                           borderRadius: BorderRadius.circular(8),
-                          child: Image.asset(
-                            logo.path,
-                            fit: BoxFit.contain,
-                            cacheWidth: 200, // Logos partenaires
-                            errorBuilder: (_, __, ___) => Center(
-                              child: Text(
-                                logo.name,
-                                style: const TextStyle(
-                                  fontSize: 13,
-                                  fontWeight: FontWeight.w700,
-                                  color: AppColors.purple,
-                                ),
+                          delay: Duration.zero,
+                          errorBuilder: (_, __, ___) => Center(
+                            child: Text(
+                              logo.name,
+                              style: const TextStyle(
+                                fontSize: 13,
+                                fontWeight: FontWeight.w700,
+                                color: AppColors.purple,
                               ),
                             ),
                           ),

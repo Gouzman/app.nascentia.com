@@ -46,6 +46,7 @@ test/.test_coverage.dart
 .env
 .env.local
 .env.*.local
+.deploy.env
 
 # Fichiers temporaires Claude
 tmpclaude-*

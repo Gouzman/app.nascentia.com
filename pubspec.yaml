@@ -27,6 +27,9 @@ dependencies:
   # HTTP requests pour Brevo API
   http: ^1.2.0
 
+  # BlurHash pour placeholders progressifs (effet Facebook)
+  flutter_blurhash: ^0.8.2
+
 dev_dependencies:
   flutter_test:
     sdk: flutter

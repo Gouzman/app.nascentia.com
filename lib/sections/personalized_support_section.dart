@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import '../config/cdn_images.dart';
 import '../theme/app_colors.dart';
 import '../theme/app_constants.dart';
 import '../theme/app_text_styles.dart';
+import '../widgets/lazy_image.dart';
 
 /// Section 2 - Expertise & Crédibilité NASCENTIA
 class PersonalizedSupportSection extends StatefulWidget {
@@ -284,28 +286,27 @@ class _PersonalizedSupportSectionState
                 ),
               ],
             ),
-            child: ClipRRect(
+            child: LazyImage(
+              imagePath: CdnImages.section1,
+              fit: BoxFit.cover,
+              cacheWidth: 800,
               borderRadius: BorderRadius.circular(24),
-              child: Image.asset(
-                'lib/assets/images/image_section1.png',
-                fit: BoxFit.cover,
-                cacheWidth: 800, // image_section1.png (944 KB)
-                errorBuilder: (context, error, stackTrace) {
-                  return Container(
-                    decoration: BoxDecoration(
-                      color: AppColors.lightCream,
-                      borderRadius: BorderRadius.circular(24),
+              delay: Duration.zero,
+              errorBuilder: (context, error, stackTrace) {
+                return Container(
+                  decoration: BoxDecoration(
+                    color: AppColors.lightCream,
+                    borderRadius: BorderRadius.circular(24),
+                  ),
+                  child: const Center(
+                    child: Icon(
+                      Icons.phone_iphone,
+                      size: 60,
+                      color: AppColors.primaryPink,
                     ),
-                    child: const Center(
-                      child: Icon(
-                        Icons.phone_iphone,
-                        size: 60,
-                        color: AppColors.primaryPink,
-                      ),
-                    ),
-                  );
-                },
-              ),
+                  ),
+                );
+              },
             ),
           ),
         );

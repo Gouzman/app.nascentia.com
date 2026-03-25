@@ -7,6 +7,7 @@ import '../theme/app_text_styles.dart';
 import '../widgets/scroll_reveal.dart';
 import '../widgets/top_navigation_bar.dart';
 import '../widgets/app_footer.dart';
+import '../widgets/lazy_image.dart';
 import 'dart:html' as html;
 
 /// Page de téléchargement NASCENTIA - Style App Store
@@ -466,12 +467,12 @@ class _DownloadPageState extends State<DownloadPage> {
   // Screenshots section
   Widget _buildScreenshotsSection(bool isMobile, bool isTablet) {
     const screenshots = [
-      'lib/assets/images/Download_ScrenShot-1.jpg',
-      'lib/assets/images/Download_ScrenShot-2.png',
-      'lib/assets/images/Download_ScrenShot-3.png',
-      'lib/assets/images/Download_ScrenShot-4.png',
-      'lib/assets/images/Download_ScrenShot-5.png',
-      'lib/assets/images/Download_ScrenShot-6.png',
+      'https://ukqbpzpqlaejgddzsqml.supabase.co/storage/v1/object/public/nascentia-images/Download_ScrenShot-1.jpg?width=800&quality=85&format=webp',
+      'https://ukqbpzpqlaejgddzsqml.supabase.co/storage/v1/object/public/nascentia-images/Download_ScrenShot-2.png?width=800&quality=85&format=webp',
+      'https://ukqbpzpqlaejgddzsqml.supabase.co/storage/v1/object/public/nascentia-images/Download_ScrenShot-3.png?width=800&quality=85&format=webp',
+      'https://ukqbpzpqlaejgddzsqml.supabase.co/storage/v1/object/public/nascentia-images/Download_ScrenShot-4.png?width=800&quality=85&format=webp',
+      'https://ukqbpzpqlaejgddzsqml.supabase.co/storage/v1/object/public/nascentia-images/Download_ScrenShot-5.png?width=800&quality=85&format=webp',
+      'https://ukqbpzpqlaejgddzsqml.supabase.co/storage/v1/object/public/nascentia-images/Download_ScrenShot-6.png?width=800&quality=85&format=webp',
     ];
     final imageWidth = isMobile ? 140.0 : 200.0;
     final imageHeight = isMobile ? 280.0 : 400.0;
@@ -525,21 +526,19 @@ class _DownloadPageState extends State<DownloadPage> {
                             ),
                           ],
                         ),
-                        child: ClipRRect(
-                          borderRadius:
-                              BorderRadius.circular(isSelected ? 17 : 20),
-                          child: Image.asset(
-                            path,
-                            fit: BoxFit.cover,
-                            cacheWidth: 800, // Screenshots download page
-                            errorBuilder: (_, __, ___) => Container(
-                              color:
-                                  AppColors.greyLight.withValues(alpha: 0.1),
-                              child: const Center(
-                                child: Icon(
-                                    Icons.image_not_supported_outlined,
-                                    color: Colors.grey),
-                              ),
+                        child: LazyImage(
+                          imagePath: path,
+                          fit: BoxFit.cover,
+                          cacheWidth: 800, // Screenshots download page
+                          borderRadius: BorderRadius.circular(isSelected ? 17 : 20),
+                          delay: Duration.zero,
+                          errorBuilder: (_, __, ___) => Container(
+                            color:
+                                AppColors.greyLight.withValues(alpha: 0.1),
+                            child: const Center(
+                              child: Icon(
+                                  Icons.image_not_supported_outlined,
+                                  color: Colors.grey),
                             ),
                           ),
                         ),

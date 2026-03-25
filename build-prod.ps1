@@ -41,6 +41,30 @@ flutter build web `
 if ($LASTEXITCODE -eq 0) {
     Write-Host ""
     Write-Host "[OK] Build reussi!" -ForegroundColor Green
+
+    # Ajouter un hash de build unique au version.json pour le cache-busting
+    Write-Host "[CACHE] Mise a jour du hash de version..." -ForegroundColor Cyan
+
+    $versionFile = "build\web\version.json"
+    if (Test-Path $versionFile) {
+        $versionData = Get-Content $versionFile -Raw | ConvertFrom-Json
+
+        # Générer un hash unique basé sur la date et l'heure
+        $buildHash = [System.DateTimeOffset]::UtcNow.ToUnixTimeSeconds().ToString()
+        $buildDate = Get-Date -Format "yyyy-MM-dd HH:mm:ss"
+
+        # Ajouter les nouvelles propriétés
+        $versionData | Add-Member -NotePropertyName "build_hash" -NotePropertyValue $buildHash -Force
+        $versionData | Add-Member -NotePropertyName "build_date" -NotePropertyValue $buildDate -Force
+
+        # Sauvegarder
+        $versionData | ConvertTo-Json | Set-Content $versionFile -Encoding UTF8
+
+        Write-Host "[OK] Hash de build: $buildHash" -ForegroundColor Green
+        Write-Host "[OK] Date de build: $buildDate" -ForegroundColor Green
+    }
+
+    Write-Host ""
     Write-Host "[INFO] Fichiers dans: build\web" -ForegroundColor Gray
     Write-Host ""
     Write-Host "Pour tester localement:" -ForegroundColor Yellow

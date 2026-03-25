@@ -24,7 +24,7 @@ class BrevoService {
   /// Adresse email de réception (votre email professionnel)
   static const String receiverEmail = String.fromEnvironment(
     'BREVO_RECEIVER_EMAIL',
-    defaultValue: 'nascentia.info@gmail.com',
+    defaultValue: 'contact@nascentia-tech.com',
   );
 
   /// Envoie un email de contact depuis le formulaire du site web
@@ -392,10 +392,15 @@ Envoyé depuis nascentia-tech.com
 
       // 201 = créé, 204 = déjà existant
       if (response.statusCode == 201 || response.statusCode == 204) {
-        debugPrint('[BREVO] ✅ Contact ajouté à la newsletter: $email');
+        final isNewContact = response.statusCode == 201;
 
-        // Envoyer un email de bienvenue (optionnel)
-        await _sendNewsletterWelcomeEmail(email);
+        if (isNewContact) {
+          debugPrint('[BREVO] ✅ Nouveau contact ajouté à la newsletter: $email');
+          // Envoyer un email de bienvenue uniquement pour les nouveaux contacts
+          await _sendNewsletterWelcomeEmail(email);
+        } else {
+          debugPrint('[BREVO] ℹ️ Contact déjà existant dans la newsletter: $email');
+        }
 
         return true;
       } else {

@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import '../config/cdn_images.dart';
 import '../theme/app_colors.dart';
 import '../theme/app_constants.dart';
 import '../theme/app_text_styles.dart';
+import '../widgets/lazy_image.dart';
 
 /// Section "Problème & Solution" — angle simplicité et accessibilité
 class FastOrderSection extends StatelessWidget {
@@ -108,28 +110,27 @@ class FastOrderSection extends StatelessWidget {
                 ),
               ],
             ),
-            child: ClipRRect(
+            child: LazyImage(
+              imagePath: CdnImages.section2,
+              fit: BoxFit.cover,
+              cacheWidth: 900,
               borderRadius: BorderRadius.circular(28),
-              child: Image.asset(
-                'lib/assets/images/image_section2.png',
-                fit: BoxFit.cover,
-                cacheWidth: 900, // image_section2.png (2.4 MB)
-                errorBuilder: (context, error, stackTrace) {
-                  return Container(
-                    decoration: BoxDecoration(
-                      color: AppColors.white.withValues(alpha: 0.15),
-                      borderRadius: BorderRadius.circular(28),
+              delay: Duration.zero,
+              errorBuilder: (context, error, stackTrace) {
+                return Container(
+                  decoration: BoxDecoration(
+                    color: AppColors.white.withValues(alpha: 0.15),
+                    borderRadius: BorderRadius.circular(28),
+                  ),
+                  child: const Center(
+                    child: Icon(
+                      Icons.phone_iphone,
+                      size: 80,
+                      color: AppColors.white,
                     ),
-                    child: const Center(
-                      child: Icon(
-                        Icons.phone_iphone,
-                        size: 80,
-                        color: AppColors.white,
-                      ),
-                    ),
-                  );
-                },
-              ),
+                  ),
+                );
+              },
             ),
           ),
         );

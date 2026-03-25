@@ -1,0 +1,22 @@
+{
+    "name": "nascentia-blurhash-generator",
+    "version": "1.0.0",
+    "description": "Générateur de BlurHash pour les images NASCENTIA hébergées sur Supabase CDN",
+    "main": "generate-blurhash.js",
+    "scripts": {
+        "generate": "node generate-blurhash.js",
+        "test": "echo \"Lancez: npm run generate\" && exit 1"
+    },
+    "keywords": [
+        "blurhash",
+        "image",
+        "placeholder",
+        "nascentia"
+    ],
+    "author": "NASCENTIA Team",
+    "license": "MIT",
+    "dependencies": {
+        "blurhash": "^2.0.5",
+        "sharp": "^0.33.5"
+    }
+}
