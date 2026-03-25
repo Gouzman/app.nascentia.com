@@ -24,7 +24,7 @@ v=spf1 include:spf.brevo.com ip4:91.234.194.126 +a +mx ~all
 
 **Vérifier les SPAMS** :
 - Ouvrir Gmail → Dossier "Spam" / "Courriers indésirables"
-- Chercher emails de `contact@nascentia-tech.com`
+- Chercher emails de `nascentia.info@gmail.com`
 - Si trouvés → Marquer "Pas un spam" + Ajouter aux contacts
 
 ### 3️⃣ Après 15-30 minutes

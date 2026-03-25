@@ -52,7 +52,7 @@ Quand vous testez le formulaire, vous devriez voir:
 3. Autre client email → Vérifier le filtre anti-spam
 
 **Recherche par expéditeur:**
-- `contact@nascentia-tech.com`
+- `nascentia.info@gmail.com`
 - Sujet contenant "NASCENTIA"
 
 ### 5. Test DNS complet
@@ -89,7 +89,7 @@ nslookup -type=TXT _dmarc.nascentia-tech.com
 ### ✅ Action 3: Chercher dans SPAM
 1. Ouvrez votre boîte email (celle utilisée pour tester)
 2. Vérifiez le dossier **SPAM/Courrier indésirable**
-3. Cherchez "NASCENTIA" ou "contact@nascentia-tech.com"
+3. Cherchez "NASCENTIA" ou "nascentia.info@gmail.com"
 
 ### ✅ Action 4: Tester avec votre email
 Quel email utilisez-vous pour tester ?
@@ -120,7 +120,7 @@ Quel email utilisez-vous pour tester ?
 
 **Si email en SPAM:**
 - ✅ Marquer comme "Non spam"
-- ✅ Ajouter contact@nascentia-tech.com aux contacts
+- ✅ Ajouter nascentia.info@gmail.com aux contacts
 - 🔄 Retester → devrait arriver en boîte normale
 
 **Si aucun log [BREVO] n'apparaît:**

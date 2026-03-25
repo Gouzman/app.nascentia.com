@@ -16,9 +16,6 @@ class SectionContainer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // Utilisation des helpers centralisés pour la cohérence
-    final isMobile = AppConstants.isMobile(context);
-
     return Container(
       width: double.infinity,
       color: backgroundColor,

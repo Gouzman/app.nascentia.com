@@ -259,16 +259,14 @@ class _ContactFormState extends State<ContactForm> {
                         size: 20,
                       ),
                     const SizedBox(width: 12),
-                    Flexible(
-                      child: Text(
-                        _isLoading ? 'Envoi en cours...' : 'Envoyer le message',
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: isMobile ? 16 : 18,
-                          fontWeight: FontWeight.w700,
-                          letterSpacing: 0.3,
-                        ),
+                    Text(
+                      _isLoading ? 'Envoi en cours...' : 'Envoyer le message',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: isMobile ? 16 : 18,
+                        fontWeight: FontWeight.w700,
+                        letterSpacing: 0.3,
                       ),
                     ),
                   ],

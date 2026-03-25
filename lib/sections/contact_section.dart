@@ -177,7 +177,7 @@ class ContactSection extends StatelessWidget {
           _buildContactItem(
             icon: Icons.email_rounded,
             label: 'Email',
-            value: 'contact@nascentia-tech.com',
+            value: 'nascentia.info@gmail.com',
             gradient: const LinearGradient(
               colors: [Color(0xFF4A90E2), Color(0xFF357ABD)],
             ),

@@ -145,15 +145,22 @@ class _HeroSectionState extends State<HeroSection>
       children: [
         // Titre principal avec ligne décorative
         Row(
-          mainAxisSize: isMobile ? MainAxisSize.min : MainAxisSize.max,
+          mainAxisSize: MainAxisSize.max,
           children: [
-            Flexible(
-              child: Text(
+            if (isMobile)
+              Expanded(
+                child: Text(
+                  'NASCENTIA',
+                  style: AppTextStyles.displayLarge(context),
+                  textAlign: TextAlign.center,
+                ),
+              )
+            else
+              Text(
                 'NASCENTIA',
                 style: AppTextStyles.displayLarge(context),
-                textAlign: isMobile ? TextAlign.center : TextAlign.left,
+                textAlign: TextAlign.left,
               ),
-            ),
             if (!isMobile) ...[
               const SizedBox(width: 24),
               Container(

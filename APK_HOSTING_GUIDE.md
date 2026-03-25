@@ -69,7 +69,7 @@ Application mobile officielle pour la planification familiale scientifique basé
 
 ### 🆘 Support
 
-Pour toute question: contact@nascentia-tech.com
+Pour toute question: nascentia.info@gmail.com
 
 ---
 

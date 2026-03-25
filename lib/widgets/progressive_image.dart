@@ -65,8 +65,7 @@ class _ProgressiveImageState extends State<ProgressiveImage> {
 
     if (_hasError && widget.errorBuilder != null) {
       // Afficher le widget d'erreur si disponible
-      content = widget.errorBuilder!(context, _error!, _stackTrace) ??
-          BlurHash(hash: widget.blurHash, imageFit: widget.fit);
+      content = widget.errorBuilder!(context, _error!, _stackTrace);
     } else if (!_imageLoaded) {
       // Afficher uniquement BlurHash pendant le chargement
       content = BlurHash(

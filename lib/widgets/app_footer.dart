@@ -142,8 +142,8 @@ class AppFooter extends StatelessWidget {
         const SizedBox(height: 20),
         _buildContactItem(
           Icons.email_outlined,
-          'contact@nascentia-tech.com',
-          url: 'mailto:contact@nascentia-tech.com',
+          'nascentia.info@gmail.com',
+          url: 'mailto:nascentia.info@gmail.com',
         ),
         const SizedBox(height: 12),
         _buildContactItem(

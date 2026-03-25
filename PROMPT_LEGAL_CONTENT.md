@@ -11,36 +11,36 @@ Je développe un site web pour l'application mobile NASCENTIA et j'ai besoin de 
 
 ## CONTEXTE DU PROJET
 
-**Nom du site :** nascentia-tech.com  
-**Type :** Landing page Flutter Web pour application mobile Android  
-**Activité :** Application de planification familiale scientifique en Côte d'Ivoire  
-**Langue :** Français  
+**Nom du site :** nascentia-tech.com
+**Type :** Landing page Flutter Web pour application mobile Android
+**Activité :** Application de planification familiale scientifique en Côte d'Ivoire
+**Langue :** Français
 **Juridiction :** Côte d'Ivoire + conformité RGPD (UE)
 
 ## INFORMATIONS SOCIÉTÉ
 
 **À PERSONNALISER AVEC VOS VRAIES INFOS :**
 
-- **Nom commercial :** NASCENTIA  
-- **Raison sociale :** [Votre nom/entreprise]  
-- **Forme juridique :** [Personne physique / SARL / SAS / SASU / etc.]  
-- **Capital social :** [Si société, sinon supprimer]  
-- **SIRET :** [Votre numéro SIRET]  
-- **RCS :** [Si société : ville + numéro]  
-- **Adresse siège social :** [Votre adresse complète]  
-- **Ville/Pays :** [Ville, Côte d'Ivoire]  
-- **Email contact :** contact@nascentia-tech.com  
-- **Téléphone :** [Votre numéro]  
+- **Nom commercial :** NASCENTIA
+- **Raison sociale :** [Votre nom/entreprise]
+- **Forme juridique :** [Personne physique / SARL / SAS / SASU / etc.]
+- **Capital social :** [Si société, sinon supprimer]
+- **SIRET :** [Votre numéro SIRET]
+- **RCS :** [Si société : ville + numéro]
+- **Adresse siège social :** [Votre adresse complète]
+- **Ville/Pays :** [Ville, Côte d'Ivoire]
+- **Email contact :** nascentia.info@gmail.com
+- **Téléphone :** [Votre numéro]
 - **Directeur de publication :** [Nom Prénom]
 
 ## HÉBERGEMENT
 
-- **Hébergeur :** LWS (Ligne Web Services)  
-- **Forme juridique :** SAS au capital de 150 000 €  
-- **SIRET :** 851 993 683 00015  
-- **RCS :** Amiens B 851 993 683  
-- **Adresse :** 10 rue de la Perle, 75003 Paris, France  
-- **Site :** https://www.lws.fr  
+- **Hébergeur :** LWS (Ligne Web Services)
+- **Forme juridique :** SAS au capital de 150 000 €
+- **SIRET :** 851 993 683 00015
+- **RCS :** Amiens B 851 993 683
+- **Adresse :** 10 rue de la Perle, 75003 Paris, France
+- **Site :** https://www.lws.fr
 - **Téléphone :** +33 3 66 72 10 70
 
 ## DONNÉES COLLECTÉES
@@ -90,7 +90,7 @@ Je développe un site web pour l'application mobile NASCENTIA et j'ai besoin de 
 
 ## COOKIES
 
-**Cookies techniques uniquement** (Service Worker PWA) — pas de consentement requis.  
+**Cookies techniques uniquement** (Service Worker PWA) — pas de consentement requis.
 Aucun cookie publicitaire, tracking ou analytics pour le moment.
 
 ---

@@ -3,9 +3,13 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 import 'app.dart';
 import 'config/cdn_images.dart';
 import 'services/supabase_config.dart';
+import 'debug_env_check.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
+  // DEBUG: Vérifier les variables d'environnement
+  DebugEnvCheck.checkEnvironmentVariables();
 
   // Initialisation Supabase
   await Supabase.initialize(

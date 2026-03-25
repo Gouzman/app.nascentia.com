@@ -2,7 +2,7 @@
 
 ## ⚠️ PROBLÈME ACTUEL
 
-Vous envoyez des emails depuis `contact@nascentia-tech.com` mais ils **ne sont pas reçus** car les DNS ne sont pas configurés.
+Vous envoyez des emails depuis `nascentia.info@gmail.com` mais ils **ne sont pas reçus** car les DNS ne sont pas configurés.
 
 **Résultat :** Les emails sont bloqués ou vont directement dans les SPAMS.
 
@@ -95,7 +95,7 @@ Tester :
 
 1. Aller sur https://app.brevo.com/
 2. **Settings** → **Senders & IP**
-3. Vérifier que `contact@nascentia-tech.com` a le statut : ✅ **Verified**
+3. Vérifier que `nascentia.info@gmail.com` a le statut : ✅ **Verified**
 4. Les DNS doivent être validés (cochés en vert)
 
 ---

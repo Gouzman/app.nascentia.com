@@ -131,42 +131,16 @@ class _PersonalizedSupportSectionState
                   .copyWith(fontWeight: FontWeight.w900),
               textAlign: isMobile ? TextAlign.center : TextAlign.left,
             ),
-            Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Text(
-                  'scientifique validée',
-                  style: AppTextStyles.headlineLarge(context).copyWith(
-                    foreground: Paint()
-                      ..shader = AppColors.primaryGradient.createShader(
-                        const Rect.fromLTWH(0, 0, 400, 100),
-                      ),
-                    fontWeight: FontWeight.w900,
+            Text(
+              'scientifique validée',
+              style: AppTextStyles.headlineLarge(context).copyWith(
+                foreground: Paint()
+                  ..shader = AppColors.primaryGradient.createShader(
+                    const Rect.fromLTWH(0, 0, 400, 100),
                   ),
-                  textAlign: isMobile ? TextAlign.center : TextAlign.left,
-                ),
-                const SizedBox(width: 12),
-                Container(
-                  width: 48,
-                  height: 48,
-                  decoration: BoxDecoration(
-                    gradient: AppColors.primaryGradient,
-                    shape: BoxShape.circle,
-                    boxShadow: [
-                      BoxShadow(
-                        color: AppColors.primary.withValues(alpha: 0.3),
-                        blurRadius: 12,
-                        offset: const Offset(0, 4),
-                      ),
-                    ],
-                  ),
-                  child: const Icon(
-                    Icons.auto_awesome,
-                    color: Colors.white,
-                    size: 24,
-                  ),
-                ),
-              ],
+                fontWeight: FontWeight.w900,
+              ),
+              textAlign: isMobile ? TextAlign.center : TextAlign.left,
             ),
           ],
         ),
@@ -237,8 +211,8 @@ class _PersonalizedSupportSectionState
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Icon(icon, color: AppColors.primary, size: isMobile ? 20 : 24),
-          const SizedBox(width: 8),
+          Icon(icon, color: AppColors.primary, size: isMobile ? 18 : 24),
+          SizedBox(width: isMobile ? 6 : 8),
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisSize: MainAxisSize.min,
@@ -246,7 +220,7 @@ class _PersonalizedSupportSectionState
               Text(
                 value,
                 style: TextStyle(
-                  fontSize: isMobile ? 16 : 18,
+                  fontSize: isMobile ? 15 : 18,
                   fontWeight: FontWeight.w900,
                   color: AppColors.darkText,
                 ),
@@ -254,7 +228,7 @@ class _PersonalizedSupportSectionState
               Text(
                 label,
                 style: TextStyle(
-                  fontSize: isMobile ? 12 : 12,
+                  fontSize: isMobile ? 11 : 12,
                   fontWeight: FontWeight.w600,
                   color: AppColors.greyText,
                 ),

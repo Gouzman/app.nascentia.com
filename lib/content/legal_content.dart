@@ -36,7 +36,7 @@ Siège social :<br>
 [PAYS]<br>
 <br>
 Contact :<br>
-Email : contact@nascentia-tech.com<br>
+Email : nascentia.info@gmail.com<br>
 Téléphone : [NUMÉRO DE TÉLÉPHONE]</p>
 
 <h2>2. Directeur de publication</h2>
@@ -70,7 +70,7 @@ Téléphone : +33 3 66 72 10 70</p>
 <li>Améliorer nos services</li>
 </ul>
 <p>Conformément au Règlement Général sur la Protection des Données (RGPD) et à la loi "Informatique et Libertés", vous disposez d'un droit d'accès, de rectification, de suppression et d'opposition aux données vous concernant.</p>
-<p>Pour exercer ces droits, contactez-nous à : contact@nascentia-tech.com</p>
+<p>Pour exercer ces droits, contactez-nous à : nascentia.info@gmail.com</p>
 <p>Pour plus de détails, consultez notre <a href="/politique-confidentialite">Politique de confidentialité</a>.</p>
 
 <h2>6. Cookies</h2>
@@ -101,7 +101,7 @@ Téléphone : +33 3 66 72 10 70</p>
 <h2>2. Responsable du traitement</h2>
 <p><strong>Identité :</strong> [NOM SOCIÉTÉ OU NOM/PRÉNOM]<br>
 <strong>Adresse :</strong> [ADRESSE COMPLÈTE]<br>
-<strong>Email :</strong> contact@nascentia-tech.com<br>
+<strong>Email :</strong> nascentia.info@gmail.com<br>
 <strong>Téléphone :</strong> [NUMÉRO]</p>
 
 <h2>3. Données collectées</h2>
@@ -185,7 +185,7 @@ Téléphone : +33 3 66 72 10 70</p>
 
 <h2>10. Exercer vos droits</h2>
 <p>Pour exercer vos droits, contactez-nous par email à :</p>
-<p><strong>contact@nascentia-tech.com</strong></p>
+<p><strong>nascentia.info@gmail.com</strong></p>
 <p>Objet : "Exercice de mes droits RGPD"</p>
 <p>Nous nous engageons à répondre sous 30 jours maximum.</p>
 
@@ -216,7 +216,7 @@ Site web : https://www.cnil.fr</p>
 
 <h2>15. Contact</h2>
 <p>Pour toute question concernant cette politique de confidentialité, contactez-nous :</p>
-<p><strong>Email :</strong> contact@nascentia-tech.com<br>
+<p><strong>Email :</strong> nascentia.info@gmail.com<br>
 <strong>Adresse :</strong> [ADRESSE COMPLÈTE]</p>
 ''',
   };
@@ -295,7 +295,7 @@ Site web : https://www.cnil.fr</p>
 <li>Offres et promotions</li>
 <li>Conseils et astuces</li>
 </ul>
-<p>Vous pouvez vous désinscrire à tout moment en cliquant sur le lien de désinscription présent dans chaque email ou en nous contactant à : contact@nascentia-tech.com</p>
+<p>Vous pouvez vous désinscrire à tout moment en cliquant sur le lien de désinscription présent dans chaque email ou en nous contactant à : nascentia.info@gmail.com</p>
 
 <h2>11. Formulaire de contact</h2>
 <p>Les informations transmises via le formulaire de contact sont uniquement destinées à notre équipe pour répondre à vos demandes. Elles ne seront jamais partagées avec des tiers.</p>
@@ -311,7 +311,7 @@ Site web : https://www.cnil.fr</p>
 
 <h2>15. Contact</h2>
 <p>Pour toute question concernant les présentes CGU, contactez-nous :</p>
-<p><strong>Email :</strong> contact@nascentia-tech.com<br>
+<p><strong>Email :</strong> nascentia.info@gmail.com<br>
 <strong>Adresse :</strong> [ADRESSE COMPLÈTE]<br>
 <strong>Téléphone :</strong> [NUMÉRO]</p>
 ''',

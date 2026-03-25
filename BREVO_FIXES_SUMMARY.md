@@ -95,7 +95,7 @@ if (response.statusCode == 201 || response.statusCode == 204) {
 
 5. **Vérifier dans Brevo Dashboard :**
    - Settings → Senders & IP
-   - `contact@nascentia-tech.com` doit être ✅ **Verified**
+   - `nascentia.info@gmail.com` doit être ✅ **Verified**
 
 ---
 

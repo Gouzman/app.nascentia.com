@@ -180,7 +180,7 @@
 ```
 ☐ 55. Tester le formulaire de contact
 ☐ 56. Email envoyé avec succès via Brevo
-☐ 57. Vérifier réception sur contact@nascentia-tech.com
+☐ 57. Vérifier réception sur nascentia.info@gmail.com
 ```
 
 ---

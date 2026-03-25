@@ -113,7 +113,7 @@ class _CalendarSectionState extends State<CalendarSection> {
       {
         'icon': Icons.event_available_outlined,
         'title': 'Périodes Favorables',
-        'description': 'Identifiez les moments optimaux pour la conception',
+        'description': 'Moments optimaux pour concevoir',
       },
       {
         'icon': Icons.calendar_month_outlined,
@@ -154,28 +154,44 @@ class _CalendarSectionState extends State<CalendarSection> {
       );
     }
 
-    // R4 — Utiliser le screenWidth passé en paramètre (plus de getter)
-    final cardWidth = isTablet ? (screenWidth - 100) / 2 - 10 : 280.0;
+    // Desktop/Tablet: créer des lignes avec IntrinsicHeight pour adapter la hauteur au contenu
+    final cardsPerRow = isTablet ? 2 : 4;
+    final rows = <Widget>[];
 
-    return Wrap(
-      spacing: 20,
-      runSpacing: 20,
-      alignment: WrapAlignment.center,
-      children: features
-          .asMap()
-          .entries
-          .map((entry) => SizedBox(
-                width: cardWidth,
-                child: _buildFeatureCard(
-                  context,
-                  entry.value['icon'] as IconData,
-                  entry.value['title'] as String,
-                  entry.value['description'] as String,
-                  entry.key,
-                  isMobile,
-                ),
-              ))
-          .toList(),
+    for (int i = 0; i < features.length; i += cardsPerRow) {
+      final rowFeatures = features.skip(i).take(cardsPerRow).toList();
+      rows.add(
+        Padding(
+          padding: EdgeInsets.only(bottom: i + cardsPerRow < features.length ? 20 : 0),
+          child: IntrinsicHeight(
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: rowFeatures.asMap().entries.map((entry) {
+                final index = i + entry.key;
+                return Expanded(
+                  child: Padding(
+                    padding: EdgeInsets.only(
+                      right: entry.key < rowFeatures.length - 1 ? 20 : 0,
+                    ),
+                    child: _buildFeatureCard(
+                      context,
+                      entry.value['icon'] as IconData,
+                      entry.value['title'] as String,
+                      entry.value['description'] as String,
+                      index,
+                      isMobile,
+                    ),
+                  ),
+                );
+              }).toList(),
+            ),
+          ),
+        ),
+      );
+    }
+
+    return Column(
+      children: rows,
     );
   }
 
@@ -220,7 +236,7 @@ class _CalendarSectionState extends State<CalendarSection> {
         padding: EdgeInsets.all(isHovered ? 2 : 1),
         transform: Matrix4.translationValues(0.0, isHovered ? -6.0 : 0.0, 0.0),
         child: Container(
-          padding: EdgeInsets.all(isMobile ? 24 : 32),
+          padding: EdgeInsets.all(isMobile ? 20 : 28),
           decoration: BoxDecoration(
             color: AppColors.white,
             borderRadius: BorderRadius.circular(18),
@@ -233,10 +249,11 @@ class _CalendarSectionState extends State<CalendarSection> {
           ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisSize: MainAxisSize.min,
             children: [
               Container(
-                width: isMobile ? 56 : 64,
-                height: isMobile ? 56 : 64,
+                width: isMobile ? 56 : 60,
+                height: isMobile ? 56 : 60,
                 decoration: BoxDecoration(
                   gradient: LinearGradient(
                     colors: [
@@ -247,19 +264,22 @@ class _CalendarSectionState extends State<CalendarSection> {
                   shape: BoxShape.circle,
                 ),
                 child: Icon(icon,
-                    size: isMobile ? 28 : 32, color: AppColors.purple),
+                    size: isMobile ? 28 : 30, color: AppColors.purple),
               ),
-              SizedBox(height: isMobile ? 16 : 20),
+              SizedBox(height: isMobile ? 14 : 18),
               Text(
                 title,
                 style: titleStyle,
               ),
-              SizedBox(height: isMobile ? 8 : 12),
-              Text(
-                description,
-                style: AppTextStyles.bodyMedium(context).copyWith(
-                  color: AppColors.greyText,
-                  height: 1.6,
+              SizedBox(height: isMobile ? 8 : 10),
+              Flexible(
+                child: Text(
+                  description,
+                  style: AppTextStyles.bodyMedium(context).copyWith(
+                    color: AppColors.greyText,
+                    height: 1.5,
+                    fontSize: isMobile ? 14 : 15,
+                  ),
                 ),
               ),
             ],

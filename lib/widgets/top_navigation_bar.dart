@@ -16,7 +16,8 @@ class _TopNavigationBarState extends State<TopNavigationBar> {
   Widget build(BuildContext context) {
     final s = widget.isScrolled;
     final size = MediaQuery.of(context).size;
-    final isMobile = size.width < 768;
+    final isMobile = size.width < 1024; // Tablet aussi en mode mobile
+    final hidePhone = size.width < 1200; // Masquer téléphone sur petits écrans
     final isTablet = size.width >= 768 && size.width < 1024;
 
     return AnimatedContainer(
@@ -54,7 +55,7 @@ class _TopNavigationBarState extends State<TopNavigationBar> {
               _buildLogo(s),
               if (!isMobile) _buildNavigationMenu(),
               if (!isMobile)
-                _buildRightSection(isTablet)
+                _buildRightSection(hidePhone)
               else
                 _buildMobileMenu(),
             ],
@@ -105,7 +106,7 @@ class _TopNavigationBarState extends State<TopNavigationBar> {
   Widget _buildMenuItem(String title) {
     return Builder(
       builder: (context) => Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 16),
+        padding: const EdgeInsets.symmetric(horizontal: 12),
         child: MouseRegion(
           cursor: SystemMouseCursors.click,
           child: GestureDetector(
@@ -121,7 +122,7 @@ class _TopNavigationBarState extends State<TopNavigationBar> {
             child: Text(
               title,
               style: const TextStyle(
-                fontSize: 15,
+                fontSize: 14,
                 fontWeight: FontWeight.w500,
                 color: AppColors.darkText,
               ),
@@ -132,10 +133,10 @@ class _TopNavigationBarState extends State<TopNavigationBar> {
     );
   }
 
-  Widget _buildRightSection(bool isTablet) {
+  Widget _buildRightSection(bool hidePhone) {
     return Row(
       children: [
-        if (!isTablet) ...[
+        if (!hidePhone) ...[
           MouseRegion(
             cursor: SystemMouseCursors.click,
             child: GestureDetector(
@@ -156,9 +157,9 @@ class _TopNavigationBarState extends State<TopNavigationBar> {
               ),
             ),
           ),
-          const SizedBox(width: 20),
+          const SizedBox(width: 16),
         ],
-        _buildCTAButton(isTablet),
+        _buildCTAButton(hidePhone),
       ],
     );
   }

@@ -16,7 +16,7 @@ class BrevoService {
   /// Adresse email de l'expéditeur (doit être vérifiée dans Brevo)
   static const String senderEmail = String.fromEnvironment(
     'BREVO_SENDER_EMAIL',
-    defaultValue: 'contact@nascentia-tech.com',
+    defaultValue: 'nascentia.info@gmail.com',
   );
 
   static const String senderName = 'NASCENTIA';
@@ -24,7 +24,7 @@ class BrevoService {
   /// Adresse email de réception (votre email professionnel)
   static const String receiverEmail = String.fromEnvironment(
     'BREVO_RECEIVER_EMAIL',
-    defaultValue: 'contact@nascentia-tech.com',
+    defaultValue: 'nascentia.info@gmail.com',
   );
 
   /// Envoie un email de contact depuis le formulaire du site web
