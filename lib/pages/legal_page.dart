@@ -10,7 +10,7 @@ import '../content/legal_content.dart';
 class LegalPage extends StatelessWidget {
   final String contentType; // 'mentions', 'privacy', 'terms'
 
-  const LegalPage({
+  LegalPage({
     Key? key,
     required this.contentType,
   }) : super(key: key);
@@ -18,14 +18,14 @@ class LegalPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final content = LegalContent.getContent(contentType);
-    final isMobile = MediaQuery.of(context).size.width < AppConstants.breakpointMobile;
+    final isMobile = (MediaQuery.maybeOf(context)?.size.width ?? 1024) < AppConstants.breakpointMobile;
 
     return Scaffold(
       backgroundColor: Colors.white,
       body: SingleChildScrollView(
         child: Column(
           children: [
-            const TopNavigationBar(),
+            TopNavigationBar(),
 
             // Contenu principal
             Container(
@@ -83,7 +83,7 @@ class LegalPage extends StatelessWidget {
               ),
             ),
 
-            const AppFooter(),
+            AppFooter(),
           ],
         ),
       ),

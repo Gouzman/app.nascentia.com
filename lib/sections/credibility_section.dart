@@ -6,7 +6,7 @@ import '../widgets/lazy_image.dart';
 
 /// Section "Crédibilité Scientifique"
 class CredibilitySection extends StatefulWidget {
-  const CredibilitySection({Key? key}) : super(key: key);
+  CredibilitySection({Key? key}) : super(key: key);
 
   @override
   State<CredibilitySection> createState() => _CredibilitySectionState();
@@ -18,7 +18,7 @@ class _CredibilitySectionState extends State<CredibilitySection> {
 
   @override
   Widget build(BuildContext context) {
-    final screenWidth = MediaQuery.of(context).size.width;
+    final screenWidth = MediaQuery.maybeOf(context)?.size.width ?? 1024;
     final isMobile = screenWidth < 768; // R4 — breakpoint unifié
 
     // R5 — SectionContainer gère le padding ; plus de Container dupliqué

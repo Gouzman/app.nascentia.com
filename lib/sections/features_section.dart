@@ -6,7 +6,7 @@ import '../widgets/section_container.dart';
 
 /// Section "Fonctionnalités Clés"
 class FeaturesSection extends StatefulWidget {
-  const FeaturesSection({Key? key}) : super(key: key);
+  FeaturesSection({Key? key}) : super(key: key);
 
   @override
   State<FeaturesSection> createState() => _FeaturesSectionState();
@@ -17,7 +17,7 @@ class _FeaturesSectionState extends State<FeaturesSection> {
 
   @override
   Widget build(BuildContext context) {
-    final isMobile = MediaQuery.of(context).size.width < 768; // R4
+    final isMobile = (MediaQuery.maybeOf(context)?.size.width ?? 1024) < 768; // R4
 
     return SectionContainer(
       backgroundColor: AppColors.lightBg,
@@ -89,7 +89,7 @@ class _FeaturesSectionState extends State<FeaturesSection> {
     IconData icon,
   ) {
     final isHovered = _hoveredCard == index;
-    final isMobile = MediaQuery.of(context).size.width < 768;
+    final isMobile = (MediaQuery.maybeOf(context)?.size.width ?? 1024) < 768;
 
     // Couleur d'accent unique par carte
     final accentColors = [AppColors.primary, AppColors.purple, AppColors.secondary];

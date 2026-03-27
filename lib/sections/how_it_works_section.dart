@@ -64,7 +64,7 @@ const List<_StepData> _steps = [
 
 /// Section "Comment ça marche" — Timeline
 class HowItWorksSection extends StatefulWidget {
-  const HowItWorksSection({Key? key}) : super(key: key);
+  HowItWorksSection({Key? key}) : super(key: key);
 
   @override
   State<HowItWorksSection> createState() => _HowItWorksSectionState();
@@ -75,7 +75,7 @@ class _HowItWorksSectionState extends State<HowItWorksSection> {
 
   @override
   Widget build(BuildContext context) {
-    final isMobile = MediaQuery.of(context).size.width < 768;
+    final isMobile = (MediaQuery.maybeOf(context)?.size.width ?? 1024) < 768;
 
     return Container(
       decoration: BoxDecoration(

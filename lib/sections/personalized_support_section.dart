@@ -7,7 +7,7 @@ import '../widgets/lazy_image.dart';
 
 /// Section 2 - Expertise & Crédibilité NASCENTIA
 class PersonalizedSupportSection extends StatefulWidget {
-  const PersonalizedSupportSection({Key? key}) : super(key: key);
+  PersonalizedSupportSection({Key? key}) : super(key: key);
 
   @override
   State<PersonalizedSupportSection> createState() =>
@@ -18,7 +18,7 @@ class _PersonalizedSupportSectionState
     extends State<PersonalizedSupportSection> {
   @override
   Widget build(BuildContext context) {
-    final size = MediaQuery.of(context).size;
+    final size = MediaQuery.maybeOf(context)?.size ?? const Size(1024, 800);
     final isDesktop = size.width >= 1024;
     final isMobile = size.width < 768; // R4 — breakpoint unifié
 
@@ -50,7 +50,7 @@ class _PersonalizedSupportSectionState
               ],
             ),
             padding: EdgeInsets.symmetric(
-              horizontal: AppConstants.responsiveHorizontalPadding(context),
+              horizontal: isMobile ? 20.0 : 40.0,
               vertical:
                   isMobile ? AppConstants.spacing40 : AppConstants.spacing48,
             ),
@@ -243,7 +243,7 @@ class _PersonalizedSupportSectionState
   Widget _buildPhoneMockup(bool isDesktop) {
     return LayoutBuilder(
       builder: (context, constraints) {
-        final maxWidth = AppConstants.responsiveMaxWidth(context, 240);
+        const maxWidth = 240.0;
         return Center(
           child: Container(
             height: isDesktop ? 420 : 360,

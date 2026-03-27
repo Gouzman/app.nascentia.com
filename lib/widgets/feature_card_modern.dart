@@ -24,7 +24,7 @@ class FeatureCardModern extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final isMobile = AppConstants.isMobile(context);
+    final isMobile = (MediaQuery.maybeOf(context)?.size.width ?? 1024) < 768;
 
     if (isMobile) {
       return _buildMobileLayout(context);

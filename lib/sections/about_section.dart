@@ -5,7 +5,7 @@ import '../widgets/section_container.dart';
 
 /// Section "À propos de NASCENTIA" — angle histoire et mission
 class AboutSection extends StatefulWidget {
-  const AboutSection({Key? key}) : super(key: key);
+  AboutSection({Key? key}) : super(key: key);
 
   @override
   State<AboutSection> createState() => _AboutSectionState();
@@ -16,7 +16,7 @@ class _AboutSectionState extends State<AboutSection> {
 
   @override
   Widget build(BuildContext context) {
-    final screenWidth = MediaQuery.of(context).size.width;
+    final screenWidth = MediaQuery.maybeOf(context)?.size.width ?? 1024;
     final isMobile = screenWidth < 768; // R4 — breakpoint unifié
 
     // R5 — SectionContainer gère déjà le padding ; pas de Container interne dupliqué

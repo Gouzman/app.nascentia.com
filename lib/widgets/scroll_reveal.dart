@@ -60,7 +60,7 @@ class _ScrollRevealState extends State<ScrollReveal>
     final RenderBox? box = context.findRenderObject() as RenderBox?;
     if (box == null || !box.attached) return;
 
-    final double screenHeight = MediaQuery.sizeOf(context).height;
+    final double screenHeight = MediaQuery.maybeOf(context)?.size.height ?? 800;
     final Offset position = box.localToGlobal(Offset.zero);
 
     // Déclenche quand le haut du widget est à 105 % de la hauteur de l'écran

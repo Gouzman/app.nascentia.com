@@ -13,6 +13,9 @@ if (-Not (Test-Path ".env")) {
 $envContent = Get-Content ".env" -Raw
 $supabaseUrl = ""
 $supabaseKey = ""
+$brevoApiKey = ""
+$brevoSenderEmail = ""
+$brevoReceiverEmail = ""
 
 $envContent -split "`n" | ForEach-Object {
     if ($_ -match "^SUPABASE_URL=(.+)$") {
@@ -21,10 +24,24 @@ $envContent -split "`n" | ForEach-Object {
     if ($_ -match "^SUPABASE_ANON_KEY=(.+)$") {
         $supabaseKey = $matches[1].Trim()
     }
+    if ($_ -match "^BREVO_API_KEY=(.+)$") {
+        $brevoApiKey = $matches[1].Trim()
+    }
+    if ($_ -match "^BREVO_SENDER_EMAIL=(.+)$") {
+        $brevoSenderEmail = $matches[1].Trim()
+    }
+    if ($_ -match "^BREVO_RECEIVER_EMAIL=(.+)$") {
+        $brevoReceiverEmail = $matches[1].Trim()
+    }
 }
 
 if ([string]::IsNullOrEmpty($supabaseUrl) -or [string]::IsNullOrEmpty($supabaseKey)) {
     Write-Host "[ERREUR] Configuration Supabase manquante" -ForegroundColor Red
+    exit 1
+}
+
+if ([string]::IsNullOrEmpty($brevoApiKey) -or [string]::IsNullOrEmpty($brevoSenderEmail) -or [string]::IsNullOrEmpty($brevoReceiverEmail)) {
+    Write-Host "[ERREUR] Configuration Brevo manquante" -ForegroundColor Red
     exit 1
 }
 
@@ -36,6 +53,9 @@ Write-Host "[FLUTTER] Build du projet web..." -ForegroundColor Cyan
 flutter build web `
     --dart-define=SUPABASE_URL=$supabaseUrl `
     --dart-define=SUPABASE_ANON_KEY=$supabaseKey `
+    --dart-define=BREVO_API_KEY=$brevoApiKey `
+    --dart-define=BREVO_SENDER_EMAIL=$brevoSenderEmail `
+    --dart-define=BREVO_RECEIVER_EMAIL=$brevoReceiverEmail `
     --release
 
 if ($LASTEXITCODE -eq 0) {

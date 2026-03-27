@@ -7,7 +7,7 @@ import '../services/supabase_config.dart';
 
 /// Section "CTA Téléchargement" - NASCENTIA
 class AppSection extends StatefulWidget {
-  const AppSection({Key? key}) : super(key: key);
+  AppSection({Key? key}) : super(key: key);
 
   @override
   State<AppSection> createState() => _AppSectionState();
@@ -18,7 +18,7 @@ class _AppSectionState extends State<AppSection> {
 
   @override
   Widget build(BuildContext context) {
-    final isMobile = MediaQuery.of(context).size.width < 768; // R4
+    final isMobile = (MediaQuery.maybeOf(context)?.size.width ?? 1024) < 768; // R4
 
     return Container(
       width: double.infinity,

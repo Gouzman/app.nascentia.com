@@ -7,11 +7,11 @@ import '../widgets/lazy_image.dart';
 
 /// Section "Problème & Solution" — angle simplicité et accessibilité
 class FastOrderSection extends StatelessWidget {
-  const FastOrderSection({Key? key}) : super(key: key);
+  FastOrderSection({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    final size = MediaQuery.of(context).size;
+    final size = MediaQuery.maybeOf(context)?.size ?? const Size(1024, 800);
     final isMobile = size.width < 768; // R4 — breakpoint unifié
     final isTablet = size.width >= 768 && size.width < 1024;
 
@@ -90,10 +90,7 @@ class FastOrderSection extends StatelessWidget {
 
     return LayoutBuilder(
       builder: (context, constraints) {
-        final maxWidth = AppConstants.responsiveMaxWidth(
-          context,
-          isTablet ? 320.0 : 360.0,
-        );
+        final maxWidth = isTablet ? 320.0 : 360.0;
         return Center(
           child: Container(
             height: imageHeight,
@@ -140,7 +137,7 @@ class FastOrderSection extends StatelessWidget {
 
   /// R13 — Focus sur simplicité et accessibilité (pas "méthode scientifique")
   Widget _buildTextContent(BuildContext context) {
-    final isMobile = MediaQuery.of(context).size.width < 768;
+    final isMobile = (MediaQuery.maybeOf(context)?.size.width ?? 1024) < 768;
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,

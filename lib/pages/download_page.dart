@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../models/review.dart';
 import '../services/download_service.dart';
+import '../services/navigation_service.dart';
 import '../services/supabase_config.dart';
 import '../theme/app_colors.dart';
 import '../theme/app_text_styles.dart';
@@ -12,7 +13,7 @@ import 'dart:html' as html;
 
 /// Page de téléchargement NASCENTIA - Style App Store
 class DownloadPage extends StatefulWidget {
-  const DownloadPage({Key? key}) : super(key: key);
+  DownloadPage({Key? key}) : super(key: key);
 
   @override
   State<DownloadPage> createState() => _DownloadPageState();
@@ -118,12 +119,13 @@ class _DownloadPageState extends State<DownloadPage> {
 
   @override
   Widget build(BuildContext context) {
-    final screenWidth = MediaQuery.of(context).size.width;
+    final screenWidth = MediaQuery.maybeOf(context)?.size.width ?? 1024;
     final isMobile = screenWidth < 768;
     final isTablet = screenWidth >= 768 && screenWidth < 1024;
 
     return Scaffold(
       backgroundColor: AppColors.lightBg,
+      drawer: _buildMobileDrawer(),
       body: Stack(
         children: [
           SingleChildScrollView(
@@ -131,7 +133,7 @@ class _DownloadPageState extends State<DownloadPage> {
             child: Column(
               children: [
                 // Nav en position normale (scrolle avec le contenu)
-                const TopNavigationBar(),
+                TopNavigationBar(),
 
                 // Contenu principal
                 Container(
@@ -209,7 +211,7 @@ class _DownloadPageState extends State<DownloadPage> {
             ),
 
                 // Footer
-                const AppFooter(),
+                AppFooter(),
               ],
             ),
           ),
@@ -228,7 +230,7 @@ class _DownloadPageState extends State<DownloadPage> {
                 duration: const Duration(milliseconds: 250),
                 child: IgnorePointer(
                   ignoring: !_isNavScrolled,
-                  child: const TopNavigationBar(isScrolled: true),
+                  child: TopNavigationBar(isScrolled: true),
                 ),
               ),
             ),
@@ -240,82 +242,157 @@ class _DownloadPageState extends State<DownloadPage> {
 
   // Header avec icône et infos principales
   Widget _buildHeader(BuildContext context, bool isMobile) {
-   return Row(
-  crossAxisAlignment: CrossAxisAlignment.start,
-  children: [
+   if (isMobile) {
+    // Version mobile : Layout vertical
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            // LOGO
+            Container(
+              width: 96,
+              height: 96,
+              decoration: BoxDecoration(
+                color: AppColors.white,
+                borderRadius: BorderRadius.circular(30),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withValues(alpha: 0.08),
+                    blurRadius: 18,
+                    offset: const Offset(0, 6),
+                  ),
+                ],
+              ),
+              child: Padding(
+                padding: const EdgeInsets.all(4),
+                child: Image.asset(
+                  'lib/assets/images/logo-nascentia.png',
+                  fit: BoxFit.contain,
+                  cacheWidth: 80,
+                ),
+              ),
+            ),
 
-    // LOGO
-    Container(
-      width: isMobile ? 96 : 140,
-      height: isMobile ? 96 : 140,
-      decoration: BoxDecoration(
-        color: AppColors.white,
-        borderRadius: BorderRadius.circular(30),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withValues(alpha: 0.08),
-            blurRadius: 18,
-            offset: const Offset(0, 6),
-          ),
-        ],
-      ),
-      child: Padding(
-        padding: EdgeInsets.all(isMobile ? 4 : 6),
-        child: Image.asset(
-          'lib/assets/images/logo-nascentia.png',
-          fit: BoxFit.contain,
-          cacheWidth: 80, // Optimisation mémoire
+            const SizedBox(width: 16),
+
+            // TEXTE APPLICATION
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    'NASCENTIA',
+                    style: AppTextStyles.headlineMedium(context),
+                  ),
+
+                  const SizedBox(height: 8),
+
+                  Text(
+                    'NASCENTIA Health Tech',
+                    style: AppTextStyles.bodyMedium(context).copyWith(
+                      color: AppColors.primary,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+
+                  const SizedBox(height: 4),
+
+                  Text(
+                    'Santé & Bien-être • Planification familiale',
+                    style: AppTextStyles.bodySmall(context).copyWith(
+                      color: AppColors.greyText,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ],
         ),
-      ),
-    ),
 
-    SizedBox(width: isMobile ? 16 : 24),
+        // BADGES SÉCURITÉ en dessous en mode mobile
+        const SizedBox(height: 20),
+        _buildSecurityBadges(),
+      ],
+    );
+   } else {
+    // Version desktop : Layout horizontal
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
 
-    // TEXTE APPLICATION
-    Expanded(
-      flex: 2,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-
-          Text(
-            'NASCENTIA',
-            style: isMobile
-                ? AppTextStyles.headlineMedium(context)
-                : AppTextStyles.headlineLarge(context),
+        // LOGO
+        Container(
+          width: 140,
+          height: 140,
+          decoration: BoxDecoration(
+            color: AppColors.white,
+            borderRadius: BorderRadius.circular(30),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black.withValues(alpha: 0.08),
+                blurRadius: 18,
+                offset: const Offset(0, 6),
+              ),
+            ],
           ),
-
-          const SizedBox(height: 8),
-
-          Text(
-            'NASCENTIA Health Tech',
-            style: AppTextStyles.bodyMedium(context).copyWith(
-              color: AppColors.primary,
-              fontWeight: FontWeight.w600,
+          child: Padding(
+            padding: const EdgeInsets.all(6),
+            child: Image.asset(
+              'lib/assets/images/logo-nascentia.png',
+              fit: BoxFit.contain,
+              cacheWidth: 80,
             ),
           ),
+        ),
 
-          const SizedBox(height: 4),
+        const SizedBox(width: 24),
 
-          Text(
-            'Santé & Bien-être • Planification familiale',
-            style: AppTextStyles.bodySmall(context).copyWith(
-              color: AppColors.greyText,
-            ),
+        // TEXTE APPLICATION
+        Expanded(
+          flex: 2,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+
+              Text(
+                'NASCENTIA',
+                style: AppTextStyles.headlineLarge(context),
+              ),
+
+              const SizedBox(height: 8),
+
+              Text(
+                'NASCENTIA Health Tech',
+                style: AppTextStyles.bodyMedium(context).copyWith(
+                  color: AppColors.primary,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+
+              const SizedBox(height: 4),
+
+              Text(
+                'Santé & Bien-être • Planification familiale',
+                style: AppTextStyles.bodySmall(context).copyWith(
+                  color: AppColors.greyText,
+                ),
+              ),
+            ],
           ),
-        ],
-      ),
-    ),
+        ),
 
-    const SizedBox(width: 40),
+        const SizedBox(width: 40),
 
-    // BADGES SÉCURITÉ
-    Expanded(
-      flex: 2,
-      child: _buildSecurityBadges(),
-    ),
-  ],
-);
+        // BADGES SÉCURITÉ
+        Expanded(
+          flex: 2,
+          child: _buildSecurityBadges(),
+        ),
+      ],
+    );
+   }
   }
 
   // Stats row
@@ -1206,7 +1283,11 @@ class _DownloadPageState extends State<DownloadPage> {
         // Bandeau "Ce contenu vous a-t-il été utile ?"
         if (reviewId != null) ...[
           const SizedBox(height: 14),
-          Row(
+          // Utilisation de Wrap pour responsive
+          Wrap(
+            crossAxisAlignment: WrapCrossAlignment.center,
+            spacing: 12,
+            runSpacing: 8,
             children: [
               Text(
                 'Ce contenu vous a-t-il été utile ?',
@@ -1214,13 +1295,11 @@ class _DownloadPageState extends State<DownloadPage> {
                   color: AppColors.greyText,
                 ),
               ),
-              const SizedBox(width: 12),
               _buildHelpfulButton(
                 label: 'Oui',
                 selected: vote == true,
                 onTap: () => _handleHelpfulVote(reviewId, true),
               ),
-              const SizedBox(width: 8),
               _buildHelpfulButton(
                 label: 'Non',
                 selected: vote == false,
@@ -1720,5 +1799,62 @@ Widget _buildSecurityItem(String text, {String? link}) {
 }
 /** fin du code */
 
+  // Menu burger mobile
+  Widget _buildMobileDrawer() {
+    return Drawer(
+      child: ListView(
+        padding: EdgeInsets.zero,
+        children: [
+          DrawerHeader(
+            decoration: const BoxDecoration(
+              gradient: LinearGradient(
+                colors: [Color(0xFFE95263), Color(0xFF582674)],
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
+              ),
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: const [
+                Text(
+                  'NASCENTIA',
+                  style: TextStyle(
+                    fontSize: 24,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white,
+                  ),
+                ),
+                SizedBox(height: 8),
+                Text(
+                  'Navigation',
+                  style: TextStyle(fontSize: 14, color: Colors.white70),
+                ),
+              ],
+            ),
+          ),
+          ..._buildMobileMenuItems(),
+        ],
+      ),
+    );
+  }
+
+  List<Widget> _buildMobileMenuItems() {
+    final items = NavigationService.getSectionNames();
+    return items.map((item) {
+      return ListTile(
+        title: Text(item),
+        onTap: () {
+          Navigator.pop(context);
+          // Naviguer vers la home page avec l'argument de la section
+          Navigator.pushReplacementNamed(
+            context,
+            '/',
+            arguments: item,
+          );
+        },
+      );
+    }).toList();
+  }
 
 }

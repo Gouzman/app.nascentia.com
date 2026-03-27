@@ -8,7 +8,8 @@ class AppTextStyles {
   // ==================== DISPLAY ====================
   // Pour les hero sections et titres très importants
   static TextStyle displayLarge(BuildContext context) {
-    final isSmall = MediaQuery.of(context).size.width < 768;
+    final size = MediaQuery.maybeOf(context)?.size;
+    final isSmall = size != null ? size.width < 768 : false;
     return GoogleFonts.poppins(
       fontSize: isSmall ? 40 : 72,
       fontWeight: FontWeight.w900,
@@ -19,7 +20,8 @@ class AppTextStyles {
   }
 
   static TextStyle displayMedium(BuildContext context) {
-    final isSmall = MediaQuery.of(context).size.width < 768;
+    final size = MediaQuery.maybeOf(context)?.size;
+    final isSmall = size != null ? size.width < 768 : false;
     return GoogleFonts.poppins(
       fontSize: isSmall ? 32 : 56,
       fontWeight: FontWeight.bold,
@@ -31,7 +33,8 @@ class AppTextStyles {
   // ==================== HEADLINE ====================
   // Pour les titres de sections
   static TextStyle headlineLarge(BuildContext context) {
-    final isSmall = MediaQuery.of(context).size.width < 768;
+    final size = MediaQuery.maybeOf(context)?.size;
+    final isSmall = size != null ? size.width < 768 : false;
     return GoogleFonts.poppins(
       fontSize: isSmall ? 32 : 48,
       fontWeight: FontWeight.bold,
@@ -42,7 +45,8 @@ class AppTextStyles {
   }
 
   static TextStyle headlineMedium(BuildContext context) {
-    final isSmall = MediaQuery.of(context).size.width < 768;
+    final size = MediaQuery.maybeOf(context)?.size;
+    final isSmall = size != null ? size.width < 768 : false;
     return GoogleFonts.poppins(
       fontSize: isSmall ? 28 : 40,
       fontWeight: FontWeight.bold,
@@ -53,7 +57,8 @@ class AppTextStyles {
   }
 
   static TextStyle headlineSmall(BuildContext context) {
-    final isSmall = MediaQuery.of(context).size.width < 768;
+    final size = MediaQuery.maybeOf(context)?.size;
+    final isSmall = size != null ? size.width < 768 : false;
     return GoogleFonts.poppins(
       fontSize: isSmall ? 24 : 32,
       fontWeight: FontWeight.w600,
@@ -65,7 +70,8 @@ class AppTextStyles {
   // ==================== TITLE ====================
   // Pour les sous-titres et titres de cartes
   static TextStyle titleLarge(BuildContext context) {
-    final isSmall = MediaQuery.of(context).size.width < 768;
+    final size = MediaQuery.maybeOf(context)?.size;
+    final isSmall = size != null ? size.width < 768 : false;
     return GoogleFonts.poppins(
       fontSize: isSmall ? 20 : 24,
       fontWeight: FontWeight.w600,
@@ -75,7 +81,8 @@ class AppTextStyles {
   }
 
   static TextStyle titleMedium(BuildContext context) {
-    final isSmall = MediaQuery.of(context).size.width < 768;
+    final size = MediaQuery.maybeOf(context)?.size;
+    final isSmall = size != null ? size.width < 768 : false;
     return GoogleFonts.poppins(
       fontSize: isSmall ? 18 : 20,
       fontWeight: FontWeight.w600,
@@ -96,7 +103,8 @@ class AppTextStyles {
   // ==================== BODY ====================
   // Pour les paragraphes et contenus principaux
   static TextStyle bodyLarge(BuildContext context) {
-    final isSmall = MediaQuery.of(context).size.width < 768;
+    final size = MediaQuery.maybeOf(context)?.size;
+    final isSmall = size != null ? size.width < 768 : false;
     return GoogleFonts.poppins(
       fontSize: isSmall ? 16 : 18,
       fontWeight: FontWeight.w400,

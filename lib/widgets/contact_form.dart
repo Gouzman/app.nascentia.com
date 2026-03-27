@@ -98,7 +98,7 @@ class _ContactFormState extends State<ContactForm> {
 
   @override
   Widget build(BuildContext context) {
-    final isMobile = AppConstants.isMobile(context);
+    final isMobile = (MediaQuery.maybeOf(context)?.size.width ?? 1024) < 768;
 
     return Form(
       key: _formKey,

@@ -196,7 +196,7 @@ class _VisibilityDetectorState extends State<VisibilityDetector> {
 
     final position = renderBox.localToGlobal(Offset.zero);
     final size = renderBox.size;
-    final screenHeight = MediaQuery.of(context).size.height;
+    final screenHeight = MediaQuery.maybeOf(context)?.size.height ?? 800;
 
     // Vérifie si le widget est visible dans le viewport
     final isVisible = position.dy < screenHeight && position.dy + size.height > 0;

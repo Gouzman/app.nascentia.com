@@ -16,13 +16,14 @@ class SectionContainer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isMobile = (MediaQuery.maybeOf(context)?.size.width ?? 1024) < 768;
     return Container(
       width: double.infinity,
       color: backgroundColor,
       padding: padding ??
           EdgeInsets.symmetric(
-            horizontal: AppConstants.responsiveHorizontalPadding(context),
-            vertical: AppConstants.responsiveVerticalPadding(context),
+            horizontal: isMobile ? 20.0 : 40.0,
+            vertical: isMobile ? 56.0 : 80.0,
           ),
       child: Center(
         child: ConstrainedBox(

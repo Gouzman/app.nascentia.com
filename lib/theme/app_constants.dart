@@ -107,28 +107,28 @@ class AppConstants {
   // ==================== RESPONSIVE HELPERS ====================
   /// Vérifie si l'écran est très petit (< 600px) - iPhone SE, Android compacts
   static bool isSmallMobile(BuildContext context) {
-    return MediaQuery.of(context).size.width < breakpointSmallMobile;
+    return (MediaQuery.maybeOf(context)?.size.width ?? 1024) < breakpointSmallMobile;
   }
 
   /// Vérifie si l'écran est en mode mobile (< 768px)
   static bool isMobile(BuildContext context) {
-    return MediaQuery.of(context).size.width < breakpointMobile;
+    return (MediaQuery.maybeOf(context)?.size.width ?? 1024) < breakpointMobile;
   }
 
   /// Vérifie si l'écran est en mode tablet (768px - 1024px)
   static bool isTablet(BuildContext context) {
-    final width = MediaQuery.of(context).size.width;
+    final width = MediaQuery.maybeOf(context)?.size.width ?? 1024;
     return width >= breakpointMobile && width < breakpointTablet;
   }
 
   /// Vérifie si l'écran est en mode desktop (>= 1024px)
   static bool isDesktop(BuildContext context) {
-    return MediaQuery.of(context).size.width >= breakpointTablet;
+    return (MediaQuery.maybeOf(context)?.size.width ?? 1024) >= breakpointTablet;
   }
 
   /// Retourne la largeur de l'écran
   static double screenWidth(BuildContext context) {
-    return MediaQuery.of(context).size.width;
+    return MediaQuery.maybeOf(context)?.size.width ?? 1024;
   }
 
   /// Padding horizontal responsive optimisé pour tous les téléphones

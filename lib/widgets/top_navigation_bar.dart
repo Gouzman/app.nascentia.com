@@ -5,7 +5,7 @@ import '../services/navigation_service.dart';
 
 class TopNavigationBar extends StatefulWidget {
   final bool isScrolled;
-  const TopNavigationBar({Key? key, this.isScrolled = false}) : super(key: key);
+  TopNavigationBar({Key? key, this.isScrolled = false}) : super(key: key);
 
   @override
   State<TopNavigationBar> createState() => _TopNavigationBarState();
@@ -15,7 +15,7 @@ class _TopNavigationBarState extends State<TopNavigationBar> {
   @override
   Widget build(BuildContext context) {
     final s = widget.isScrolled;
-    final size = MediaQuery.of(context).size;
+    final size = MediaQuery.maybeOf(context)?.size ?? const Size(1024, 800);
     final isMobile = size.width < 1024; // Tablet aussi en mode mobile
     final hidePhone = size.width < 1200; // Masquer téléphone sur petits écrans
     final isTablet = size.width >= 768 && size.width < 1024;

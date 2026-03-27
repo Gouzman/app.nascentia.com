@@ -73,7 +73,11 @@
     <!-- Système de détection de nouvelle version -->
     <script src="version-check.js"></script>
 
-    <!-- Flutter injecte l'application ici -->
+    <!-- Le script Flutter sera injecté ici par le build -->
+    <script src="flutter_bootstrap.js" async></script>
+
+    <!-- Service Worker DÉSACTIVÉ temporairement pour debug cache -->
+    <!--
     <script>
         // Service Worker pour PWA
         if ('serviceWorker' in navigator) {
@@ -82,9 +86,7 @@
             });
         }
     </script>
-
-    <!-- Le script Flutter sera injecté ici par le build -->
-    <script src="flutter_bootstrap.js" async></script>
+    -->
 </body>
 
 </html>

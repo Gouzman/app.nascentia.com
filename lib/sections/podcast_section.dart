@@ -5,7 +5,7 @@ import '../theme/app_text_styles.dart';
 
 /// Section NASCENTIA TV — Podcast officiel de la marque
 class PodcastSection extends StatefulWidget {
-  const PodcastSection({Key? key}) : super(key: key);
+  PodcastSection({Key? key}) : super(key: key);
 
   @override
   State<PodcastSection> createState() => _PodcastSectionState();
@@ -41,7 +41,7 @@ class _PodcastSectionState extends State<PodcastSection>
 
   @override
   Widget build(BuildContext context) {
-    final size = MediaQuery.of(context).size;
+    final size = MediaQuery.maybeOf(context)?.size ?? const Size(1024, 800);
     final isMobile = size.width < 768;
 
     return Container(
@@ -66,7 +66,7 @@ class _PodcastSectionState extends State<PodcastSection>
             right: -40,
             child: LayoutBuilder(
               builder: (context, constraints) {
-                final size = MediaQuery.of(context).size;
+                final size = MediaQuery.maybeOf(context)?.size ?? const Size(1024, 800);
                 final orbSize = size.width < 600 ? size.width * 0.6 : 300.0;
                 return Container(
                   width: orbSize,
@@ -89,7 +89,7 @@ class _PodcastSectionState extends State<PodcastSection>
             left: -60,
             child: LayoutBuilder(
               builder: (context, constraints) {
-                final size = MediaQuery.of(context).size;
+                final size = MediaQuery.maybeOf(context)?.size ?? const Size(1024, 800);
                 final orbSize = size.width < 600 ? size.width * 0.7 : 350.0;
                 return Container(
                   width: orbSize,
@@ -307,7 +307,7 @@ class _PodcastSectionState extends State<PodcastSection>
   Widget _buildVisual() {
     return LayoutBuilder(
       builder: (context, constraints) {
-        final size = MediaQuery.of(context).size;
+        final size = MediaQuery.maybeOf(context)?.size ?? const Size(1024, 800);
         final visualSize = size.width < 600 ? size.width * 0.7 : 300.0;
         return Center(
           child: SizedBox(

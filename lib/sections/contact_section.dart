@@ -7,12 +7,12 @@ import '../widgets/contact_form.dart';
 
 /// Section "Contact" avec formulaire fonctionnel et informations de contact
 class ContactSection extends StatelessWidget {
-  const ContactSection({Key? key}) : super(key: key);
+  ContactSection({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    final isMobile = AppConstants.isMobile(context);
-    final size = MediaQuery.of(context).size;
+    final size = MediaQuery.maybeOf(context)?.size ?? const Size(1024, 800);
+    final isMobile = size.width < 768;
 
     return SectionContainer(
       backgroundColor: Colors.grey.shade50,

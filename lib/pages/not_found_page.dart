@@ -8,11 +8,11 @@ import '../widgets/app_footer.dart';
 
 /// Page 404 - Page non trouvée
 class NotFoundPage extends StatelessWidget {
-  const NotFoundPage({Key? key}) : super(key: key);
+  NotFoundPage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    final size = MediaQuery.of(context).size;
+    final size = MediaQuery.maybeOf(context)?.size ?? const Size(1024, 800);
     final isMobile = size.width < AppConstants.breakpointMobile;
 
     return Scaffold(
@@ -20,7 +20,7 @@ class NotFoundPage extends StatelessWidget {
       body: SingleChildScrollView(
         child: Column(
           children: [
-            const TopNavigationBar(),
+            TopNavigationBar(),
 
             // Contenu 404
             Container(

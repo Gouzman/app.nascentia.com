@@ -8,11 +8,11 @@ import 'newsletter_form.dart';
 
 /// Footer NASCENTIA — Design Premium
 class AppFooter extends StatelessWidget {
-  const AppFooter({Key? key}) : super(key: key);
+  AppFooter({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    final size = MediaQuery.of(context).size;
+    final size = MediaQuery.maybeOf(context)?.size ?? const Size(1024, 800);
     final isTablet = size.width >= 768 && size.width < 1024;
     final isMobile = size.width < 768; // R4 — breakpoint unifié
 

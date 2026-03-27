@@ -9,7 +9,7 @@ import 'dart:math' as math;
 
 /// Hero Section NASCENTIA - Design Premium Pixel Perfect
 class HeroSection extends StatefulWidget {
-  const HeroSection({Key? key}) : super(key: key);
+  HeroSection({Key? key}) : super(key: key);
 
   @override
   State<HeroSection> createState() => _HeroSectionState();
@@ -49,14 +49,13 @@ class _HeroSectionState extends State<HeroSection>
 
   @override
   Widget build(BuildContext context) {
-    final size = MediaQuery.of(context).size;
+    final size = MediaQuery.maybeOf(context)?.size ?? const Size(1024, 800);
     final isDesktop = size.width >= 1024;
     final isMobile = size.width < 768;
+    final sectionHeight = isMobile ? 650.0 : size.height * 0.7;
 
     return Container(
-      constraints: BoxConstraints(
-        minHeight: size.height * 0.7,
-      ),
+      height: sectionHeight,
       margin: EdgeInsets.symmetric(
         horizontal: isMobile ? 16 : 20,
         vertical: isMobile ? 0 : 10,
@@ -74,6 +73,8 @@ class _HeroSectionState extends State<HeroSection>
       child: ClipRRect(
         borderRadius: BorderRadius.circular(40),
         child: Container(
+          width: double.infinity,
+          height: double.infinity,
           decoration: const BoxDecoration(
             gradient: AppColors.heroGradient,
           ),
@@ -82,8 +83,8 @@ class _HeroSectionState extends State<HeroSection>
             children: [
               Padding(
                 padding: EdgeInsets.symmetric(
-                  horizontal: AppConstants.responsiveHorizontalPadding(context),
-                  vertical: isMobile ? 50 : 60,
+                  horizontal: isMobile ? 24 : 40,
+                  vertical: isMobile ? 80 : 60,
                 ),
                 child: isMobile
                     ? _buildMobileLayout(context)
@@ -131,8 +132,8 @@ class _HeroSectionState extends State<HeroSection>
           opacity: _fadeAnimation,
           child: _buildTextContent(context, true),
         ),
-        SizedBox(height: AppConstants.responsiveSectionSpacing(context)),
-        _buildPhoneMockups(context, false),
+        // Images de téléphones masquées en mode mobile pour un meilleur affichage
+        // Elles sont visibles uniquement en mode web et tablette (via Stack)
       ],
     );
   }
@@ -175,22 +176,24 @@ class _HeroSectionState extends State<HeroSection>
           ],
         ),
 
-        SizedBox(height: AppConstants.responsiveItemSpacing(context)),
+        SizedBox(height: isMobile ? 24.0 : 30.0),
 
         Text(
           'scientifique innovante permettant de déterminer le sexe du bébé dès la conception '
           'ou de planifier le sexe avant la grossesse grâce à un modèle validé.',
-          style: AppTextStyles.bodyLarge(context).copyWith(height: 1.7),
+          style: AppTextStyles.bodyLarge(context).copyWith(
+            height: isMobile ? 1.6 : 1.7,
+          ),
           textAlign: isMobile ? TextAlign.center : TextAlign.left,
         ),
 
-        SizedBox(height: AppConstants.responsiveItemSpacing(context) * 1.5),
+        SizedBox(height: isMobile ? 32.0 : 45.0),
 
         // R2 — Bouton CTA solide blanc (plus visible sur fond rose)
         _buildPrimaryButton(isMobile),
 
         if (!isMobile) ...[
-          SizedBox(height: AppConstants.responsiveSectionSpacing(context)),
+          const SizedBox(height: 60.0),
           _buildSocialIcons(),
         ],
       ],
@@ -379,7 +382,7 @@ class _AnimatedPhoneState extends State<_AnimatedPhone>
             scale: widget.scale,
             child: LayoutBuilder(
               builder: (context, constraints) {
-                final maxWidth = AppConstants.responsiveMaxWidth(context, 280);
+                const maxWidth = 280.0;
                 return Container(
                   width: maxWidth,
                   constraints: BoxConstraints(maxWidth: maxWidth),

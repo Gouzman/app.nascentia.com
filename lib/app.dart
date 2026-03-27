@@ -16,11 +16,11 @@ class NascentiaApp extends StatelessWidget {
       theme: AppTheme.lightTheme,
       initialRoute: '/',
       routes: {
-        '/': (context) => const HomePage(),
-        '/download': (context) => const DownloadPage(),
-        '/mentions-legales': (context) => const LegalPage(contentType: 'mentions'),
-        '/politique-confidentialite': (context) => const LegalPage(contentType: 'privacy'),
-        '/cgu': (context) => const LegalPage(contentType: 'terms'),
+        '/': (context) => HomePage(),
+        '/download': (context) => DownloadPage(),
+        '/mentions-legales': (context) => LegalPage(contentType: 'mentions'),
+        '/politique-confidentialite': (context) => LegalPage(contentType: 'privacy'),
+        '/cgu': (context) => LegalPage(contentType: 'terms'),
       },
     );
   }
