@@ -48,6 +48,10 @@ test/.test_coverage.dart
 .env.*.local
 .deploy.env
 
+# Fichiers de logs - Peuvent contenir des secrets
+*.log
+flutter_*.log
+
 # Fichiers temporaires Claude
 tmpclaude-*
 
