@@ -1,7 +1,7 @@
 {
     "name": "NASCENTIA",
     "short_name": "NASCENTIA",
-    "description": "Application de commande de repas en Côte d'Ivoire - Commandez rapidement et suivez vos commandes en temps réel.",
+    "description": "Solution scientifique pour la planification du sexe de bébé - Expertise en santé reproductive et accompagnement des couples.",
     "start_url": "/",
     "display": "standalone",
     "background_color": "#FFFFFF",
@@ -11,9 +11,9 @@
     "dir": "ltr",
     "scope": "/",
     "categories": [
-        "food",
-        "lifestyle",
-        "delivery"
+        "health",
+        "medical",
+        "lifestyle"
     ],
     "icons": [
         {
