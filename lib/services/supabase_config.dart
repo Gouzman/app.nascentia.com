@@ -37,7 +37,7 @@ class SupabaseConfig {
   static const String apkDownloadUrl = String.fromEnvironment(
     'APK_DOWNLOAD_URL',
     // URL GitHub Releases - Hébergement gratuit et illimité
-    defaultValue: 'https://github.com/Gouzman/app.nascentia.com/releases/download/app-v1.0.0/nascentia.apk',
+    defaultValue: 'https://github.com/Gouzman/app.nascentia.com/releases/download/app-v1.0.1/nascentia.apk',
   );
 
   /// Vérification que les credentials sont bien configurés
